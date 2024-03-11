@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-} */
-
 body {
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(
@@ -30,4 +16,78 @@ body {
     .text-balance {
         text-wrap: balance;
     }
+}
+
+.cup {
+    height: 210px;
+    width: 220px;
+    border: 10px solid #030303;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 20px 20px 60px 60px;
+    background: url("../assets/svgs/coffee-img-1.svg"),
+        url("../assets/svgs/coffee-img-2.svg");
+    background-position: 0 0, 0 0;
+    background-repeat: repeat-x;
+    animation: coffee 4s infinite linear;
+}
+@keyframes coffee {
+    100% {
+        background-position: -100% 0, -100% 0;
+    }
+}
+.cup:before {
+    content: "";
+    position: absolute;
+    height: 80px;
+    width: 60px;
+    border: 10px solid #030303;
+    border-left: none;
+    right: -75px;
+    top: 30px;
+    border-radius: 0 30px 80px 0;
+}
+.cup:after {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 300px;
+    background-color: #030303;
+    left: -45px;
+    bottom: -10px;
+    border-radius: 10px;
+}
+.bubble {
+    height: 15px;
+    width: 15px;
+    background-color: #fbbe08;
+    border-radius: 50%;
+    position: absolute;
+    animation: bubbles forwards infinite;
+    opacity: 0.6;
+}
+@keyframes bubbles {
+    100% {
+        transform: translateY(-150px);
+        opacity: 0;
+    }
+}
+.bubble-1 {
+    left: 30px;
+    bottom: 10px;
+    animation-delay: 0.5s;
+    animation-duration: 3s;
+}
+.bubble-2 {
+    left: 80px;
+    bottom: 35px;
+    animation-delay: 1.2s;
+    animation-duration: 4s;
+}
+.bubble-3 {
+    left: 140px;
+    bottom: 30px;
+    animation-duration: 4s;
 }

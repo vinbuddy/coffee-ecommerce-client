@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import { NextProvider as NextUIProvider } from "./providers";
 import "./globals.css";
+import { AuthContextProvider } from "@/hooks/useAuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`min-h-[100vh] ${inter.className}`}>
-                <NextUIProvider>{children}</NextUIProvider>
+                <NextUIProvider>
+                    <AuthContextProvider>{children}</AuthContextProvider>
+                </NextUIProvider>
             </body>
         </html>
     );

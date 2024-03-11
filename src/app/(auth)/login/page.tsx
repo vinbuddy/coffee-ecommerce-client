@@ -1,13 +1,14 @@
 "use client";
-// import { Button } from "antd";
-import logoImg from "@/assets/images/logo.png";
-import Image from "next/image";
+
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, CardBody } from "@nextui-org/react";
-import Logo from "@/components/Logo";
-// import { signIn } from "next-auth/react";
+import Logo from "@/components/UI/Logo";
+import { FcGoogle } from "react-icons/fc";
+import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import { useRouter } from "next/navigation";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface IUserLogin {
     password: string;
@@ -23,22 +24,32 @@ export default function LoginPage(): React.ReactNode {
     } = useForm<IUserLogin>();
 
     const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
-    const [loading, setLoading] = useState<Boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const { handleSignInGoogle } = useFirebaseAuthStore();
+    const router = useRouter();
+
+    const { currentUser } = useCurrentUser();
+
+    useEffect(() => {
+        if (currentUser) {
+            router.push("/");
+        }
+    }, [currentUser]);
 
     const onSubmitHandler = async (data: IUserLogin) => {
         setLoading(true);
-        // const loginRes = await signIn("credentials", {
-        //     email: data.email,
-        //     password: data.password,
-        //     callbackUrl: "/",
-        // });
 
-        // if (loginRes?.error) {
-        //     setAuthErrorMessage("Something went wrong!!");
-        //     setLoading(false);
-        //     return;
-        // }
+        setLoading(false);
+    };
+    const onSubmitGoogle = async (): Promise<void> => {
+        try {
+            setLoading(true);
 
+            await handleSignInGoogle();
+            router.push("/");
+        } catch (error) {
+            setLoading(false);
+        }
         setLoading(false);
     };
     return (
@@ -48,10 +59,10 @@ export default function LoginPage(): React.ReactNode {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     className="w-[400px] "
                 >
-                    <div>
+                    <div className="">
                         <Logo />
-                        <h4 className="text-center text-primary text-3xl mb-5">
-                            Login to website
+                        <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">
+                            Login
                         </h4>
                     </div>
                     <div className="mb-5">
@@ -112,6 +123,8 @@ export default function LoginPage(): React.ReactNode {
                     )}
 
                     <Button
+                        isLoading={loading}
+                        type="submit"
                         color="primary"
                         size="lg"
                         className="w-full text-lg"
@@ -119,7 +132,19 @@ export default function LoginPage(): React.ReactNode {
                         Login
                     </Button>
 
-                    <div className="flex items-center justify-between pt-4 mt-4 border-t border-t-gray-300">
+                    <div className="pt-5 mt-5 border-t border-t-gray-100">
+                        <Button
+                            // type="button"
+                            onClick={onSubmitGoogle}
+                            size="lg"
+                            className="bg-transparent border w-full"
+                            startContent={<FcGoogle className="text-xl" />}
+                        >
+                            Google
+                        </Button>
+                    </div>
+
+                    <div className="flex items-center justify-between  mt-4 ">
                         <Link className="text-gray-600" href="/forgot">
                             Forgot password?
                         </Link>

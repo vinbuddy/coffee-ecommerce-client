@@ -4,13 +4,15 @@ import { Card, CardHeader, Image } from "@nextui-org/react";
 import banner2 from "@/assets/images/banner2.png";
 import banner4 from "@/assets/images/banner4.jpg";
 import Link from "next/link";
-import MainLayout from "@/components/MainLayout";
+import MainLayout from "@/components/UI/MainLayout";
+import ProductCard from "@/components/Product/ProductCard";
 
 export default function Home() {
     return (
         <MainLayout>
             <div className="container">
-                <div className="gap-5 grid grid-cols-12 px-6">
+                {/* Banner */}
+                <section className="gap-5 grid grid-cols-12 px-6">
                     <Card className="w-full h-[300px] col-span-12 sm:col-span-6">
                         <Link className="h-full" href="">
                             <Image
@@ -33,7 +35,7 @@ export default function Home() {
                     </Card>
                     <Card className="col-span-12 sm:col-span-3 h-[300px]">
                         <Link className="h-full" href="">
-                            <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+                            <CardHeader className="absolute z-[1] top-1 flex-col !items-start">
                                 <h4 className="text-primary bg-white rounded-xl px-3 font-medium">
                                     Hoa nước xinh yêu
                                 </h4>
@@ -46,7 +48,42 @@ export default function Home() {
                             />
                         </Link>
                     </Card>
-                </div>
+                </section>
+
+                {/* Outlet */}
+                <section className="mt-10">
+                    <h4 className="text-3xl mb-5 font-medium text-center">
+                        Best seller
+                    </h4>
+                    <div className="grid grid-cols-12 gap-5 px-6">
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-5 px-6">
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                    </div>
+                </section>
             </div>
         </MainLayout>
     );

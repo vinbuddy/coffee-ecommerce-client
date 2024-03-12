@@ -12,17 +12,16 @@ export const AuthContext = React.createContext({});
 export const useAuthContext = () => React.useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
-    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                // setUser(user);
-                useCurrentUser.setState((state) => ({ currentUser: user }));
+                // useCurrentUser.setState((state) => ({ currentUser: user }));
+                useCurrentUser.setState((state) => ({ isLogged: true }));
             } else {
-                // setUser(null);
-                useCurrentUser.setState((state) => ({ currentUser: null }));
+                useCurrentUser.setState((state) => ({ isLogged: false }));
+                // useCurrentUser.setState((state) => ({ currentUser: null }));
             }
             setLoading(false);
         });
@@ -31,7 +30,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user }}>
+        <AuthContext.Provider value={{}}>
             {loading ? <LoadingPage /> : children}
         </AuthContext.Provider>
     );

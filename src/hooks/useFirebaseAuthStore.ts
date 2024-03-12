@@ -12,6 +12,7 @@ import {
     sendPasswordResetEmail,
 } from "firebase/auth";
 import useCurrentUser from "./useCurrentUser";
+import { IUser } from "@/types/user";
 
 interface FirebaseAuthStoreState {
     loading: boolean;
@@ -29,7 +30,7 @@ interface FirebaseAuthStoreState {
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-const currentUser = useCurrentUser.getState().user;
+const currentUser = useCurrentUser.getState().currentUser;
 // const auth = getAuth();
 
 const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
@@ -38,8 +39,19 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
     handleSignInGoogle: async () => {
         try {
             const userCredential = await signInWithPopup(auth, googleProvider);
+            const token: string = await userCredential.user.getIdToken();
+            if (token) {
+                localStorage.setItem("@token", token);
+            }
 
-            // useCurrentUser.setState((state) => ({ user: userCredential.user }));
+            const userData: IUser = {
+                id: userCredential.user.uid,
+                email: userCredential.user.email,
+                avatar: userCredential.user.photoURL,
+                user_name: userCredential.user.displayName,
+            };
+
+            useCurrentUser.setState((state) => ({ currentUser: userData }));
         } catch (error: any) {
             set(() => ({ error: error.code }));
         }

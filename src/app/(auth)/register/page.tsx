@@ -1,69 +1,65 @@
 "use client";
-
+import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Button, Card, CardBody } from "@nextui-org/react";
-import Logo from "@/components/UI/Logo";
-import { FcGoogle } from "react-icons/fc";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import { useState } from "react";
+// import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import Logo from "@/components/UI/Logo";
 
-interface IUserLogin {
+interface IUserRegister {
+    username: string;
     password: string;
     email: string;
+    confirm: string;
 }
 
-export default function LoginPage(): React.ReactNode {
+function Register() {
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<IUserLogin>();
+    } = useForm<IUserRegister>();
 
     const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const { handleSignInGoogle } = useFirebaseAuthStore();
-    const router = useRouter();
 
-    const { isLogged } = useCurrentUser();
-
-    useEffect(() => {
-        if (isLogged) {
-            router.push("/");
-        }
-    }, [isLogged]);
-
-    const onSubmitHandler = async (data: IUserLogin) => {
-        setLoading(true);
-
-        setLoading(false);
+    const onSubmitHandler = async (
+        data: IUserRegister,
+        e?: React.BaseSyntheticEvent
+    ) => {
+        e?.preventDefault();
     };
-    const onSubmitGoogle = async (): Promise<void> => {
-        try {
-            setLoading(true);
 
-            await handleSignInGoogle();
-            router.push("/");
-        } catch (error) {
-            setLoading(false);
-        }
-        setLoading(false);
-    };
     return (
-        <Card>
-            <CardBody className="px-5">
+        <>
+            <div>
                 <form
                     onSubmit={handleSubmit(onSubmitHandler)}
-                    className="w-[400px] "
+                    className="w-[400px] bg-white p-5 rounded-lg"
                 >
-                    <div className="">
+                    <div>
                         <Logo />
-                        <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">
-                            Login
+                        <h4 className="text-center text-primary text-2xl mb-5 mt-3">
+                            Create your account
                         </h4>
+                    </div>
+                    <div className="mb-5">
+                        <input
+                            className="w-full outline-none p-3 border border-slate-300 rounded-md"
+                            type="text"
+                            placeholder="User name"
+                            {...register("username", {
+                                required: true,
+                                maxLength: 20,
+                            })}
+                        />
+                        {errors?.username?.type === "required" && (
+                            <p className="text-red-500 mt-3">
+                                Please enter name
+                            </p>
+                        )}
                     </div>
                     <div className="mb-5">
                         <input
@@ -76,7 +72,6 @@ export default function LoginPage(): React.ReactNode {
                                     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                             })}
                         />
-
                         {errors.email?.type === "required" && (
                             <p className="text-red-500 mt-3">
                                 Please enter email
@@ -99,7 +94,6 @@ export default function LoginPage(): React.ReactNode {
                                 maxLength: 15,
                             })}
                         />
-
                         {errors.password?.type === "required" && (
                             <p className="text-red-500 mt-3">
                                 Please enter password
@@ -116,6 +110,34 @@ export default function LoginPage(): React.ReactNode {
                             </p>
                         )}
                     </div>
+                    <div className="mb-5">
+                        <input
+                            className="w-full outline-none p-3 border border-slate-300 rounded-md"
+                            type="password"
+                            placeholder="Confirm password"
+                            {...register("confirm", {
+                                required: true,
+                                validate: (value) => {
+                                    if (
+                                        watch("password") !== value ||
+                                        watch("password") === ""
+                                    )
+                                        return "Your password do not match";
+                                },
+                            })}
+                        />
+                        {errors.confirm?.type === "validate" && (
+                            <p className="text-red-500 mt-3">
+                                {errors.confirm?.message}
+                            </p>
+                        )}
+                        {errors.confirm?.type === "required" && (
+                            <p className="text-red-500 mt-3">
+                                Please enter confirm password
+                            </p>
+                        )}
+                    </div>
+
                     {authErrorMessage.length > 0 && (
                         <p className="text-red-500 my-3 text-center">
                             {authErrorMessage}
@@ -125,35 +147,25 @@ export default function LoginPage(): React.ReactNode {
                     <Button
                         isLoading={loading}
                         type="submit"
+                        className="w-full"
                         color="primary"
                         size="lg"
-                        className="w-full text-lg"
                     >
-                        Login
+                        Create account
                     </Button>
 
-                    <div className="pt-5 mt-5 border-t border-t-gray-100">
-                        <Button
-                            // type="button"
-                            onClick={onSubmitGoogle}
-                            size="lg"
-                            className="bg-transparent border w-full"
-                            startContent={<FcGoogle className="text-xl" />}
-                        >
-                            Google
-                        </Button>
-                    </div>
-
-                    <div className="flex items-center justify-between  mt-4 ">
-                        <Link className="text-gray-600" href="/forgot">
-                            Forgot password?
-                        </Link>
-                        <Link className="text-primary" href="/register">
-                            Register
-                        </Link>
+                    <div className="flex items-center justify-center pt-4 mt-4 border-t border-t-gray-300">
+                        <p>
+                            Already have an account? &nbsp;
+                            <Link className="text-primary" href="/login">
+                                Login
+                            </Link>
+                        </p>
                     </div>
                 </form>
-            </CardBody>
-        </Card>
+            </div>
+        </>
     );
 }
+
+export default Register;

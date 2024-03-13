@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function MainLayout({ children }: Props): React.ReactNode {
-    const { currentUser, isLogged } = useCurrentUser();
+    const { currentUser } = useCurrentUser();
     const { handleSignOut } = useFirebaseAuthStore();
     return (
         <>
@@ -86,7 +86,7 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                                         </Badge>
                                     </Link>
                                 </Tooltip>
-                                {isLogged ? (
+                                {currentUser ? (
                                     <>
                                         <Dropdown placement="bottom-end">
                                             <DropdownTrigger>

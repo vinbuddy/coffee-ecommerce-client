@@ -4,6 +4,7 @@ import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import { app } from "@/config/firebase";
 import useCurrentUser from "./useCurrentUser";
 import LoadingPage from "@/components/UI/LoadingPage";
+import { IUser } from "@/types/user";
 
 const auth = getAuth(app);
 
@@ -17,11 +18,21 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                // useCurrentUser.setState((state) => ({ currentUser: user }));
-                useCurrentUser.setState((state) => ({ isLogged: true }));
+                const userData: IUser = {
+                    id: user.uid,
+                    email: user.email,
+                    avatar: user.photoURL,
+                    user_name: user.displayName,
+                };
+                // Or using uid fetch user -> setCurrentUser
+
+                // const res = await fetch("/api/user/uid");
+                // const data = await res.json();
+                // userData = data.userData
+
+                useCurrentUser.setState((state) => ({ currentUser: userData }));
             } else {
-                useCurrentUser.setState((state) => ({ isLogged: false }));
-                // useCurrentUser.setState((state) => ({ currentUser: null }));
+                useCurrentUser.setState((state) => ({ currentUser: null }));
             }
             setLoading(false);
         });

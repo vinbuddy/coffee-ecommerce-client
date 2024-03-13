@@ -68,14 +68,6 @@ export default function Home() {
                         <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                             <ProductCard />
                         </div>
-                    </div>
-                    <div className="grid grid-cols-12 gap-5 px-6">
-                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                            <ProductCard />
-                        </div>
-                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                            <ProductCard />
-                        </div>
                         <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                             <ProductCard />
                         </div>
@@ -83,6 +75,20 @@ export default function Home() {
                             <ProductCard />
                         </div>
                     </div>
+                    {/* <div className="grid grid-cols-12 gap-5 px-6">
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                        <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <ProductCard />
+                        </div>
+                    </div> */}
                 </section>
             </div>
         </MainLayout>

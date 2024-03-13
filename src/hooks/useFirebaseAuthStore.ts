@@ -40,18 +40,29 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
         try {
             const userCredential = await signInWithPopup(auth, googleProvider);
             const token: string = await userCredential.user.getIdToken();
-            if (token) {
-                localStorage.setItem("@token", token);
-            }
 
-            const userData: IUser = {
-                id: userCredential.user.uid,
-                email: userCredential.user.email,
-                avatar: userCredential.user.photoURL,
-                user_name: userCredential.user.displayName,
-            };
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/social-register`,
+                {
+                    method: "post",
+                    body: JSON.stringify({
+                        id: userCredential.user.uid,
+                        user_name: userCredential.user.displayName,
+                        avatar: userCredential.user.photoURL,
+                        email: userCredential.user.email,
+                        account_type: "google",
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
-            useCurrentUser.setState((state) => ({ currentUser: userData }));
+            const data = await response.json();
+
+            // if (token) {
+            //     localStorage.setItem("@token", token);
+            // }
         } catch (error: any) {
             set(() => ({ error: error.code }));
         }

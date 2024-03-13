@@ -28,13 +28,15 @@ export default function LoginPage(): React.ReactNode {
     const { handleSignInGoogle } = useFirebaseAuthStore();
     const router = useRouter();
 
-    const { isLogged } = useCurrentUser();
+    const { currentUser } = useCurrentUser();
 
     useEffect(() => {
-        if (isLogged) {
+        // if (currentUser.role === "admin")router.push("/admin");
+
+        if (currentUser) {
             router.push("/");
         }
-    }, [isLogged]);
+    }, [currentUser]);
 
     const onSubmitHandler = async (data: IUserLogin) => {
         setLoading(true);

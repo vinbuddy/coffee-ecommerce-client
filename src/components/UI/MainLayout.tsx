@@ -21,6 +21,7 @@ import Logo from "./Logo";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
 
+import avatarFallback from "@/assets/images/avatar-fallback.jpg";
 interface Props {
     children?: ReactNode;
 }
@@ -99,7 +100,7 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                                                     size="sm"
                                                     src={
                                                         currentUser?.avatar ||
-                                                        ""
+                                                        avatarFallback.src
                                                     }
                                                 />
                                             </DropdownTrigger>

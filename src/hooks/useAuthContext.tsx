@@ -16,7 +16,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userData: IUser = {
                     id: user.uid,
@@ -25,12 +25,17 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
                     user_name: user.displayName,
                 };
                 // Or using uid fetch user -> setCurrentUser
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${user.uid}`,
+                    {
+                        method: "Get",
+                    }
+                );
+                const resData = await res.json();
 
-                // const res = await fetch("/api/user/uid");
-                // const data = await res.json();
-                // userData = data.userData
-
-                useCurrentUser.setState((state) => ({ currentUser: userData }));
+                useCurrentUser.setState((state) => ({
+                    currentUser: resData.data,
+                }));
             } else {
                 useCurrentUser.setState((state) => ({ currentUser: null }));
             }

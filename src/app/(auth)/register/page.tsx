@@ -2,10 +2,12 @@
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/UI/Logo";
+import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface IUserRegister {
     username: string;
@@ -22,16 +24,36 @@ function Register() {
         formState: { errors },
     } = useForm<IUserRegister>();
 
-    const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
+    const {
+        handleCreateAccount,
+        loading,
+        error: authErrorMessage,
+    } = useFirebaseAuthStore();
+    const router = useRouter();
+
+    const { currentUser } = useCurrentUser();
 
     const onSubmitHandler = async (
         data: IUserRegister,
         e?: React.BaseSyntheticEvent
-    ) => {
+    ): Promise<void> => {
         e?.preventDefault();
+
+        try {
+            await handleCreateAccount(data.username, data.email, data.password);
+            router.push("/");
+        } catch (error) {
+            console.log("error: ", error);
+        }
     };
 
+    useEffect(() => {
+        // if (currentUser.role === "admin")router.push("/admin");
+
+        if (currentUser) {
+            router.push("/");
+        }
+    }, [currentUser]);
     return (
         <>
             <div>

@@ -23,9 +23,14 @@ export default function LoginPage(): React.ReactNode {
         formState: { errors },
     } = useForm<IUserLogin>();
 
-    const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
-    const { handleSignInGoogle } = useFirebaseAuthStore();
+    // const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
+    // const [loading, setLoading] = useState<boolean>(false);
+    const {
+        handleSignInGoogle,
+        handleSignInGoogleEmailPassword,
+        loading,
+        error: authErrorMessage,
+    } = useFirebaseAuthStore();
     const router = useRouter();
 
     const { currentUser } = useCurrentUser();
@@ -39,20 +44,16 @@ export default function LoginPage(): React.ReactNode {
     }, [currentUser]);
 
     const onSubmitHandler = async (data: IUserLogin) => {
-        setLoading(true);
-
-        setLoading(false);
+        try {
+            await handleSignInGoogleEmailPassword(data.email, data.password);
+            router.push("/");
+        } catch (error) {}
     };
     const onSubmitGoogle = async (): Promise<void> => {
         try {
-            setLoading(true);
-
             await handleSignInGoogle();
             router.push("/");
-        } catch (error) {
-            setLoading(false);
-        }
-        setLoading(false);
+        } catch (error) {}
     };
     return (
         <Card>

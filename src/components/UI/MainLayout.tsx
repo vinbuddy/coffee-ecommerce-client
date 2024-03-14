@@ -22,6 +22,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
 
 import avatarFallback from "@/assets/images/avatar-fallback.jpg";
+import Footer from "./Footer";
 interface Props {
     children?: ReactNode;
 }
@@ -38,7 +39,7 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                             <Logo />
                         </NavbarBrand>
                         <NavbarContent
-                            as="div"
+                            as="ul"
                             className="hidden sm:flex gap-6"
                             justify="center"
                         >
@@ -66,7 +67,7 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                                 </Link>
                             </NavbarItem>
                         </NavbarContent>
-                        <NavbarContent justify="end">
+                        <NavbarContent justify="end" as="div">
                             <div className="flex items-center ">
                                 <Tooltip
                                     content="Your cart"
@@ -96,7 +97,10 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                                                     as="button"
                                                     className="transition-transform"
                                                     color="default"
-                                                    name="Jason Hughes"
+                                                    name={
+                                                        currentUser?.user_name ||
+                                                        ""
+                                                    }
                                                     size="sm"
                                                     src={
                                                         currentUser?.avatar ||
@@ -164,7 +168,14 @@ export default function MainLayout({ children }: Props): React.ReactNode {
                     </Navbar>
                 </div>
             </header>
+
+            {/* Content */}
             <div className="mt-[85px]">{children}</div>
+
+            {/* Footer */}
+            <div className="pt-10 border">
+                <Footer />
+            </div>
         </>
     );
 }

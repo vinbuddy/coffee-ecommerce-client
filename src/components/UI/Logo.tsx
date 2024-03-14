@@ -5,7 +5,7 @@ import logoImg from "@/assets/images/logo.png";
 export default function Logo(): React.ReactNode {
     return (
         <Link href="/">
-            <Image className="w-[230px] mx-auto block" src={logoImg} alt="" />
+            <Image className="w-[230px] block" src={logoImg} alt="" />
         </Link>
     );
 }

@@ -18,7 +18,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning={true}>
             <body className={`min-h-[100vh] ${inter.className}`}>
                 <NextUIProvider>
                     <AuthContextProvider>{children}</AuthContextProvider>

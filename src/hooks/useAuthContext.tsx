@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
+import { setCookie, getCookie } from "cookies-next";
 import { app } from "@/config/firebase";
 import useCurrentUser from "./useCurrentUser";
 import LoadingPage from "@/components/UI/LoadingPage";
@@ -18,12 +19,10 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userData: IUser = {
-                    id: user.uid,
-                    email: user.email,
-                    avatar: user.photoURL,
-                    user_name: user.displayName,
-                };
+                const token: string = await user.getIdToken();
+                setCookie("token", token);
+                setCookie("uid", user.uid);
+
                 // Or using uid fetch user -> setCurrentUser
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${user.uid}`,

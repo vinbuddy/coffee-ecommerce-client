@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Teko } from "next/font/google";
 
 import { NextProvider as NextUIProvider } from "./providers";
 import "./globals.css";
 import { AuthContextProvider } from "@/hooks/useAuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
+const teko = Teko({ subsets: ["latin"], variable: "--font-teko" });
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning={true}>
-            <body className={`min-h-[100vh] ${inter.className}`}>
+            <body
+                className={`min-h-[100vh] ${teko.variable}  ${inter.className}`}
+            >
                 <NextUIProvider>
                     <AuthContextProvider>{children}</AuthContextProvider>
                 </NextUIProvider>

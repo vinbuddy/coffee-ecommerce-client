@@ -2,6 +2,10 @@ import Link from "next/link";
 import Logo from "./Logo";
 import { Image } from "@nextui-org/react";
 
+import { BiTimeFive } from "react-icons/bi";
+import { SlLocationPin } from "react-icons/sl";
+import { AiOutlineMail } from "react-icons/ai";
+import { BiPhone } from "react-icons/bi";
 import logo2 from "@/assets/images/logo2.jpg";
 
 export default function Footer(): React.ReactNode {
@@ -25,7 +29,7 @@ export default function Footer(): React.ReactNode {
                     <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <ul className="text-sm">
                             <p className="mb-6 text-gray-400 text-md font-bold ">
-                                INTRODUCTION
+                                GIỚI THIỆU
                             </p>
                             <li className="mb-5">
                                 <Link
@@ -33,7 +37,7 @@ export default function Footer(): React.ReactNode {
                                     color="gray"
                                     className="py-1.5 font-normal transition-colors hover:text-blue-gray-900"
                                 >
-                                    About us
+                                    Sản phẩm
                                 </Link>
                             </li>
                             <li className="mb-5">
@@ -42,7 +46,7 @@ export default function Footer(): React.ReactNode {
                                     color="gray"
                                     className="py-1.5 font-normal transition-colors hover:text-blue-gray-900"
                                 >
-                                    Product
+                                    Khuyến mãi
                                 </Link>
                             </li>
                             <li className="mb-5">
@@ -51,16 +55,7 @@ export default function Footer(): React.ReactNode {
                                     color="gray"
                                     className="py-1.5 font-normal transition-colors hover:text-blue-gray-900"
                                 >
-                                    Voucher
-                                </Link>
-                            </li>
-                            <li className="mb-5">
-                                <Link
-                                    href="#"
-                                    color="gray"
-                                    className="py-1.5 font-normal transition-colors hover:text-blue-gray-900"
-                                >
-                                    Store
+                                    Cửa hàng
                                 </Link>
                             </li>
                         </ul>
@@ -93,25 +88,37 @@ export default function Footer(): React.ReactNode {
                     <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <ul className="text-sm">
                             <p className="mb-6 text-gray-400 textt-md font-bold ">
-                                CONTACT
+                                LIÊN HỆ
                             </p>
-                            <li className="mb-5">
-                                <span className="py-1.5 font-normal transition-colors hover:text-blue-gray-900">
+                            <li className="mb-5 flex items-center justify-start">
+                                <span className="me-4">
+                                    <BiTimeFive />
+                                </span>
+                                <span className="transition-colors hover:text-blue-gray-900">
                                     07.00 AM - 10.00 PM
                                 </span>
                             </li>
-                            <li className="mb-5">
-                                <span className="py-1.5 font-normal transition-colors hover:text-blue-gray-900">
+                            <li className="mb-5 flex items-center justify-start">
+                                <span className="me-4">
+                                    <SlLocationPin />
+                                </span>
+                                <span className="transition-colors hover:text-blue-gray-900">
                                     Ho Chi Minh, Viet Nam
                                 </span>
                             </li>
-                            <li className="mb-5">
-                                <span className="py-1.5 font-normal transition-colors hover:text-blue-gray-900">
+                            <li className="mb-5 flex items-center justify-start">
+                                <span className="me-4">
+                                    <AiOutlineMail />
+                                </span>
+                                <span className="transition-colors hover:text-blue-gray-900">
                                     huynhthevinh1608@gmail.com
                                 </span>
                             </li>
-                            <li className="mb-5">
-                                <span className="py-1.5 font-normal transition-colors hover:text-blue-gray-900">
+                            <li className="mb-5 flex items-center justify-start">
+                                <span className="me-4">
+                                    <BiPhone />
+                                </span>
+                                <span className="transition-colors hover:text-blue-gray-900">
                                     0933693266
                                 </span>
                             </li>

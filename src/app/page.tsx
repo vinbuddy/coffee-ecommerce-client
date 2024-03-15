@@ -3,6 +3,9 @@ import { Button, Card, CardHeader, Image, Tooltip } from "@nextui-org/react";
 
 import banner2 from "@/assets/images/banner2.png";
 import banner4 from "@/assets/images/banner4.jpg";
+import productBg from "@/assets/images/product-bg.png";
+import productTitleBg from "@/assets/images/product-title-bg.png";
+
 import coffeeIcon from "@/assets/images/coffee-icon.png";
 import teaIcon from "@/assets/images/tea-icon.png";
 import foodIcon from "@/assets/images/food-icon.png";
@@ -58,15 +61,16 @@ export default function Home() {
                     </section>
 
                     <section className="mt-12 flex justify-center flex-col text-center">
-                        <h2 className="text-2xl font-medium">
+                        <h2 className="font-teko text-4xl font-medium">
                             Discover The Art Of Perfect Coffee And Tea
                         </h2>
 
                         <p className="mt-2 text-gray-500">
-                            Experience the difference as we meticulously select
-                            and roast the finest beans to create a truly
-                            unforgettable cup of coffee. Join us on a journey of
-                            taste and awaken your senses, one sip at a time.
+                            Hãy trải nghiệm sự khác biệt khi chúng tôi tỉ mỉ lựa
+                            chọn và rang những hạt cà phê ngon nhất để tạo ra
+                            một tách cà phê thực sự khó quên. Hãy tham gia cùng
+                            chúng tôi trên hành trình nếm thử và đánh thức các
+                            giác quan của bạn, từng ngụm một.
                         </p>
 
                         <div className="flex items-center justify-center my-5">
@@ -120,27 +124,27 @@ export default function Home() {
                                     </div>
                                 }
                             >
-                                Order Now
+                                Đặt hàng ngay
                             </Button>
                         </div>
                     </section>
 
                     {/* Outlet Best seller */}
                     <section className="mt-12">
-                        <h2 className="text-3xl mb-5 font-medium text-center">
+                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">
                             Best seller
                         </h2>
                         <div className="grid grid-cols-12 gap-10">
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
                         </div>
@@ -148,66 +152,93 @@ export default function Home() {
 
                     {/* Outlet Coffee */}
                     <section className="mt-12">
-                        <h2 className="text-3xl mb-5 font-medium text-center">
-                            Coffee
+                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">
+                            Cà phê
                         </h2>
                         <div className="grid grid-cols-12 gap-x-10 gap-y-5">
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
                         </div>
-                        {/* <div className="grid grid-cols-12 gap-5 px-6">
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                        </div> */}
                     </section>
 
                     <section className="mt-12">
-                        <h2 className="text-3xl mb-5 font-medium text-center">
-                            Food
+                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">
+                            Các món ăn
                         </h2>
                         <div className="grid grid-cols-12 gap-x-10 gap-y-5">
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
-                            <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
                         </div>
                     </section>
 
-                    <section className="mt-12"></section>
+                    <section
+                        style={{
+                            backgroundImage: `url(${productBg.src})`,
+                            backgroundPosition: "top center",
+                            backgroundSize: `100% auto`,
+                            backgroundRepeat: "no-repeat",
+                            height: `${productBg.height}px`,
+                        }}
+                        className="mt-14 mb-10 "
+                    >
+                        <div className="gap-5 grid grid-cols-12">
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-6 xl:col-span-6 2xl:col-span-6"></div>
+                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                                <Image
+                                    src={productTitleBg.src}
+                                    alt="product bg"
+                                />
+                                <p className="mt-7 text-gray-500 leading-6">
+                                    Được trồng trọt và chăm chút kỹ lưỡng, nuôi
+                                    dưỡng từ thổ nhưỡng phì nhiêu, nguồn nước
+                                    mát lành, bao bọc bởi mây và sương cùng nền
+                                    nhiệt độ mát mẻ quanh năm, những búp trà ở
+                                    Tây Bắc mập mạp và xanh mướt, hội tụ đầy đủ
+                                    dưỡng chất, sinh khí, và tinh hoa đất trời.
+                                    Chính khí hậu đặc trưng cùng phương pháp
+                                    canh tác của đồng bào dân tộc nơi đây đã tạo
+                                    ra Trà Xanh vị mộc dễ uống, dễ yêu, không
+                                    thể trộn lẫn với bất kỳ vùng miền nào khác.
+                                </p>
+
+                                <Button
+                                    as={Link}
+                                    href="/"
+                                    variant="flat"
+                                    radius="full"
+                                    className="bg-[#778B37] text-white mt-5"
+                                >
+                                    Thử ngay
+                                </Button>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </MainLayout>

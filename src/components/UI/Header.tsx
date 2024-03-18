@@ -21,9 +21,30 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
 
 import avatarFallback from "@/assets/images/avatar-fallback.jpg";
+import { usePathname } from "next/navigation";
+
+const navLinks = [
+    {
+        content: "Trang chủ",
+        href: "/",
+    },
+    {
+        content: "Menu",
+        href: "/product",
+    },
+    {
+        content: "Khuyến mãi",
+        href: "/voucher",
+    },
+    {
+        content: "Cửa hàng",
+        href: "/store",
+    },
+];
 
 export default function Header(): React.ReactNode {
     const { currentUser } = useCurrentUser();
+    const pathName = usePathname();
     const { handleSignOut } = useFirebaseAuthStore();
 
     return (
@@ -38,24 +59,21 @@ export default function Header(): React.ReactNode {
                         className="hidden sm:flex gap-6"
                         justify="center"
                     >
-                        <NavbarItem isActive aria-current="page">
-                            <Link color="foreground" href="#">
-                                Trang chủ
-                            </Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link color="foreground" href="#">
-                                Menu
-                            </Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link href="#">Khuyến mãi</Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link color="foreground" href="#">
-                                Cửa hàng
-                            </Link>
-                        </NavbarItem>
+                        {navLinks.map((navLink, index) => {
+                            return (
+                                <NavbarItem
+                                    isActive={pathName === navLink.href}
+                                    key={index}
+                                >
+                                    <Link
+                                        color="foreground"
+                                        href={navLink.href}
+                                    >
+                                        {navLink.content}
+                                    </Link>
+                                </NavbarItem>
+                            );
+                        })}
                     </NavbarContent>
                     <NavbarContent justify="end" as="div">
                         <div className="flex items-center ">

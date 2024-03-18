@@ -134,7 +134,7 @@ export default function Home() {
                         <h2 className="font-teko text-4xl mb-5 font-medium text-center">
                             Best seller
                         </h2>
-                        <div className="grid grid-cols-12 gap-10">
+                        <div className="grid grid-cols-12 gap-5">
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
@@ -155,7 +155,7 @@ export default function Home() {
                         <h2 className="font-teko text-4xl mb-5 font-medium text-center">
                             Cà phê
                         </h2>
-                        <div className="grid grid-cols-12 gap-x-10 gap-y-5">
+                        <div className="grid grid-cols-12 gap-5">
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>
@@ -181,7 +181,7 @@ export default function Home() {
                         <h2 className="font-teko text-4xl mb-5 font-medium text-center">
                             Các món ăn
                         </h2>
-                        <div className="grid grid-cols-12 gap-x-10 gap-y-5">
+                        <div className="grid grid-cols-12 gap-5">
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard />
                             </div>

@@ -12,7 +12,7 @@ export default function MainLayout({ children }: Props): React.ReactNode {
             <Header />
 
             {/* Content */}
-            <div className="mt-[85px]">{children}</div>
+            <div className="mt-[64.8px] pt-5">{children}</div>
 
             {/* Footer */}
             <div className="pt-10 border">

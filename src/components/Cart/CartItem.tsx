@@ -15,17 +15,27 @@ import AddToCartPreviewButton from "./AddToCartPreviewButton";
 
 interface IProps {
     cartItem: any;
+    isSelected?: boolean;
+    isDeleted?: boolean;
+    isEdited?: boolean;
 }
 
-export default function CartItem({ cartItem }: IProps): React.ReactNode {
+export default function CartItem({
+    isSelected = true,
+    isDeleted = true,
+    isEdited = true,
+    cartItem,
+}: IProps): React.ReactNode {
     return (
         <li className="flex items-start h-[140px] mb-5">
-            <Checkbox
-                className="me-1.5"
-                size="lg"
-                radius="full"
-                value={cartItem?.id}
-            ></Checkbox>
+            {isSelected && (
+                <Checkbox
+                    className="me-1.5"
+                    size="lg"
+                    radius="full"
+                    value={cartItem?.id}
+                ></Checkbox>
+            )}
 
             <div className="flex-1 h-full flex justify-between ">
                 <Image
@@ -40,33 +50,37 @@ export default function CartItem({ cartItem }: IProps): React.ReactNode {
                             CloudFee Hạnh Nhân Nướng
                         </p>
                         <div className="flex items-center">
-                            <AddToCartPreviewButton
-                                buttonProps={{
-                                    color: "primary",
-                                    variant: "light",
-                                    size: "md",
-                                    radius: "full",
-                                    className: "w-[30px] h-[30px] px-0 min-w-0",
-                                    children: (
-                                        <MdOutlineDraw className="text-lg" />
-                                    ),
-                                }}
-                            />
-                            <Spacer x={2} />
-                            <Button
-                                color="danger"
-                                variant="light"
-                                radius="full"
-                                size="md"
-                                className="w-[30px] h-[30px] px-0 min-w-0"
-                                startContent={
-                                    <AiOutlineDelete className="text-lg" />
-                                }
-                            />
+                            {isEdited && (
+                                <AddToCartPreviewButton
+                                    buttonProps={{
+                                        color: "default",
+                                        variant: "light",
+                                        size: "md",
+                                        radius: "full",
+                                        className:
+                                            "w-[30px] h-[30px] px-0 min-w-0",
+                                        children: (
+                                            <MdOutlineDraw className="text-lg" />
+                                        ),
+                                    }}
+                                />
+                            )}
+                            {isDeleted && (
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    radius="full"
+                                    size="md"
+                                    className="w-[30px] h-[30px] px-0 min-w-0 ms-2"
+                                    startContent={
+                                        <AiOutlineDelete className="text-lg" />
+                                    }
+                                />
+                            )}
                         </div>
                     </div>
                     <p className="text-gray-500 mb-2">49.000 đ</p>
-                    <p className="text-gray-500 mb-2">x1 - size vừa</p>
+                    <p className="text-gray-500 mb-2">+1, size vừa</p>
                     <div className="flex gap-x-2">
                         <p className="text-gray-500 mb-2">Topping: </p>
                         <Chip color="default" variant="flat">

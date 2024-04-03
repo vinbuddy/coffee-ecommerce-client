@@ -14,8 +14,10 @@ import {
 import React from "react";
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
+import vnpayIcon from "@/assets/images/vnpay-icon.png";
 
 import { MdLocationSearching } from "react-icons/md";
+import { HiOutlineBuildingStorefront } from "react-icons/hi2";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -131,6 +133,19 @@ export default function CheckoutPage(): React.ReactNode {
                                         isRequired
                                         defaultItems={locations}
                                         labelPlacement="inside"
+                                        label="Chọn chi nhánh"
+                                        className="col-span-12"
+                                    >
+                                        {(item: any) => (
+                                            <AutocompleteItem key={item.value}>
+                                                {item.label}
+                                            </AutocompleteItem>
+                                        )}
+                                    </Autocomplete>
+                                    <Autocomplete
+                                        isRequired
+                                        defaultItems={locations}
+                                        labelPlacement="inside"
                                         label="Địa chỉ giao hàng"
                                         className="col-span-12"
                                         selectorIcon={<MdLocationSearching />}
@@ -141,6 +156,7 @@ export default function CheckoutPage(): React.ReactNode {
                                             </AutocompleteItem>
                                         )}
                                     </Autocomplete>
+
                                     <Input
                                         isRequired
                                         className="col-span-6"
@@ -180,6 +196,19 @@ export default function CheckoutPage(): React.ReactNode {
                                                 />
                                                 <span className="ms-3">
                                                     Tiền mặt
+                                                </span>
+                                            </div>
+                                        </PaymentMethodRadio>
+                                        <PaymentMethodRadio value="vnpay">
+                                            <div className="flex items-center">
+                                                <Image
+                                                    width={24}
+                                                    src={vnpayIcon.src}
+                                                    alt="money icon"
+                                                    radius="none"
+                                                />
+                                                <span className="ms-3">
+                                                    VNPAY
                                                 </span>
                                             </div>
                                         </PaymentMethodRadio>
@@ -268,7 +297,11 @@ export default function CheckoutPage(): React.ReactNode {
                                         </p>
                                     </div>
 
-                                    <Button color="primary" size="lg">
+                                    <Button
+                                        radius="full"
+                                        color="primary"
+                                        size="lg"
+                                    >
                                         Đặt hàng
                                     </Button>
                                 </div>

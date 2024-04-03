@@ -62,7 +62,7 @@ function Register() {
                     className="w-[400px] bg-white p-5 rounded-lg"
                 >
                     <div>
-                        <Logo />
+                        <Logo className="flex justify-center" />
                         <h4 className="text-center text-primary text-2xl mb-5 mt-3">
                             Create your account
                         </h4>

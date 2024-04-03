@@ -62,8 +62,8 @@ export default function LoginPage(): React.ReactNode {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     className="w-[400px] "
                 >
-                    <div className="">
-                        <Logo />
+                    <div>
+                        <Logo className="flex justify-center" />
                         <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">
                             Login
                         </h4>

@@ -27,7 +27,7 @@ export default function CartItem({
     cartItem,
 }: IProps): React.ReactNode {
     return (
-        <li className="flex items-start h-[140px] mb-5">
+        <li className="flex items-start h-[140px] mb-5 last:mb-0">
             {isSelected && (
                 <Checkbox
                     className="me-1.5"
@@ -79,16 +79,39 @@ export default function CartItem({
                             )}
                         </div>
                     </div>
-                    <p className="text-gray-500 mb-2">49.000 đ</p>
+                    <div className="flex items-center justify-between">
+                        <p className="text-gray-500 mb-2">49.000 đ</p>
+                        <p className="text-gray-500 mb-2">Tổng: 49.000 đ</p>
+                    </div>
                     <p className="text-gray-500 mb-2">+1, size vừa</p>
                     <div className="flex gap-x-2">
                         <p className="text-gray-500 mb-2">Topping: </p>
-                        <Chip color="default" variant="flat">
-                            Trái vải
-                        </Chip>
-                        <Chip color="default" variant="flat">
-                            Đào miếng
-                        </Chip>
+                        <Tooltip
+                            closeDelay={0}
+                            content="+10.000 đ"
+                            placement="bottom"
+                        >
+                            <Chip
+                                className="cursor-pointer"
+                                color="default"
+                                variant="flat"
+                            >
+                                Trái vải
+                            </Chip>
+                        </Tooltip>
+                        <Tooltip
+                            closeDelay={0}
+                            content="+10.000 đ"
+                            placement="bottom"
+                        >
+                            <Chip
+                                className="cursor-pointer"
+                                color="default"
+                                variant="flat"
+                            >
+                                Đào miếng
+                            </Chip>
+                        </Tooltip>
                     </div>
                 </div>
             </div>

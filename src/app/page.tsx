@@ -3,6 +3,7 @@ import { Button, Card, CardHeader, Image, Tooltip } from "@nextui-org/react";
 
 import banner2 from "@/assets/images/banner2.png";
 import banner4 from "@/assets/images/banner4.jpg";
+import banner5 from "@/assets/images/banner5.jpg";
 import productBg from "@/assets/images/product-bg.png";
 import productTitleBg from "@/assets/images/product-title-bg.png";
 
@@ -39,7 +40,7 @@ export default function Home() {
                                     removeWrapper
                                     alt="Card background"
                                     className="z-0 w-full h-full object-cover"
-                                    src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t39.30808-6/430996243_417129577344825_3847305229450240265_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=lUCDhqRLeF0AX8GUmnX&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfAQRd_zNwkRZjP-EARbySNIVoT5mVsUuNMu8Rbsfdf7XQ&oe=65F14B57"
+                                    src={banner5.src}
                                 />
                             </Link>
                         </Card>

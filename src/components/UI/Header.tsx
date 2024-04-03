@@ -127,14 +127,26 @@ export default function Header(): React.ReactNode {
                                                     {currentUser?.email}
                                                 </p>
                                             </DropdownItem>
-                                            <DropdownItem key="team_settings">
+                                            <DropdownItem
+                                                as={Link}
+                                                href="/profile"
+                                                key="profile"
+                                            >
                                                 Trang cá nhân
                                             </DropdownItem>
-                                            <DropdownItem key="settings">
+                                            <DropdownItem
+                                                as={Link}
+                                                href="/cart"
+                                                key="cart"
+                                            >
                                                 Giỏ hàng
                                             </DropdownItem>
 
-                                            <DropdownItem key="analytics">
+                                            <DropdownItem
+                                                as={Link}
+                                                href="/profile/order"
+                                                key="user-order"
+                                            >
                                                 Các đơn hàng
                                             </DropdownItem>
                                             <DropdownItem

@@ -91,3 +91,19 @@ body {
     bottom: 30px;
     animation-duration: 4s;
 }
+/* 
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #f4f4f5 inset !important;
+}
+
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #e4e4e7 inset !important;
+}
+
+div[data-hover="true"]:hover input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #e4e4e7 inset !important;
+}
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #f4f4f5 inset !important;
+    border: 1px solid #f4f4f5; 
+} */

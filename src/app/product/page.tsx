@@ -20,7 +20,11 @@ const breadcumbItems: IBreadcumbItem[] = [
     },
 ];
 
-export default function ProductPage(): React.ReactNode {
+export default async function ProductPage() {
+    // const res = await fetch("http://localhost:5500/product", { method: "GET" });
+    // const data = await res.json();
+    // console.log("data: ", data);
+
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
@@ -50,7 +54,7 @@ export default function ProductPage(): React.ReactNode {
                                 type="search"
                             />
                             <ul className="py-3">
-                                <li className="p-2 rounded-lg text-primary">
+                                <li className="px-3 py-2 rounded-lg text-primary">
                                     <Link href="/">Tất cả</Link>
                                 </li>
                                 <li className="px-3 py-2 rounded-lg ">

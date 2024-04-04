@@ -1,25 +1,27 @@
 "use client";
 import {
-    Avatar,
+    Accordion,
+    AccordionItem,
     Button,
     Divider,
-    Image,
     Tooltip,
-    User,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
-import logo from "@/assets/images/logo.png";
 
-import { TbPackage } from "react-icons/tb";
+import { TbPackage, TbCategoryPlus } from "react-icons/tb";
 import { FiShoppingBag } from "react-icons/fi";
 import { RiHome5Line } from "react-icons/ri";
 import { PiChartLineBold } from "react-icons/pi";
-import { LuBadgePercent, LuBell, LuMapPin } from "react-icons/lu";
+import { LuBadgePercent, LuBell, LuMapPin, LuIceCream2 } from "react-icons/lu";
 import { IoLogOutOutline } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+import { RxSize } from "react-icons/rx";
 
-const navLinks = [
+import { usePathname } from "next/navigation";
+import { INavLink } from "@/types";
+import Logo from "@/components/UI/Logo";
+
+const navLinks: INavLink[] = [
     {
         content: "Trang chủ",
         href: "/admin",
@@ -34,6 +36,28 @@ const navLinks = [
         content: "Sản phẩm",
         href: "/admin/product",
         icon: <FiShoppingBag />,
+        children: [
+            {
+                content: "Sản phẩm",
+                href: "/admin/product",
+                icon: <FiShoppingBag />,
+            },
+            {
+                content: "Danh mục",
+                href: "/admin/category",
+                icon: <TbCategoryPlus />,
+            },
+            {
+                content: "Size",
+                href: "/admin/size",
+                icon: <RxSize />,
+            },
+            {
+                content: "Topping",
+                href: "/admin/topping",
+                icon: <LuIceCream2 />,
+            },
+        ],
     },
     {
         content: "Voucher",
@@ -59,32 +83,76 @@ export default function AdminLayout({
 }): React.ReactNode {
     const pathName = usePathname();
     const admin = true;
+
+    const renderSubNavLink = (
+        currentNav: INavLink,
+        subNavs: INavLink[]
+    ): React.ReactNode => {
+        return (
+            <Accordion
+                variant="light"
+                showDivider={false}
+                itemClasses={{ trigger: "py-4", title: "text-base" }}
+            >
+                <AccordionItem
+                    startContent={currentNav.icon}
+                    title={currentNav.content}
+                >
+                    {subNavs.map((navLink, index) => {
+                        let isActive: boolean = navLink.href === pathName;
+
+                        return (
+                            <li
+                                key={index}
+                                className={`${
+                                    isActive && "bg-[#E4E4E7] shadow"
+                                } rounded-lg  mb-3`}
+                            >
+                                <Link
+                                    className="flex items-center ps-4 py-2"
+                                    href={navLink.href}
+                                >
+                                    {navLink.icon}
+                                    <span className="ms-2.5">
+                                        {navLink.content}
+                                    </span>
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </AccordionItem>
+            </Accordion>
+        );
+    };
+
     return (
         <div className="min-h-[400px]">
             <div className="grid grid-cols-12 gap-5 h-full">
                 <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-2 2xl:col-span-2">
-                    <aside className="h-screen flex flex-col justify-between sticky top-0 z-[1] p-5">
+                    <aside className="h-screen flex flex-col justify-between sticky top-0 z-[1] p-5 overflow-y-auto scrollbar">
                         <div>
-                            <Image
-                                className="w-full"
-                                src={logo.src}
-                                alt="logo"
-                                radius="none"
-                            />
+                            <Logo href="/admin" className="w-full" />
                             <ul className="mt-5">
                                 {navLinks.map((navLink, index) => {
                                     let isActive: boolean =
                                         navLink.href === pathName;
+                                    if (navLink?.children) {
+                                        return renderSubNavLink(
+                                            navLink,
+                                            navLink.children
+                                        );
+                                    }
+
                                     return (
                                         <li
-                                            key={index}
+                                            key={navLink.href}
                                             className={`${
                                                 isActive &&
                                                 "bg-[#E4E4E7] shadow"
-                                            } rounded-lg  mb-3`}
+                                            } rounded-lg`}
                                         >
                                             <Link
-                                                className="flex items-center px-3 py-3"
+                                                className="flex items-center px-2 py-4"
                                                 href={navLink.href}
                                             >
                                                 {navLink.icon}
@@ -98,7 +166,7 @@ export default function AdminLayout({
                             </ul>
                         </div>
 
-                        <div className="p-3 rounded-lg bg-gray-100">
+                        <div className="p-3 rounded-lg bg-gray-100 mt-5">
                             <Tooltip
                                 showArrow
                                 color="foreground"

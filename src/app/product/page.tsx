@@ -37,6 +37,7 @@ export default async function ProductPage() {
                     <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <aside className="sticky top-[80px] z-[1]">
                             <Input
+                                isClearable
                                 classNames={{
                                     base: "max-w-full h-10 !w-full",
                                     mainWrapper: "h-full",
@@ -51,7 +52,7 @@ export default async function ProductPage() {
                                         <CiSearch size={18} />
                                     </button>
                                 }
-                                type="search"
+                                type="text"
                             />
                             <ul className="py-3">
                                 <li className="px-3 py-2 rounded-lg text-primary">

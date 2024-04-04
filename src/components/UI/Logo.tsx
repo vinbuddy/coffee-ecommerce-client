@@ -4,11 +4,15 @@ import logoImg from "@/assets/images/logo.png";
 
 interface IProps {
     className?: string;
+    href?: string;
 }
 
-export default function Logo({ className = "" }: IProps): React.ReactNode {
+export default function Logo({
+    className = "",
+    href = "/",
+}: IProps): React.ReactNode {
     return (
-        <Link className={className} href="/">
+        <Link className={className} href={href}>
             <Image className="w-[230px] block" src={logoImg} alt="" />
         </Link>
     );

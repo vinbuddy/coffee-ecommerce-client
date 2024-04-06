@@ -32,7 +32,7 @@ const breadcumbItems: IBreadcumbItem[] = [
 export default async function AdminProductPage() {
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/product`,
-        { method: "GET", cache: "no-store" }
+        { method: "GET", cache: "no-cache" }
     );
 
     const productData = await response.json();
@@ -73,7 +73,7 @@ export default async function AdminProductPage() {
                 </div>
                 <ProductTable products={productData.data} />
                 {/* Bottom pagination */}
-                <div className="mt-5 flex justify-center">
+                {/* <div className="mt-5 flex justify-center">
                     <Pagination
                         classNames={{
                             cursor: " bg-black text-white",
@@ -83,7 +83,7 @@ export default async function AdminProductPage() {
                         initialPage={1}
                         variant="light"
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     );

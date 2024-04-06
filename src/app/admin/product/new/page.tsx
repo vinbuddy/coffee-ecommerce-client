@@ -24,6 +24,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import useLoading from "@/hooks/useLoading";
+import { useTransition } from "react";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -53,6 +54,8 @@ interface IAddProductForm {
 
 export default function AdminNewProductPage(): React.ReactNode {
     const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
     const {
         register,
         handleSubmit,
@@ -216,7 +219,8 @@ export default function AdminNewProductPage(): React.ReactNode {
             );
 
             if (response.status === 200) {
-                router.push("/admin/product");
+                startTransition(() => router.push("/admin/product"));
+                startTransition(() => router.refresh());
             }
         } catch (error: any) {
             alert(error.message);

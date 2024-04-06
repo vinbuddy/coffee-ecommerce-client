@@ -64,7 +64,7 @@ export default function ProductTable({ products }: IProps): React.ReactNode {
                             <div className="relative flex items-center gap-x-4">
                                 <Tooltip content="Chi tiết">
                                     <Link
-                                        href=""
+                                        href={`/admin/product/${product.id}`}
                                         className="text-lg text-default-400 cursor-pointer active:opacity-50"
                                     >
                                         <EyeIcon />

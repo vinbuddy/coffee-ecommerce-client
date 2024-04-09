@@ -17,6 +17,7 @@ import { CiSearch } from "react-icons/ci";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import Link from "next/link";
 import ProductTable from "@/components/Product/ProductTable";
+import { Metadata } from "next";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -28,6 +29,10 @@ const breadcumbItems: IBreadcumbItem[] = [
         href: "/admin/product",
     },
 ];
+
+export const metadata: Metadata = {
+    title: "Quản lý sản phẩm",
+};
 
 export default async function AdminProductPage() {
     const response = await fetch(

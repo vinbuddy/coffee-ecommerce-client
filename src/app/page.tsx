@@ -16,8 +16,31 @@ import MainLayout from "@/components/UI/MainLayout";
 import ProductCard from "@/components/Product/ProductCard";
 
 import { MdArrowOutward } from "react-icons/md";
+import { IProduct } from "@/types/product";
 
-export default function Home() {
+const COFFEE_CATEGORY_NAME: string = "Cà phê";
+const TEA_CATEGORY_NAME: string = "Trà";
+
+export default async function Home() {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product`,
+        { method: "GET", cache: "no-store" }
+    );
+
+    const productData = await response.json();
+    const products: IProduct[] = productData.data;
+
+    const coffeeProducts = products.filter(
+        (product) =>
+            product.category_name?.toLocaleLowerCase() ===
+            COFFEE_CATEGORY_NAME.toLocaleLowerCase()
+    );
+    const teaProducts = products.filter(
+        (product) =>
+            product.category_name?.toLocaleLowerCase() ===
+            TEA_CATEGORY_NAME.toLocaleLowerCase()
+    );
+
     return (
         <MainLayout>
             <div className="container ">
@@ -131,7 +154,7 @@ export default function Home() {
                     </section>
 
                     {/* Outlet Best seller */}
-                    <section className="mt-12">
+                    {/* <section className="mt-12">
                         <h2 className="font-teko text-4xl mb-5 font-medium text-center">
                             Best seller
                         </h2>
@@ -149,7 +172,7 @@ export default function Home() {
                                 <ProductCard />
                             </div>
                         </div>
-                    </section>
+                    </section> */}
 
                     {/* Outlet Coffee */}
                     <section className="mt-12">
@@ -157,44 +180,62 @@ export default function Home() {
                             Cà phê
                         </h2>
                         <div className="grid grid-cols-12 gap-5">
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                            {coffeeProducts
+                                .splice(0, 6)
+                                .map((coffeeProduct) => (
+                                    <div
+                                        key={coffeeProduct.id}
+                                        className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                                    >
+                                        <ProductCard product={coffeeProduct} />
+                                    </div>
+                                ))}
+                            {/* <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
+                                <ProductCard product={[]} />
+                            </div> */}
                         </div>
                     </section>
 
                     <section className="mt-12">
                         <h2 className="font-teko text-4xl mb-5 font-medium text-center">
-                            Các món ăn
+                            Trà
                         </h2>
                         <div className="grid grid-cols-12 gap-5">
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                            {teaProducts.splice(0, 6).map((teaProduct) => (
+                                <div
+                                    key={teaProduct.id}
+                                    className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                                >
+                                    <ProductCard product={teaProduct} />
+                                </div>
+                            ))}
+                            {/* <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                                <ProductCard product={[]} />
                             </div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
+                                <ProductCard product={[]} />
+                            </div> */}
                         </div>
                     </section>
 

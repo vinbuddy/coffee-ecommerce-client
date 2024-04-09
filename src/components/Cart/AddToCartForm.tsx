@@ -1,21 +1,51 @@
 "use client";
+import useLoading from "@/hooks/useLoading";
+import { fetchData, formatVNCurrency } from "@/lib/utils";
+import { IProductSize, IProductTopping } from "@/types/product";
 import {
     Button,
     Checkbox,
     CheckboxGroup,
     Radio,
     RadioGroup,
+    Skeleton,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
 interface IProps {
     onDone?: () => void;
+    productId?: number;
 }
 
-export default function AddToCartForm({}: IProps): React.ReactNode {
+export default function AddToCartForm({ productId }: IProps): React.ReactNode {
     const [quantity, setQuantity] = useState<number>(1);
-    // const [size, setSize] = useState<string>("small");
+    const [sizes, setSizes] = useState<IProductSize[]>([]);
+    const [toppings, setToppings] = useState<IProductTopping[]>([]);
+    const { loading, startLoading, stopLoading } = useLoading();
+
+    useEffect(() => {
+        (async () => {
+            try {
+                startLoading();
+                let [toppingData, sizeData] = await Promise.all([
+                    fetchData(
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${productId}`
+                    ),
+                    fetchData(
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${productId}`
+                    ),
+                ]);
+
+                setToppings(toppingData.data);
+                setSizes(sizeData.data);
+            } catch (error) {
+                console.log("error: ", error);
+            } finally {
+                stopLoading();
+            }
+        })();
+    }, []);
 
     const handleIncrease = (): void => {
         setQuantity((prevQuantity) => prevQuantity + 1);
@@ -31,26 +61,46 @@ export default function AddToCartForm({}: IProps): React.ReactNode {
         <form action="">
             {/* Size - Topping */}
             <div>
-                <RadioGroup label="Chọn size" defaultValue="size-s">
-                    <Radio value="size-s">Nhỏ + 0 đ</Radio>
-                    <Radio value="size-m">Vừa + 10.000 đ</Radio>
-                    <Radio value="size-l">Lớn + 16.000 đ</Radio>
+                <RadioGroup
+                    label={sizes.length > 0 ? "Chọn size" : null}
+                    defaultValue="size-s"
+                >
+                    {sizes.map((size) => (
+                        <Radio key={size?.id} value={size?.id?.toString()}>
+                            {size?.size_name} +{" "}
+                            {formatVNCurrency(size.size_price)}
+                        </Radio>
+                    ))}
                 </RadioGroup>
+                {loading && (
+                    <div>
+                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                    </div>
+                )}
             </div>
             <div className="mt-5">
                 <CheckboxGroup
                     color="primary"
-                    label="Chọn topping"
+                    label={sizes.length > 0 ? "Chọn topping" : null}
                     defaultValue={[]}
                 >
-                    <Checkbox value="buenos-aires">
-                        Trái vải (+10.000 đ)
-                    </Checkbox>
-                    <Checkbox value="sydney">Đào miếng (+10.000 đ)</Checkbox>
-                    <Checkbox value="london">
-                        Trân châu trắng (+10.000 đ)
-                    </Checkbox>
+                    {toppings.map((topping) => (
+                        <Checkbox
+                            key={topping?.id}
+                            value={topping?.id.toString()}
+                        >
+                            {topping.topping_name} +{" "}
+                            {formatVNCurrency(topping.topping_price)}
+                        </Checkbox>
+                    ))}
                 </CheckboxGroup>
+                {loading && (
+                    <div>
+                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                    </div>
+                )}
             </div>
 
             {/* Select quantity - Add to cart */}

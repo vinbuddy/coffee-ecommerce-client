@@ -11,13 +11,17 @@ import {
 } from "@nextui-org/react";
 import { AiOutlinePlus } from "react-icons/ai";
 import AddToCartForm from "./AddToCartForm";
+import { IProduct } from "@/types/product";
+import { formatVNCurrency } from "@/lib/utils";
 
 interface IProps {
     buttonProps?: ButtonProps;
+    product: IProduct;
 }
 
 export default function AddToCartPreviewButton({
     buttonProps,
+    product,
 }: IProps): React.ReactNode {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -48,21 +52,23 @@ export default function AddToCartPreviewButton({
                                     <div className="flex-1 h-full flex justify-between">
                                         <Image
                                             className="h-full border object-cover"
-                                            src="https://product.hstatic.net/1000075078/product/1697442235_cloudfee-hanh-nhan-nuong_8282f6c2cf4d49bba2dfbe70cb7dbede_large.jpg"
+                                            src={product?.image || ""}
                                             alt=""
                                         />
 
                                         <div className="flex-1 ms-3 ">
                                             <p className="font-medium mb-1">
-                                                CloudFee Hạnh Nhân Nướng
+                                                {product?.name}
                                             </p>
                                             <span className="text-gray-500 ">
-                                                49.000 đ
+                                                {formatVNCurrency(
+                                                    product?.price
+                                                )}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <AddToCartForm />
+                                <AddToCartForm productId={product.id} />
                             </ModalBody>
                         </>
                     )}

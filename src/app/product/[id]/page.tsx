@@ -103,7 +103,7 @@ export default async function ProductDetail({
                             </p>
 
                             <div className="mt-7">
-                                <AddToCartForm productId={product.id} />
+                                <AddToCartForm product={product} />
                             </div>
                         </div>
                     </section>

@@ -1,7 +1,7 @@
 "use client";
-import useLoading from "@/hooks/useLoading";
-import { fetchData, formatVNCurrency } from "@/lib/utils";
-import { IProductSize, IProductTopping } from "@/types/product";
+import React, { useEffect, useState } from "react";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { toast } from "sonner";
 import {
     Button,
     Checkbox,
@@ -10,19 +10,39 @@ import {
     RadioGroup,
     Skeleton,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
-import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+
+import useCartStore from "@/hooks/useCartStore";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import useLoading from "@/hooks/useLoading";
+
+import { fetchData, formatVNCurrency } from "@/lib/utils";
+import { IProduct, IProductSize, IProductTopping } from "@/types/product";
 
 interface IProps {
     onDone?: () => void;
-    productId?: number;
+    product: IProduct;
 }
 
-export default function AddToCartForm({ productId }: IProps): React.ReactNode {
-    const [quantity, setQuantity] = useState<number>(1);
+export default function AddToCartForm({
+    product,
+    onDone = () => {},
+}: IProps): React.ReactNode {
     const [sizes, setSizes] = useState<IProductSize[]>([]);
     const [toppings, setToppings] = useState<IProductTopping[]>([]);
+
     const { loading, startLoading, stopLoading } = useLoading();
+    const {
+        loading: submitLoading,
+        startLoading: startSubmitLoading,
+        stopLoading: stopSubmitLoading,
+    } = useLoading();
+
+    const [quantity, setQuantity] = useState<number>(1);
+    const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
+    const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
+    const [previewPrice, setPreviewPrice] = useState<number | string>(0);
+
+    const { currentUser } = useCurrentUser();
 
     useEffect(() => {
         (async () => {
@@ -30,15 +50,28 @@ export default function AddToCartForm({ productId }: IProps): React.ReactNode {
                 startLoading();
                 let [toppingData, sizeData] = await Promise.all([
                     fetchData(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${productId}`
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${product.id}`
                     ),
                     fetchData(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${productId}`
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${product.id}`
                     ),
                 ]);
 
                 setToppings(toppingData.data);
                 setSizes(sizeData.data);
+                setSelectedSizeId(sizeData.data[0]?.size_id);
+
+                // Preview Price = product.price + first size price
+                if (sizeData.data[0]?.size_price) {
+                    const initPreviewPrice: number =
+                        Number(product.price) +
+                        Number(sizeData.data[0]?.size_price);
+
+                    console.log("initPreviewPrice: ", initPreviewPrice);
+                    setPreviewPrice(initPreviewPrice);
+                } else {
+                    setPreviewPrice(Number(product.price));
+                }
             } catch (error) {
                 console.log("error: ", error);
             } finally {
@@ -57,21 +90,119 @@ export default function AddToCartForm({ productId }: IProps): React.ReactNode {
         }
     };
 
+    const handleSelectToppings = (toppingIds: any): void => {
+        setSelectedToppings(toppingIds);
+    };
+
+    const handleSelectSize = (sizeId: string): void => {
+        setSelectedSizeId(Number(sizeId));
+    };
+
+    // Calculcate preview price
+    useEffect(() => {
+        handlePreviewPrice();
+    }, [selectedSizeId, selectedToppings, quantity]);
+
+    const handlePreviewPrice = (): void => {
+        let totalPrice: number = Number(product.price);
+
+        // Calculate size price
+        const selectedSize = sizes.find(
+            (size) => size.size_id === selectedSizeId
+        );
+
+        if (selectedSize && selectedSize.size_price) {
+            totalPrice += Number(selectedSize.size_price);
+        }
+
+        // Calculate toppings price
+        selectedToppings.forEach((toppingId) => {
+            const selectedTopping = toppings.find(
+                (topping) => topping.id === Number(toppingId)
+            );
+
+            if (selectedTopping && selectedTopping.topping_price) {
+                totalPrice += Number(selectedTopping.topping_price);
+            }
+        });
+
+        totalPrice *= quantity;
+
+        setPreviewPrice(totalPrice);
+    };
+
+    const addToCart = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
+
+        try {
+            startSubmitLoading();
+
+            const body = {
+                user_id: currentUser?.id,
+                product_id: product.id,
+                size_id: selectedSizeId,
+                quantity: quantity,
+                toppings: selectedToppings,
+            };
+
+            console.log("body: ", body);
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(body),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            const resData = await response.json();
+
+            if (response.status === 200) {
+                useCartStore.setState((state) => ({
+                    totalItem: state.totalItem + 1,
+                }));
+
+                toast.success("Thêm giỏ hàng thành công", {
+                    position: "bottom-center",
+                });
+            } else {
+                throw new Error(resData.message);
+            }
+        } catch (error: any) {
+            toast.error("Thêm giỏ hàng thất bại", {
+                position: "bottom-center",
+            });
+        } finally {
+            stopSubmitLoading();
+            onDone();
+        }
+    };
+
     return (
-        <form action="">
+        <form onSubmit={addToCart}>
             {/* Size - Topping */}
             <div>
-                <RadioGroup
-                    label={sizes.length > 0 ? "Chọn size" : null}
-                    defaultValue="size-s"
-                >
-                    {sizes.map((size) => (
-                        <Radio key={size?.id} value={size?.id?.toString()}>
-                            {size?.size_name} +{" "}
-                            {formatVNCurrency(size.size_price)}
-                        </Radio>
-                    ))}
-                </RadioGroup>
+                {sizes.length > 0 && (
+                    <RadioGroup
+                        label={sizes.length > 0 ? "Chọn size" : null}
+                        defaultValue={selectedSizeId?.toString() || ""}
+                        onValueChange={handleSelectSize}
+                    >
+                        {sizes.map((size) => (
+                            <Radio
+                                key={size?.size_id}
+                                value={size?.size_id?.toString()}
+                            >
+                                {size?.size_name} +{" "}
+                                {formatVNCurrency(size.size_price)}
+                            </Radio>
+                        ))}
+                    </RadioGroup>
+                )}
                 {loading && (
                     <div>
                         <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
@@ -82,8 +213,9 @@ export default function AddToCartForm({ productId }: IProps): React.ReactNode {
             <div className="mt-5">
                 <CheckboxGroup
                     color="primary"
-                    label={sizes.length > 0 ? "Chọn topping" : null}
+                    label={toppings.length > 0 ? "Chọn topping" : null}
                     defaultValue={[]}
+                    onChange={handleSelectToppings}
                 >
                     {toppings.map((topping) => (
                         <Checkbox
@@ -132,8 +264,14 @@ export default function AddToCartForm({ productId }: IProps): React.ReactNode {
                         </Button>
                     </div>
 
-                    <Button className="w-full ms-3" color="primary">
-                        Thêm vào giỏ hàng
+                    <Button
+                        isLoading={submitLoading}
+                        type="submit"
+                        className="w-full ms-3"
+                        color="primary"
+                    >
+                        {formatVNCurrency(previewPrice)} &#x2022; Thêm vào giỏ
+                        hàng
                     </Button>
                 </div>
             </div>

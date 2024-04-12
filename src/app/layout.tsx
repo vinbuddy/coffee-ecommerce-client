@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Teko } from "next/font/google";
+import { Toaster } from "sonner";
 
 import { NextProvider as NextUIProvider } from "./providers";
 import "./globals.css";
@@ -24,7 +25,12 @@ export default function RootLayout({
                 className={`min-h-[100vh] ${teko.variable}  ${inter.className}`}
             >
                 <NextUIProvider>
-                    <AuthContextProvider>{children}</AuthContextProvider>
+                    <AuthContextProvider>
+                        <>
+                            {children}
+                            <Toaster />
+                        </>
+                    </AuthContextProvider>
                 </NextUIProvider>
             </body>
         </html>

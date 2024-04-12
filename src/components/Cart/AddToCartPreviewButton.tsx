@@ -23,7 +23,7 @@ export default function AddToCartPreviewButton({
     buttonProps,
     product,
 }: IProps): React.ReactNode {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
     return (
         <>
@@ -68,7 +68,10 @@ export default function AddToCartPreviewButton({
                                         </div>
                                     </div>
                                 </div>
-                                <AddToCartForm productId={product.id} />
+                                <AddToCartForm
+                                    product={product}
+                                    onDone={() => onClose()}
+                                />
                             </ModalBody>
                         </>
                     )}

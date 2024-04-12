@@ -1,7 +1,15 @@
 import AddToCartForm from "@/components/Cart/AddToCartForm";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import { fetchData, formatVNCurrency } from "@/lib/utils";
+import { IProduct, IProductSize, IProductTopping } from "@/types/product";
 import { Image } from "@nextui-org/react";
+import { Metadata, ResolvingMetadata } from "next";
 import React from "react";
+
+type Props = {
+    params: { id: string };
+    searchParams: { [key: string]: string | string[] | undefined };
+};
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -14,15 +22,57 @@ const breadcumbItems: IBreadcumbItem[] = [
     },
     {
         content: "Trà long hạt sen",
-        href: "/product",
+        href: "/product/:id",
     },
 ];
 
-export default function ProductDetail({
+export async function generateMetadata(
+    { params, searchParams }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const id = params.id;
+
+    // fetch data
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/${id}`
+    );
+
+    const productData = await response.json();
+    const product: IProduct = productData.data;
+
+    // Adding product name to breadcumbs
+    const lastBreadcumbItem = breadcumbItems[breadcumbItems.length - 1];
+
+    // Edit the content of the last item
+    lastBreadcumbItem.content = product.name;
+    lastBreadcumbItem.href = "/product/" + product.id;
+
+    return {
+        title: product.name,
+    };
+}
+
+export default async function ProductDetail({
     params,
 }: {
     params: { id: string };
-}): React.ReactNode {
+}) {
+    const [productData, productToppingData, productSizeData] =
+        await Promise.all([
+            fetchData(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/${params.id}`
+            ),
+            fetchData(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${params.id}`
+            ),
+            fetchData(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${params.id}`
+            ),
+        ]);
+
+    const product: IProduct = productData.data;
+    const productToppings: IProductTopping[] = productToppingData.data;
+    const productSizes: IProductSize[] = productSizeData.data;
     return (
         <div className="container pb-10">
             <div className="px-6">
@@ -43,21 +93,17 @@ export default function ProductDetail({
                     <section className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                         <div>
                             <h1 className="font-bold text-3xl">
-                                Trà Long Nhãn Hạt Sen
+                                {product.name}
                             </h1>
                             <p className="text-primary text-xl mt-3">
-                                39.000 đ
+                                {formatVNCurrency(product.price)}
                             </p>
                             <p className="mt-3 text-gray-500">
-                                Thức uống mang hương vị của nhãn, của sen, của
-                                trà Oolong đầy thanh mát cho tất cả các thành
-                                viên trong dịp Tết này. An lành, thư thái và đậm
-                                đà chính là những gì The Coffee House mong muốn
-                                gửi trao đến bạn và gia đình.
+                                {product.description}
                             </p>
 
                             <div className="mt-7">
-                                <AddToCartForm />
+                                <AddToCartForm productId={product.id} />
                             </div>
                         </div>
                     </section>

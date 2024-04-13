@@ -1,7 +1,13 @@
+"use client";
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { Button } from "@nextui-org/react";
-import React from "react";
+import CartItemSkeleton from "@/components/UI/CartItemSkeleton";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { ICart } from "@/types/cart";
+import { Button, Image } from "@nextui-org/react";
+import React, { useEffect } from "react";
+import emptyCartImage from "@/assets/images/empty-cart.png";
+import useSWR from "swr";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -15,6 +21,20 @@ const breadcumbItems: IBreadcumbItem[] = [
 ];
 
 export default function CartPage(): React.ReactNode {
+    const { currentUser } = useCurrentUser();
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`;
+
+    const {
+        data: cartData,
+        isLoading,
+        error,
+    } = useSWR(url, { revalidateOnMount: true });
+    const carts: ICart[] = cartData?.data || [];
+
+    useEffect(() => {
+        document.title = "Giỏ hàng của bạn";
+    }, []);
+
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
@@ -25,10 +45,32 @@ export default function CartPage(): React.ReactNode {
                 <div className="grid grid-cols-12 h-full gap-10">
                     {/* Products */}
                     <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
-                        <ul>
-                            <CartItem cartItem={{}} />
-                            <CartItem cartItem={{}} />
-                        </ul>
+                        {isLoading ? (
+                            <div>
+                                {Array.from(
+                                    { length: 3 },
+                                    (_, index) => index + 1
+                                ).map((index) => (
+                                    <CartItemSkeleton key={index} />
+                                ))}
+                            </div>
+                        ) : (
+                            <ul>
+                                {carts.length > 0 ? (
+                                    carts.map((cartItem) => (
+                                        <CartItem
+                                            key={cartItem?.id}
+                                            cartItem={cartItem}
+                                        />
+                                    ))
+                                ) : (
+                                    <Image
+                                        src={emptyCartImage.src}
+                                        alt="empty cart"
+                                    />
+                                )}
+                            </ul>
+                        )}
                     </section>
 
                     <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">

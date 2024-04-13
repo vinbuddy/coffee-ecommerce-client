@@ -1,20 +1,20 @@
-import {
-    Button,
-    Checkbox,
-    Chip,
-    Image,
-    Spacer,
-    Tooltip,
-    cn,
-} from "@nextui-org/react";
+"use client";
+import { Checkbox, Chip, Image, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlineDraw } from "react-icons/md";
 import AddToCartPreviewButton from "./AddToCartPreviewButton";
+import { ICart } from "@/types/cart";
+import { formatVNCurrency } from "@/lib/utils";
+import DeleteConfirmationButton from "../UI/DeleteConfirmationButton";
+import { mutate } from "swr";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { toast } from "sonner";
+import useCartStore from "@/hooks/useCartStore";
 
 interface IProps {
-    cartItem: any;
+    cartItem: ICart;
     isSelected?: boolean;
     isDeleted?: boolean;
     isEdited?: boolean;
@@ -26,6 +26,47 @@ export default function CartItem({
     isEdited = true,
     cartItem,
 }: IProps): React.ReactNode {
+    const { currentUser } = useCurrentUser();
+
+    const handleDeleteCartItem = async (): Promise<void> => {
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartItem.id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            const resData = await response.json();
+
+            if (response.status === 200) {
+                // Mutate Cart page
+
+                mutate(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`
+                );
+
+                // Update cart badge
+                useCartStore.setState((state) => ({
+                    totalItem: state.totalItem - 1,
+                }));
+
+                toast.success("Xóa giỏ hàng thành công", {
+                    position: "bottom-center",
+                });
+            } else {
+                throw new Error(resData.message);
+            }
+        } catch (error) {
+            toast.error("Xóa giỏ hàng thất bại", {
+                position: "bottom-center",
+            });
+        }
+    };
+
     return (
         <li className="flex items-start h-[140px] mb-5 last:mb-0">
             {isSelected && (
@@ -33,25 +74,26 @@ export default function CartItem({
                     className="me-1.5"
                     size="lg"
                     radius="full"
-                    value={cartItem?.id}
+                    value={cartItem?.id.toString()}
                 ></Checkbox>
             )}
 
             <div className="flex-1 h-full flex justify-between ">
                 <Image
                     className="h-full border object-cover"
-                    src="https://product.hstatic.net/1000075078/product/1697442235_cloudfee-hanh-nhan-nuong_8282f6c2cf4d49bba2dfbe70cb7dbede_large.jpg"
+                    src={cartItem?.product_image || ""}
                     alt=""
                 />
 
                 <div className="flex-1 ms-4">
                     <div className="flex items-center justify-between">
                         <p className="font-medium mb-2">
-                            CloudFee Hạnh Nhân Nướng
+                            {cartItem?.product_name}
                         </p>
                         <div className="flex items-center">
                             {isEdited && (
                                 <AddToCartPreviewButton
+                                    cartItem={cartItem}
                                     buttonProps={{
                                         color: "default",
                                         variant: "light",
@@ -66,53 +108,56 @@ export default function CartItem({
                                 />
                             )}
                             {isDeleted && (
-                                <Button
-                                    color="danger"
-                                    variant="light"
-                                    radius="full"
-                                    size="md"
-                                    className="w-[30px] h-[30px] px-0 min-w-0 ms-2"
-                                    startContent={
-                                        <AiOutlineDelete className="text-lg" />
-                                    }
+                                <DeleteConfirmationButton
+                                    onDelete={handleDeleteCartItem}
+                                    buttonProps={{
+                                        color: "danger",
+                                        variant: "light",
+                                        radius: "full",
+                                        size: "md",
+                                        className:
+                                            "w-[30px] h-[30px] px-0 min-w-0 ms-2",
+                                        children: (
+                                            <AiOutlineDelete className="text-lg" />
+                                        ),
+                                    }}
                                 />
                             )}
                         </div>
                     </div>
                     <div className="flex items-center justify-between">
-                        <p className="text-gray-500 mb-2">49.000 đ</p>
-                        <p className="text-gray-500 mb-2">Tổng: 49.000 đ</p>
+                        <p className="text-gray-500 mb-2">
+                            {formatVNCurrency(cartItem.product_price)}
+                        </p>
+                        <p className="text-gray-500 mb-2">
+                            Tổng: {formatVNCurrency(cartItem.total_item_price)}
+                        </p>
                     </div>
-                    <p className="text-gray-500 mb-2">+1, size vừa</p>
-                    <div className="flex gap-x-2">
-                        <p className="text-gray-500 mb-2">Topping: </p>
-                        <Tooltip
-                            closeDelay={0}
-                            content="+10.000 đ"
-                            placement="bottom"
-                        >
-                            <Chip
-                                className="cursor-pointer"
-                                color="default"
-                                variant="flat"
-                            >
-                                Trái vải
-                            </Chip>
-                        </Tooltip>
-                        <Tooltip
-                            closeDelay={0}
-                            content="+10.000 đ"
-                            placement="bottom"
-                        >
-                            <Chip
-                                className="cursor-pointer"
-                                color="default"
-                                variant="flat"
-                            >
-                                Đào miếng
-                            </Chip>
-                        </Tooltip>
-                    </div>
+                    <p className="text-gray-500 mb-2">
+                        +{cartItem.quantity}, size{" "}
+                        {cartItem.size_name.toLowerCase()}
+                    </p>
+                    {cartItem.toppings && cartItem.toppings.length > 0 && (
+                        <div className="flex gap-x-2">
+                            <p className="text-gray-500 mb-2">Topping: </p>
+                            {cartItem.toppings.map((topping) => (
+                                <Tooltip
+                                    key={topping.topping_storage_id}
+                                    closeDelay={0}
+                                    content={topping.topping_price}
+                                    placement="bottom"
+                                >
+                                    <Chip
+                                        className="cursor-pointer"
+                                        color="default"
+                                        variant="flat"
+                                    >
+                                        {topping.topping_name}
+                                    </Chip>
+                                </Tooltip>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </li>

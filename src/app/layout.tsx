@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Teko } from "next/font/google";
 import { Toaster } from "sonner";
 
-import { NextProvider as NextUIProvider } from "./providers";
+import { NextProvider as NextUIProvider, SWRConfigProvider } from "./providers";
 import "./globals.css";
 import { AuthContextProvider } from "@/hooks/useAuthContext";
 
@@ -26,10 +26,10 @@ export default function RootLayout({
             >
                 <NextUIProvider>
                     <AuthContextProvider>
-                        <>
+                        <SWRConfigProvider>
                             {children}
                             <Toaster />
-                        </>
+                        </SWRConfigProvider>
                     </AuthContextProvider>
                 </NextUIProvider>
             </body>

@@ -22,7 +22,6 @@ export default function CartBadge() {
 
                 const resData = await response.json();
                 const count: number = resData?.data;
-                console.log("count: ", count);
 
                 useCartStore.setState(() => ({
                     totalItem: count || 0,

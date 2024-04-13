@@ -19,3 +19,5 @@ export async function fetchData(url: string) {
     });
     return await response.json();
 }
+
+export const fetcher = (url: string) => fetch(url).then((res) => res.json());

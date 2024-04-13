@@ -105,7 +105,6 @@ export default function AdminNewProductPage(): React.ReactNode {
             } catch (error) {
                 console.log("error: ", error);
             } finally {
-                console.log(categories);
             }
         })();
     }, []);

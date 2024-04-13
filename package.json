@@ -21,6 +21,7 @@
     "react-hook-form": "^7.51.0",
     "react-icons": "^5.0.1",
     "sonner": "^1.4.41",
+    "swr": "^2.2.5",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

@@ -85,7 +85,7 @@ export default async function ProductDetail({
                         <div>
                             <Image
                                 className="w-full h-auto"
-                                src="https://product.hstatic.net/1000075078/product/1649378747_tra-sen-nhan_441ab034e29e4858813ebff91f85162d.jpg"
+                                src={product.image}
                                 alt=""
                             />
                         </div>

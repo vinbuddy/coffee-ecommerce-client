@@ -5,9 +5,12 @@ import CartItemSkeleton from "@/components/UI/CartItemSkeleton";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { ICart } from "@/types/cart";
 import { Button, Image } from "@nextui-org/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import emptyCartImage from "@/assets/images/empty-cart.png";
 import useSWR from "swr";
+import useCartStore from "@/hooks/useCartStore";
+import { formatVNCurrency } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -21,8 +24,10 @@ const breadcumbItems: IBreadcumbItem[] = [
 ];
 
 export default function CartPage(): React.ReactNode {
+    const router = useRouter();
     const { currentUser } = useCurrentUser();
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`;
+    const { selectedCartItems, clearSelectedCartItems } = useCartStore();
 
     const {
         data: cartData,
@@ -31,8 +36,38 @@ export default function CartPage(): React.ReactNode {
     } = useSWR(url, { revalidateOnMount: true });
     const carts: ICart[] = cartData?.data || [];
 
+    const totalPayment = useMemo(() => {
+        return selectedCartItems.reduce(
+            (acc, curr) => acc + Number(curr.total_item_price),
+            0
+        );
+    }, [selectedCartItems]);
+
+    const handleNavigateToCheckout = (): void => {
+        // Add selected items to localstorage
+        const prevCart = localStorage.getItem("cart");
+
+        // Remove pre items
+        if (prevCart) localStorage.removeItem("cart");
+
+        if (selectedCartItems.length > 0) {
+            localStorage.setItem("cart", JSON.stringify(selectedCartItems));
+
+            // clear selected items state
+            clearSelectedCartItems();
+
+            // Navigate to checkout page
+            router.push("/checkout");
+        }
+    };
+
     useEffect(() => {
         document.title = "Giỏ hàng của bạn";
+
+        return () => {
+            // clear selected cart item
+            clearSelectedCartItems();
+        };
     }, []);
 
     return (
@@ -44,7 +79,7 @@ export default function CartPage(): React.ReactNode {
 
                 <div className="grid grid-cols-12 h-full gap-10">
                     {/* Products */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
+                    <section className="col-span-6 sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
                         {isLoading ? (
                             <div>
                                 {Array.from(
@@ -73,14 +108,29 @@ export default function CartPage(): React.ReactNode {
                         )}
                     </section>
 
-                    <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                    <section className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
                         <aside className="sticky top-[80px] z-[1]">
-                            <div className="rounded-xl shadow p-4 border">
+                            <div className="rounded-lg shadow p-4 border">
                                 <p className="mb-3">
-                                    Tổng tiền thanh toán:{" "}
-                                    <b id="total-payment">0 </b> <b>Đ</b>
+                                    Số món đã chọn:{" "}
+                                    <b>{selectedCartItems.length} </b>
                                 </p>
-                                <Button className="w-full" color="primary">
+                                <p className="mb-4">
+                                    Tổng tiền thanh toán:{" "}
+                                    <b
+                                        id="total-payment"
+                                        className="text-primary"
+                                    >
+                                        {formatVNCurrency(totalPayment)}
+                                    </b>
+                                </p>
+                                <Button
+                                    isDisabled={selectedCartItems.length <= 0}
+                                    onClick={handleNavigateToCheckout}
+                                    radius="sm"
+                                    className="w-full"
+                                    color="primary"
+                                >
                                     Mua hàng
                                 </Button>
                             </div>

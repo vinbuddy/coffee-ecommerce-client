@@ -27,7 +27,7 @@ export default function CartItem({
     cartItem,
 }: IProps): React.ReactNode {
     const { currentUser } = useCurrentUser();
-
+    const { addSelectedCartItems, removeSelectedCartItems } = useCartStore();
     const handleDeleteCartItem = async (): Promise<void> => {
         try {
             const response = await fetch(
@@ -67,6 +67,18 @@ export default function CartItem({
         }
     };
 
+    const handleSelectCartItem = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        let isChecked = e.target.checked;
+
+        if (isChecked) {
+            addSelectedCartItems(cartItem);
+        } else {
+            removeSelectedCartItems(cartItem);
+        }
+    };
+
     return (
         <li className="flex items-start h-[140px] mb-5 last:mb-0">
             {isSelected && (
@@ -75,6 +87,7 @@ export default function CartItem({
                     size="lg"
                     radius="full"
                     value={cartItem?.id.toString()}
+                    onChange={handleSelectCartItem}
                 ></Checkbox>
             )}
 

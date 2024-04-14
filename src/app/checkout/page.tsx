@@ -11,18 +11,24 @@ import {
     AutocompleteItem,
     Button,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
 
 import { MdLocationSearching } from "react-icons/md";
 import { HiOutlineBuildingStorefront } from "react-icons/hi2";
+import { ICart } from "@/types/cart";
+import { useRouter } from "next/navigation";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
         content: "Trang chủ",
         href: "/",
+    },
+    {
+        content: "Giỏ hàng",
+        href: "/cart",
     },
     {
         content: "Thanh toán",
@@ -112,6 +118,19 @@ const PaymentMethodRadio = (props: any): React.ReactNode => {
 };
 
 export default function CheckoutPage(): React.ReactNode {
+    const [selectedCartItems, setSelectedCartItems] = useState<ICart[]>([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        const cartItemStorage: string | null = localStorage.getItem("cart");
+
+        if (!cartItemStorage) {
+            router.replace("/cart");
+            return;
+        }
+        setSelectedCartItems(JSON.parse(cartItemStorage));
+    }, []);
+
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
@@ -240,7 +259,18 @@ export default function CheckoutPage(): React.ReactNode {
                                         </h2>
 
                                         <ul className="mt-4">
-                                            <CartItem
+                                            {selectedCartItems.map(
+                                                (cartItem) => (
+                                                    <CartItem
+                                                        isSelected={false}
+                                                        isDeleted={false}
+                                                        isEdited={false}
+                                                        cartItem={cartItem}
+                                                        key={cartItem.id}
+                                                    />
+                                                )
+                                            )}
+                                            {/* <CartItem
                                                 isSelected={false}
                                                 isDeleted={false}
                                                 isEdited={false}
@@ -251,7 +281,7 @@ export default function CheckoutPage(): React.ReactNode {
                                                 isDeleted={false}
                                                 isEdited={false}
                                                 cartItem={{}}
-                                            />
+                                            /> */}
                                         </ul>
                                     </section>
 

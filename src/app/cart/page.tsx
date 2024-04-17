@@ -112,14 +112,20 @@ export default function CartPage(): React.ReactNode {
                         <aside className="sticky top-[80px] z-[1]">
                             <div className="rounded-lg shadow p-4 border">
                                 <p className="mb-3">
-                                    Số món đã chọn:{" "}
+                                    <span className="text-black/70">
+                                        Số món đã chọn:
+                                    </span>
+                                    &nbsp;
                                     <b>{selectedCartItems.length} </b>
                                 </p>
                                 <p className="mb-4">
-                                    Tổng tiền thanh toán:{" "}
+                                    <span className="text-black/70">
+                                        Tổng tiền thanh toán:
+                                    </span>
+                                    &nbsp;
                                     <b
                                         id="total-payment"
-                                        className="text-primary"
+                                        className="text-primary/70"
                                     >
                                         {formatVNCurrency(totalPayment)}
                                     </b>

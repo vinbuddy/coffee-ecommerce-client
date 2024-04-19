@@ -10,8 +10,8 @@ import logo2 from "@/assets/images/logo2.jpg";
 
 export default function Footer(): React.ReactNode {
     return (
-        <footer className="w-full">
-            <div className="mx-auto w-full max-w-7xl px-8">
+        <footer className="container">
+            <div className="mx-auto w-full max-w-7xl px-6">
                 <div className="grid grid-cols-12 gap-4">
                     <div className="flex flex-col col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <Link href="/">

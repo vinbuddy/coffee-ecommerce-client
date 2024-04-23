@@ -24,22 +24,13 @@ const breadcumbItems: IBreadcumbItem[] = [
     },
 ];
 
-export default async function ProductPage({
-    searchParams,
-}: {
-    searchParams: { name: string; category_id: number };
-}) {
-    const productFetchURL = `${
-        process.env.NEXT_PUBLIC_API_BASE_URL
-    }/product?category_id=${searchParams.category_id || 0}&name=${
-        searchParams.name || ""
-    }`;
+export default async function ProductPage({ searchParams }: { searchParams: { name: string; category_id: number } }) {
+    const productFetchURL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/product?category_id=${
+        searchParams.category_id || 0
+    }&name=${searchParams.name || ""}`;
     const categoryFetchURL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/category`;
 
-    let [productData, categoryData] = await Promise.all([
-        fetchData(productFetchURL),
-        fetchData(categoryFetchURL),
-    ]);
+    let [productData, categoryData] = await Promise.all([fetchData(productFetchURL), fetchData(categoryFetchURL)]);
 
     const products: IProduct[] = productData.data;
 
@@ -58,26 +49,17 @@ export default async function ProductPage({
                         <aside className="sticky top-[80px] z-[1]">
                             <ProductSearchBar />
                             <ul className="py-3">
-                                <li
-                                    className={`px-3 py-2 rounded-lg ${
-                                        !searchParams.category_id &&
-                                        "text-primary"
-                                    }`}
-                                >
+                                <li className={`px-3 py-2 rounded-lg ${!searchParams.category_id && "text-primary"}`}>
                                     <Link href="/product">Tất cả</Link>
                                 </li>
                                 {categories.map((category) => (
                                     <li
                                         key={category?.id}
                                         className={`px-3 py-2 rounded-lg ${
-                                            category.id ==
-                                                searchParams.category_id &&
-                                            "text-primary"
+                                            category.id == searchParams.category_id && "text-primary"
                                         }`}
                                     >
-                                        <Link
-                                            href={`/product?category_id=${category?.id}`}
-                                        >
+                                        <Link replace={true} href={`/product?category_id=${category?.id}`}>
                                             {category?.category_name}
                                         </Link>
                                     </li>

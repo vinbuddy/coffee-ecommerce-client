@@ -1,12 +1,7 @@
-"use client";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import {
-    Button,
-    Image,
-    Link as NextUILink,
-    Select,
-    SelectItem,
-} from "@nextui-org/react";
+import { fetchData } from "@/lib/utils";
+import { IStore, IStoreLocation } from "@/types/store";
+import { Button, Image, Link as NextUILink } from "@nextui-org/react";
 import Link from "next/link";
 
 const breadcumbItems: IBreadcumbItem[] = [
@@ -20,11 +15,23 @@ const breadcumbItems: IBreadcumbItem[] = [
     },
 ];
 
-const districts = ["Quận 3", "Quận 2"];
+const DEFAULT_CITY = "Thành phố Hồ Chí Minh";
 
 interface IProps {}
 
-export default function StorePage() {
+export default async function StorePage({ searchParams }: { searchParams: { city: string } }) {
+    const currentLocation = searchParams.city ?? DEFAULT_CITY;
+
+    const storeFetchURL = searchParams?.city
+        ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/store?city=${searchParams.city}`
+        : `${process.env.NEXT_PUBLIC_API_BASE_URL}/store?city=${DEFAULT_CITY}`;
+    const cityStoreFetchURL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/store/location`;
+
+    const [storeData, storeLocationData] = await Promise.all([fetchData(storeFetchURL), fetchData(cityStoreFetchURL)]);
+
+    const stores: IStore[] = storeData.data;
+    const storeLocations: IStoreLocation[] = storeLocationData.data;
+
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
@@ -40,185 +47,61 @@ export default function StorePage() {
                             className="sticky top-[80px] z-[1] overflow-y-auto scrollbar"
                         >
                             <ul className="">
-                                <li className="px-3 py-2 rounded-lg text-primary">
-                                    Tp Hồ Chí Minh (63)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Hà Nội (37)
-                                </li>
-                                <li className="px-3 py-2 rounded-lg">
-                                    Đà Nãng (5)
-                                </li>
+                                {storeLocations.map((storeLocation) => {
+                                    let isActive =
+                                        storeLocation.city.toLocaleLowerCase().trim() ===
+                                        currentLocation.toLocaleLowerCase().trim();
+
+                                    return (
+                                        <li
+                                            key={storeLocation.city}
+                                            className={`px-3 py-2 rounded-lg ${isActive && "text-primary"}`}
+                                        >
+                                            <Link href={`/store?city=${storeLocation.city}`} replace={true}>
+                                                {storeLocation.city}&nbsp;(
+                                                {storeLocation.store_count})
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </aside>
                     </section>
 
                     {/* Stores */}
                     <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
-                        <div className="mb-10">
-                            <Select
-                                placeholder="Chọn quận, huyện"
-                                className="max-w-xs"
-                                size="md"
-                            >
-                                {districts.map((district) => (
-                                    <SelectItem key={district} value={district}>
-                                        {district}
-                                    </SelectItem>
-                                ))}
-                            </Select>
-                        </div>
                         <div className="grid grid-cols-12 gap-x-5 gap-y-10">
-                            <div className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                                <Link href="/store/1">
-                                    <Image
-                                        isZoomed
-                                        radius="lg"
-                                        src="https://file.hstatic.net/1000075078/file/hcm-lu-gia1__1__e0a622da07ab48b8bb7a542f088b7233.jpg"
-                                        alt="store thumbnail"
-                                    />
-                                    <h3 className="font-bold mt-2 text-lg">
-                                        HCM Lữ Gia
-                                    </h3>
+                            {stores.map((store) => (
+                                <div
+                                    key={store.id}
+                                    className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6"
+                                >
+                                    <Link className="block" href={`/store/${store.id}`}>
+                                        <Image
+                                            src={store.image || ""}
+                                            alt="store thumbnail"
+                                            className="h-[300px] object-cover"
+                                        />
+                                        <h3 className="font-bold mt-2 text-lg">{store.store_name}</h3>
 
-                                    <div className="my-2">
-                                        <p className="mb-1 text-sm">
-                                            64A Lữ Gia, Phường 15, Quận 11, Hồ
-                                            Chí Minh
-                                        </p>
-                                        <p className="text-sm">07:30 - 22:00</p>
-                                    </div>
-
-                                    <Button
-                                        color="primary"
-                                        fullWidth
-                                        size="sm"
-                                        variant="flat"
-                                    >
+                                        <div className="my-2">
+                                            <p className="mb-1 text-sm">{store.address}</p>
+                                            <p className="text-sm">
+                                                {store.open_time} - {store.close_time}
+                                            </p>
+                                        </div>
+                                    </Link>
+                                    <Button color="primary" fullWidth size="sm" variant="flat">
                                         <NextUILink
                                             isExternal
-                                            className="text-primary text-sm"
-                                            href=""
+                                            className="text-primary text-sm block w-full"
+                                            href={store.google_map_location}
                                         >
                                             Xem trên bản đồ
                                         </NextUILink>
                                     </Button>
-                                </Link>
-                            </div>
-                            <div className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                                <Link href="">
-                                    <Image
-                                        isZoomed
-                                        radius="lg"
-                                        src="https://file.hstatic.net/1000075078/file/hcm-lu-gia1__1__e0a622da07ab48b8bb7a542f088b7233.jpg"
-                                        alt="store thumbnail"
-                                    />
-                                    <h3 className="font-bold mt-2 text-lg">
-                                        HCM Lữ Gia
-                                    </h3>
-
-                                    <div className="my-2">
-                                        <p className="mb-1 text-sm">
-                                            64A Lữ Gia, Phường 15, Quận 11, Hồ
-                                            Chí Minh
-                                        </p>
-                                        <p className="text-sm">07:30 - 22:00</p>
-                                    </div>
-
-                                    <Button
-                                        color="primary"
-                                        fullWidth
-                                        size="sm"
-                                        variant="flat"
-                                    >
-                                        <NextUILink
-                                            isExternal
-                                            className="text-primary text-sm"
-                                            href=""
-                                        >
-                                            Xem trên bản đồ
-                                        </NextUILink>
-                                    </Button>
-                                </Link>
-                            </div>
-                            <div className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                                <Link href="">
-                                    <Image
-                                        isZoomed
-                                        radius="lg"
-                                        src="https://file.hstatic.net/1000075078/file/hcm-lu-gia1__1__e0a622da07ab48b8bb7a542f088b7233.jpg"
-                                        alt="store thumbnail"
-                                    />
-                                    <h3 className="font-bold mt-2 text-lg">
-                                        HCM Lữ Gia
-                                    </h3>
-
-                                    <div className="my-2">
-                                        <p className="mb-1 text-sm">
-                                            64A Lữ Gia, Phường 15, Quận 11, Hồ
-                                            Chí Minh
-                                        </p>
-                                        <p className="text-sm">07:30 - 22:00</p>
-                                    </div>
-
-                                    <Button
-                                        color="primary"
-                                        fullWidth
-                                        size="sm"
-                                        variant="flat"
-                                    >
-                                        <NextUILink
-                                            isExternal
-                                            className="text-primary text-sm"
-                                            href=""
-                                        >
-                                            Xem trên bản đồ
-                                        </NextUILink>
-                                    </Button>
-                                </Link>
-                            </div>
+                                </div>
+                            ))}
                         </div>
                     </section>
                 </div>

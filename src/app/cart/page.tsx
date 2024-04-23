@@ -29,18 +29,11 @@ export default function CartPage(): React.ReactNode {
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`;
     const { selectedCartItems, clearSelectedCartItems } = useCartStore();
 
-    const {
-        data: cartData,
-        isLoading,
-        error,
-    } = useSWR(url, { revalidateOnMount: true });
+    const { data: cartData, isLoading, error } = useSWR(url, { revalidateOnMount: true });
     const carts: ICart[] = cartData?.data || [];
 
     const totalPayment = useMemo(() => {
-        return selectedCartItems.reduce(
-            (acc, curr) => acc + Number(curr.total_item_price),
-            0
-        );
+        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
     }, [selectedCartItems]);
 
     const handleNavigateToCheckout = (): void => {
@@ -82,27 +75,19 @@ export default function CartPage(): React.ReactNode {
                     <section className="col-span-6 sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
                         {isLoading ? (
                             <div>
-                                {Array.from(
-                                    { length: 3 },
-                                    (_, index) => index + 1
-                                ).map((index) => (
+                                {Array.from({ length: 3 }, (_, index) => index + 1).map((index) => (
                                     <CartItemSkeleton key={index} />
                                 ))}
                             </div>
                         ) : (
                             <ul>
                                 {carts.length > 0 ? (
-                                    carts.map((cartItem) => (
-                                        <CartItem
-                                            key={cartItem?.id}
-                                            cartItem={cartItem}
-                                        />
-                                    ))
+                                    carts.map((cartItem) => <CartItem key={cartItem?.id} cartItem={cartItem} />)
                                 ) : (
-                                    <Image
-                                        src={emptyCartImage.src}
-                                        alt="empty cart"
-                                    />
+                                    <div className="flex items-center justify-center flex-col">
+                                        <Image className="w-[250px]" src={emptyCartImage.src} alt="empty cart" />
+                                        <p className="mt-1 text-gray-500 text-lg">Giỏ hàng của bạn đang trống</p>
+                                    </div>
                                 )}
                             </ul>
                         )}
@@ -112,21 +97,14 @@ export default function CartPage(): React.ReactNode {
                         <aside className="sticky top-[80px] z-[1]">
                             <div className="rounded-lg shadow p-4 border">
                                 <p className="mb-3">
-                                    <span className="text-black/70">
-                                        Số món đã chọn:
-                                    </span>
+                                    <span className="text-black/70">Số món đã chọn:</span>
                                     &nbsp;
                                     <b>{selectedCartItems.length} </b>
                                 </p>
                                 <p className="mb-4">
-                                    <span className="text-black/70">
-                                        Tổng tiền thanh toán:
-                                    </span>
+                                    <span className="text-black/70">Tổng tiền thanh toán:</span>
                                     &nbsp;
-                                    <b
-                                        id="total-payment"
-                                        className="text-primary/70"
-                                    >
+                                    <b id="total-payment" className="text-primary/70">
                                         {formatVNCurrency(totalPayment)}
                                     </b>
                                 </p>

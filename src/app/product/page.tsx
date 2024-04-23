@@ -1,7 +1,7 @@
-import { Input } from "@nextui-org/react";
+import { Image, Input } from "@nextui-org/react";
 import React from "react";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { CiSearch } from "react-icons/ci";
+import emptyProduct from "@/assets/images/empty-product.png";
 import ProductCard from "@/components/Product/ProductCard";
 import Link from "next/link";
 import { IProduct } from "@/types/product";
@@ -33,7 +33,6 @@ export default async function ProductPage({ searchParams }: { searchParams: { na
     let [productData, categoryData] = await Promise.all([fetchData(productFetchURL), fetchData(categoryFetchURL)]);
 
     const products: IProduct[] = productData.data;
-
     const categories: ICategory[] = categoryData.data;
 
     return (
@@ -70,40 +69,23 @@ export default async function ProductPage({ searchParams }: { searchParams: { na
 
                     {/* Products */}
                     <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
-                        <div className="grid grid-cols-12 gap-5">
-                            {products.map((product) => (
-                                <div
-                                    key={product?.id}
-                                    className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
-                                >
-                                    <ProductCard product={product} />
-                                </div>
-                            ))}
-                            {/* <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                        {products.length > 0 ? (
+                            <div className="grid grid-cols-12 gap-5">
+                                {products.map((product) => (
+                                    <div
+                                        key={product?.id}
+                                        className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                                    >
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))}
                             </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
+                        ) : (
+                            <div className="flex items-center justify-center flex-col">
+                                <Image className="w-full" src={emptyProduct.src} alt="empty product" />
+                                <p className="mt-5 text-gray-500 text-lg">Không tìm thấy sản phẩm</p>
                             </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div>
-                            <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                                <ProductCard />
-                            </div> */}
-                        </div>
+                        )}
                     </section>
                 </div>
             </div>

@@ -22,16 +22,12 @@ const navLinks = [
     },
     {
         content: "Khuyến mãi",
-        href: "/voucher",
+        href: "/profile/voucher",
         icon: <RiCoupon3Line />,
     },
 ];
 
-export default function ProductLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function ProductLayout({ children }: { children: React.ReactNode }) {
     const { currentUser } = useCurrentUser();
     const pathName = usePathname();
 
@@ -57,16 +53,11 @@ export default function ProductLayout({
                                         <li
                                             key={index}
                                             className={`flex items-center py-2 rounded-lg ${
-                                                navLink.href === pathName &&
-                                                "text-primary"
+                                                navLink.href === pathName && "text-primary"
                                             }`}
                                         >
-                                            <span className="me-3">
-                                                {navLink.icon}
-                                            </span>
-                                            <Link href={navLink.href}>
-                                                {navLink.content}
-                                            </Link>
+                                            <span className="me-3">{navLink.icon}</span>
+                                            <Link href={navLink.href}>{navLink.content}</Link>
                                         </li>
                                     ))}
                                 </ul>

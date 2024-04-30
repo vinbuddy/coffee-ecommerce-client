@@ -2,15 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import {
-    Input,
-    Select,
-    SelectItem,
-    Textarea,
-    Image,
-    Button,
-    Chip,
-} from "@nextui-org/react";
+import { Input, Select, SelectItem, Textarea, Image, Button, Chip } from "@nextui-org/react";
 import { LuUpload } from "react-icons/lu";
 
 import productPlaceholder from "@/assets/images/product-placeholder.png";
@@ -132,9 +124,7 @@ export default function AdminNewProductPage(): React.ReactNode {
             if (index !== -1) {
                 return {
                     ...prev,
-                    product_toppings: prev.product_toppings.filter(
-                        (id) => id !== Number(toppingId)
-                    ),
+                    product_toppings: prev.product_toppings.filter((id) => id !== Number(toppingId)),
                 };
             }
 
@@ -151,17 +141,13 @@ export default function AdminNewProductPage(): React.ReactNode {
 
     const handleRemoveSize = (sizeId: number | string): void => {
         setNewProduct((prev) => {
-            const exists = prev.product_sizes.some(
-                (item) => item.size_id === Number(sizeId)
-            );
+            const exists = prev.product_sizes.some((item) => item.size_id === Number(sizeId));
 
             // If sizeId exists, remove it from the array
             if (exists) {
                 return {
                     ...prev,
-                    product_sizes: prev.product_sizes.filter(
-                        (productSize) => productSize.size_id !== Number(sizeId)
-                    ),
+                    product_sizes: prev.product_sizes.filter((productSize) => productSize.size_id !== Number(sizeId)),
                 };
             }
 
@@ -173,20 +159,14 @@ export default function AdminNewProductPage(): React.ReactNode {
         setNewProduct((prev) => {
             return {
                 ...prev,
-                product_sizes: [
-                    ...prev.product_sizes,
-                    { size_id: Number(sizeId), size_price: Number(sizePrice) },
-                ],
+                product_sizes: [...prev.product_sizes, { size_id: Number(sizeId), size_price: Number(sizePrice) }],
             };
         });
 
         setSizePrice("");
     };
 
-    const addProduct = async (
-        data: IAddProduct,
-        e?: React.BaseSyntheticEvent
-    ): Promise<void> => {
+    const addProduct = async (data: IAddProduct, e?: React.BaseSyntheticEvent): Promise<void> => {
         e?.preventDefault();
 
         try {
@@ -196,26 +176,20 @@ export default function AdminNewProductPage(): React.ReactNode {
 
             startLoading();
 
-            const productImageRef = ref(
-                storage,
-                `images/product/${Date.now()}${imageFile.name}`
-            );
+            const productImageRef = ref(storage, `images/product/${Date.now()}${imageFile.name}`);
             await uploadBytes(productImageRef, imageFile);
             const productImageURL = await getDownloadURL(productImageRef);
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/product`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        ...newProduct,
-                        image: productImageURL,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`, {
+                method: "POST",
+                body: JSON.stringify({
+                    ...newProduct,
+                    image: productImageURL,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             if (response.status === 200) {
                 startTransition(() => router.push("/admin/product"));
@@ -238,9 +212,7 @@ export default function AdminNewProductPage(): React.ReactNode {
                 <div className="grid grid-cols-12 gap-5 h-full">
                     <section className="col-span-12 sm:col-span-12 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
                         <div className="rounded-xl p-5">
-                            <h4 className="text-xl font-bold mb-6">
-                                Thông tin tổng quan
-                            </h4>
+                            <h4 className="text-xl font-bold mb-6">Thông tin tổng quan</h4>
                             <div className="grid grid-cols-12 gap-5">
                                 <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
                                     <Input
@@ -259,14 +231,10 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     />
 
                                     {errors?.name?.type === "required" && (
-                                        <p className="text-red-500 mt-3">
-                                            Hãy nhập tên cho sản phẩm
-                                        </p>
+                                        <p className="text-red-500 mt-3">Hãy nhập tên cho sản phẩm</p>
                                     )}
-                                    {errors?.name?.type === "minLength" && (
-                                        <p className="text-red-500 mt-3">
-                                            Tên sản phẩm tối đa 50 ký tự
-                                        </p>
+                                    {errors?.name?.type === "maxLength" && (
+                                        <p className="text-red-500 mt-3">Tên sản phẩm tối đa 50 ký tự</p>
                                     )}
                                 </section>
                                 <section className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
@@ -286,9 +254,7 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     />
 
                                     {errors?.price?.type === "required" && (
-                                        <p className="text-red-500 mt-3">
-                                            Hãy nhập giá cho sản phẩm
-                                        </p>
+                                        <p className="text-red-500 mt-3">Hãy nhập giá cho sản phẩm</p>
                                     )}
                                 </section>
                                 <section className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
@@ -296,27 +262,17 @@ export default function AdminNewProductPage(): React.ReactNode {
                                         aria-label="Chọn trạng thái"
                                         label="Chọn trạng thái"
                                         defaultSelectedKeys={["1"]}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLSelectElement>
-                                        ) => {
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                             setNewProduct((prev) => ({
                                                 ...prev,
                                                 status: Number(e.target.value),
                                             }));
                                         }}
                                     >
-                                        <SelectItem
-                                            variant="flat"
-                                            key="1"
-                                            value="1"
-                                        >
+                                        <SelectItem variant="flat" key="1" value="1">
                                             Còn
                                         </SelectItem>
-                                        <SelectItem
-                                            variant="flat"
-                                            key="0"
-                                            value="0"
-                                        >
+                                        <SelectItem variant="flat" key="0" value="0">
                                             Hết
                                         </SelectItem>
                                     </Select>
@@ -335,49 +291,30 @@ export default function AdminNewProductPage(): React.ReactNode {
                                             }));
                                         }}
                                     />
-                                    {errors?.description?.type ===
-                                        "required" && (
-                                        <p className="text-red-500 mt-3">
-                                            Hãy nhập mô tả cho sản phẩm
-                                        </p>
+                                    {errors?.description?.type === "required" && (
+                                        <p className="text-red-500 mt-3">Hãy nhập mô tả cho sản phẩm</p>
                                     )}
                                 </section>
                             </div>
                         </div>
                         <div className="rounded-xl p-5 mt-5">
-                            <h4 className="text-xl font-bold mb-6">
-                                Chọn topping
-                            </h4>
+                            <h4 className="text-xl font-bold mb-6">Chọn topping</h4>
                             <div className=" flex gap-3">
-                                {newProduct.product_toppings.map(
-                                    (topping, index) => {
-                                        const matchedTopping = toppings.find(
-                                            (_topping) =>
-                                                _topping.id === topping
-                                        );
-                                        return (
-                                            <Chip
-                                                key={index}
-                                                onClose={() =>
-                                                    handleSelectTopping(topping)
-                                                }
-                                                variant="bordered"
-                                            >
-                                                <>
-                                                    {
-                                                        matchedTopping?.topping_name
-                                                    }{" "}
-                                                    (+
-                                                    {formatVNCurrency(
-                                                        matchedTopping?.topping_price ||
-                                                            0
-                                                    )}{" "}
-                                                    )
-                                                </>
-                                            </Chip>
-                                        );
-                                    }
-                                )}
+                                {newProduct.product_toppings.map((topping, index) => {
+                                    const matchedTopping = toppings.find((_topping) => _topping.id === topping);
+                                    return (
+                                        <Chip
+                                            key={index}
+                                            onClose={() => handleSelectTopping(topping)}
+                                            variant="bordered"
+                                        >
+                                            <>
+                                                {matchedTopping?.topping_name} (+
+                                                {formatVNCurrency(matchedTopping?.topping_price || 0)} )
+                                            </>
+                                        </Chip>
+                                    );
+                                })}
                             </div>
 
                             <div className="mt-4">
@@ -388,47 +325,32 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     selectedKeys={[]}
                                     size="lg"
                                     className="max-w-xs"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLSelectElement>
-                                    ) => handleSelectTopping(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                        handleSelectTopping(e.target.value)
+                                    }
                                 >
                                     {toppings.map((topping) => (
-                                        <SelectItem
-                                            key={topping?.id || ""}
-                                            value={topping?.id}
-                                        >
+                                        <SelectItem key={topping?.id || ""} value={topping?.id}>
                                             {topping.topping_name} (+
-                                            {formatVNCurrency(
-                                                topping.topping_price || 0
-                                            )}{" "}
-                                            )
+                                            {formatVNCurrency(topping.topping_price || 0)} )
                                         </SelectItem>
                                     ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="rounded-xl p-5 mt-5">
-                            <h4 className="text-xl font-bold mb-6">
-                                Chọn size
-                            </h4>
+                            <h4 className="text-xl font-bold mb-6">Chọn size</h4>
                             <div className="mb-4 flex gap-3">
                                 {newProduct.product_sizes.map((size, index) => {
-                                    const matchedSize = sizes.find(
-                                        (_size) => _size.id === size.size_id
-                                    );
+                                    const matchedSize = sizes.find((_size) => _size.id === size.size_id);
                                     return (
                                         <Chip
                                             key={index}
-                                            onClose={() =>
-                                                handleRemoveSize(size.size_id)
-                                            }
+                                            onClose={() => handleRemoveSize(size.size_id)}
                                             variant="bordered"
                                         >
                                             {matchedSize?.size_name} (+
-                                            {formatVNCurrency(
-                                                size?.size_price || 0
-                                            )}{" "}
-                                            )
+                                            {formatVNCurrency(size?.size_price || 0)} )
                                         </Chip>
                                     );
                                 })}
@@ -440,15 +362,10 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     placeholder="Chọn size"
                                     size="lg"
                                     className="max-w-xs"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLSelectElement>
-                                    ) => setSizeId(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSizeId(e.target.value)}
                                 >
                                     {sizes.map((size) => (
-                                        <SelectItem
-                                            key={size?.id}
-                                            value={size.id}
-                                        >
+                                        <SelectItem key={size?.id} value={size.id}>
                                             {size.size_name}
                                         </SelectItem>
                                     ))}
@@ -458,16 +375,9 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     type="number"
                                     size="lg"
                                     placeholder="Giá của size"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => setSizePrice(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSizePrice(e.target.value)}
                                 />
-                                <Button
-                                    size="lg"
-                                    variant="bordered"
-                                    radius="md"
-                                    onClick={handleSelectSize}
-                                >
+                                <Button size="lg" variant="bordered" radius="md" onClick={handleSelectSize}>
                                     Thêm
                                 </Button>
                             </div>
@@ -485,42 +395,27 @@ export default function AdminNewProductPage(): React.ReactNode {
                                     aria-label="Chọn danh mục"
                                     {...register("category_id", {
                                         required: true,
-                                        onChange: (
-                                            e: React.ChangeEvent<HTMLSelectElement>
-                                        ) =>
+                                        onChange: (e: React.ChangeEvent<HTMLSelectElement>) =>
                                             setNewProduct((prev) => ({
                                                 ...prev,
-                                                category_id: Number(
-                                                    e.target.value
-                                                ),
+                                                category_id: Number(e.target.value),
                                             })),
                                     })}
                                 >
                                     {categories.map((category, index) => (
-                                        <SelectItem
-                                            variant="flat"
-                                            key={category?.id}
-                                            value={category?.id}
-                                        >
+                                        <SelectItem variant="flat" key={category?.id} value={category?.id}>
                                             {category?.category_name}
                                         </SelectItem>
                                     ))}
                                 </Select>
                                 {errors?.category_id?.type === "required" && (
-                                    <p className="text-red-500 mt-3">
-                                        Chọn danh mục cho sản phẩm
-                                    </p>
+                                    <p className="text-red-500 mt-3">Chọn danh mục cho sản phẩm</p>
                                 )}
                             </div>
                         </div>
                         <div className="rounded-xl p-5 mt-5">
-                            <h4 className="text-xl font-bold mb-6">
-                                Hình ảnh sản phẩm
-                            </h4>
-                            <Image
-                                src={previewImage || productPlaceholder.src}
-                                alt=""
-                            />
+                            <h4 className="text-xl font-bold mb-6">Hình ảnh sản phẩm</h4>
+                            <Image src={previewImage || productPlaceholder.src} alt="" />
 
                             <input
                                 hidden
@@ -545,22 +440,14 @@ export default function AdminNewProductPage(): React.ReactNode {
                                 Tải hình ảnh lên
                             </Button>
                             {errors?.image?.type === "required" && (
-                                <p className="text-red-500 mt-3">
-                                    Chọn hình ảnh cho sản phẩm
-                                </p>
+                                <p className="text-red-500 mt-3">Chọn hình ảnh cho sản phẩm</p>
                             )}
                         </div>
                     </section>
                 </div>
 
                 <div className="rounded-xl p-5">
-                    <Button
-                        isLoading={loading}
-                        type="submit"
-                        fullWidth
-                        size="lg"
-                        className="bg-black text-white"
-                    >
+                    <Button isLoading={loading} type="submit" fullWidth size="lg" className="bg-black text-white">
                         Thêm sản phẩm
                     </Button>
                 </div>

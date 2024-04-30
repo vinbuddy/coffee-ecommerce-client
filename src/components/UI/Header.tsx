@@ -18,7 +18,7 @@ const navLinks = [
     },
     {
         content: "Khuyến mãi",
-        href: "/voucher",
+        href: "/profile/voucher",
     },
     {
         content: "Cửa hàng",
@@ -34,11 +34,7 @@ export default function Header(): React.ReactNode {
                     <NavbarBrand>
                         <Logo />
                     </NavbarBrand>
-                    <NavbarContent
-                        as="ul"
-                        className="hidden sm:flex gap-6"
-                        justify="center"
-                    >
+                    <NavbarContent as="ul" className="hidden sm:flex gap-6" justify="center">
                         <NavbarLinks navLinks={navLinks} />
                     </NavbarContent>
                     <NavbarContent justify="end" as="div">

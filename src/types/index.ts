@@ -6,3 +6,5 @@ export interface INavLink {
     icon?: React.ReactNode;
     children?: INavLink[];
 }
+
+export type PaymentMethodType = "cash" | "momo" | "vnpay";

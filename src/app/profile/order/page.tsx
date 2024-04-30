@@ -57,11 +57,7 @@ export const Step = () => {
                     <div className="flex flex-col items-center mr-4">
                         <div>
                             <div className="flex items-center justify-center w-10 h-10 border rounded-full">
-                                <svg
-                                    className="w-6 text-gray-600"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
+                                <svg className="w-6 text-gray-600" stroke="currentColor" viewBox="0 0 24 24">
                                     <polyline
                                         fill="none"
                                         strokeWidth="2"
@@ -90,9 +86,7 @@ export default function UserOrderPage(): React.ReactNode {
             <div className="mb-10">
                 <div className="flex items-center justify-between mb-5">
                     <h3 className="text-xl font-bold">Đơn hàng hiện tại</h3>
-                    <Chip variant="flat">
-                        Thời gian dự kiến: 12:40 pm - 13:15 pm
-                    </Chip>
+                    <Chip variant="flat">Thời gian dự kiến: 12:40 pm - 13:15 pm</Chip>
                 </div>
                 <Card shadow="none" className="p-0">
                     <CardBody className="p-0">
@@ -106,12 +100,9 @@ export default function UserOrderPage(): React.ReactNode {
                     <Tab key="all" title="Tất cả">
                         <Card>
                             <CardBody>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             </CardBody>
                         </Card>
                     </Tab>
@@ -120,7 +111,7 @@ export default function UserOrderPage(): React.ReactNode {
                         <Card>
                             <CardBody>
                                 <ul>
-                                    <CartItem
+                                    {/* <CartItem
                                         isSelected={false}
                                         isDeleted={false}
                                         isEdited={false}
@@ -131,7 +122,7 @@ export default function UserOrderPage(): React.ReactNode {
                                         isDeleted={false}
                                         isEdited={false}
                                         cartItem={{}}
-                                    />
+                                    /> */}
                                 </ul>
                             </CardBody>
                         </Card>
@@ -140,9 +131,8 @@ export default function UserOrderPage(): React.ReactNode {
                     <Tab key="Shipping" title="Đã hủy">
                         <Card>
                             <CardBody>
-                                Excepteur sint occaecat cupidatat non proident,
-                                sunt in culpa qui officia deserunt mollit anim
-                                id est laborum.
+                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                                mollit anim id est laborum.
                             </CardBody>
                         </Card>
                     </Tab>

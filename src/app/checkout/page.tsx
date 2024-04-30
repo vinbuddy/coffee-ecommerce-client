@@ -1,17 +1,8 @@
 "use client";
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import {
-    Image,
-    Input,
-    Radio,
-    RadioGroup,
-    cn,
-    Autocomplete,
-    AutocompleteItem,
-    Button,
-} from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Image, Input, Radio, RadioGroup, cn, Autocomplete, AutocompleteItem, Button, Avatar } from "@nextui-org/react";
+import React, { useEffect, useMemo, useState } from "react";
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
@@ -20,6 +11,17 @@ import { MdLocationSearching } from "react-icons/md";
 import { HiOutlineBuildingStorefront } from "react-icons/hi2";
 import { ICart } from "@/types/cart";
 import { useRouter } from "next/navigation";
+import ShowVoucherButton from "@/components/Voucher/ShowVoucherButton";
+import useSWR from "swr";
+import { IStore } from "@/types/store";
+import useSearchDebounce from "@/hooks/useSearchDebounce";
+import useLoading from "@/hooks/useLoading";
+import { PaymentMethodType } from "@/types";
+import { formatVNCurrency, generateOrderId } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { IOrder } from "@/types/order";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { SHIPPING_COST } from "@/lib/constants";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -33,68 +35,6 @@ const breadcumbItems: IBreadcumbItem[] = [
     {
         content: "Thanh toán",
         href: "/checkout",
-    },
-];
-
-const locations: any = [
-    {
-        label: "Cat",
-        value: "cat",
-        description: "The second most popular pet in the world",
-    },
-    {
-        label: "Dog",
-        value: "dog",
-        description: "The most popular pet in the world",
-    },
-    {
-        label: "Elephant",
-        value: "elephant",
-        description: "The largest land animal",
-    },
-    { label: "Lion", value: "lion", description: "The king of the jungle" },
-    { label: "Tiger", value: "tiger", description: "The largest cat species" },
-    {
-        label: "Giraffe",
-        value: "giraffe",
-        description: "The tallest land animal",
-    },
-    {
-        label: "Dolphin",
-        value: "dolphin",
-        description:
-            "A widely distributed and diverse group of aquatic mammals",
-    },
-    {
-        label: "Penguin",
-        value: "penguin",
-        description: "A group of aquatic flightless birds",
-    },
-    {
-        label: "Zebra",
-        value: "zebra",
-        description: "A several species of African equids",
-    },
-    {
-        label: "Shark",
-        value: "shark",
-        description:
-            "A group of elasmobranch fish characterized by a cartilaginous skeleton",
-    },
-    {
-        label: "Whale",
-        value: "whale",
-        description: "Diverse group of fully aquatic placental marine mammals",
-    },
-    {
-        label: "Otter",
-        value: "otter",
-        description: "A carnivorous mammal in the subfamily Lutrinae",
-    },
-    {
-        label: "Crocodile",
-        value: "crocodile",
-        description: "A large semiaquatic reptile",
     },
 ];
 
@@ -117,10 +57,53 @@ const PaymentMethodRadio = (props: any): React.ReactNode => {
     );
 };
 
-export default function CheckoutPage(): React.ReactNode {
-    const [selectedCartItems, setSelectedCartItems] = useState<ICart[]>([]);
-    const router = useRouter();
+type CheckoutFormData = Pick<
+    IOrder,
+    "store_id" | "address" | "receiver_name" | "phone_number" | "order_note" | "payment_method"
+>;
+type NewOrder = Omit<IOrder, "order_date" | "order_status" | "id" | "address" | "user_id" | "order_items">;
 
+export default function CheckoutPage(): React.ReactNode {
+    const { startLoading, stopLoading, loading } = useLoading();
+    const { startLoading: startSubmitLoading, stopLoading: stopSubmitLoading, loading: submitLoading } = useLoading();
+    const { currentUser } = useCurrentUser();
+    const router = useRouter();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<CheckoutFormData>();
+
+    const [selectedCartItems, setSelectedCartItems] = useState<ICart[]>([]);
+    const totalItemPrice = useMemo(() => {
+        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
+    }, [selectedCartItems]);
+
+    const [newOrder, setNewOrder] = useState<NewOrder>({
+        total_payment: totalItemPrice + SHIPPING_COST,
+        payment_method: "cash",
+        order_type: "online",
+        order_note: "",
+        shipping_cost: SHIPPING_COST,
+        receiver_name: "",
+        phone_number: "",
+        store_id: 0,
+        voucher_id: 0,
+    });
+
+    const {
+        data: storeData,
+        isLoading: storeLoading,
+        error,
+    } = useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/store`, { revalidateOnMount: true });
+    const stores: IStore[] = storeData?.data || [];
+
+    const [addressList, setAdressList] = useState<any[]>([]);
+    const [addressSearch, setAddressSearch] = useState<string>("");
+    const addressValue = useSearchDebounce(addressSearch, 500);
+
+    // Get selected cart items
     useEffect(() => {
         const cartItemStorage: string | null = localStorage.getItem("cart");
 
@@ -131,6 +114,119 @@ export default function CheckoutPage(): React.ReactNode {
         setSelectedCartItems(JSON.parse(cartItemStorage));
     }, []);
 
+    // update total payment
+    useEffect(() => {
+        setNewOrder((prev) => ({
+            ...prev,
+            total_payment: totalItemPrice + SHIPPING_COST,
+        }));
+    }, [totalItemPrice]);
+
+    useEffect(() => {
+        if (addressValue.length > 0) {
+            handleSearchAddress();
+        } else {
+            setAdressList([]);
+        }
+    }, [addressValue]);
+
+    const handleSearchAddress = async (): Promise<void> => {
+        const params: any = {
+            q: addressValue,
+            format: "json",
+            addressdetails: 1,
+            polygon_geojson: 0,
+        };
+        const queryString = new URLSearchParams(params).toString();
+
+        startLoading();
+        try {
+            const url = `${process.env.NEXT_PUBLIC_API_NOMINATIM_BASE_URL}/search?${encodeURIComponent(queryString)}`;
+            const response = await fetch(url, { method: "GET", redirect: "follow" });
+            const result = await response.json();
+            setAdressList(result);
+        } catch (error) {
+        } finally {
+            stopLoading();
+        }
+    };
+
+    const handleSelectPaymentMethod = (value: string): void => {
+        setNewOrder((prev) => ({
+            ...prev,
+            payment_method: value as PaymentMethodType,
+        }));
+    };
+
+    const createOrderWithCash = async (order: any): Promise<void> => {
+        try {
+            startSubmitLoading();
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order`, {
+                method: "POST",
+                body: JSON.stringify(order),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const resData = await response.json();
+
+            if (response.status === 200) {
+                const resOrder: IOrder = resData.data;
+                const orderDate = resOrder.order_date;
+                router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}`);
+            } else {
+                throw new Error(resData.message);
+            }
+        } catch (error: any) {
+            console.log("error: ", error.message);
+        } finally {
+            stopSubmitLoading();
+        }
+    };
+
+    const createOrderWithOnlinePayment = (order: any) => {
+        // 💳 Navigate to /checkout/online route
+        const { order_items: orderItems, ...orderInfo } = order;
+
+        const encodedOrderInfo = encodeURIComponent(JSON.stringify(orderInfo));
+        const encodedOrderItems = encodeURIComponent(JSON.stringify(orderItems));
+
+        localStorage.removeItem("order");
+        router.push(`/checkout/online?encodedOrderItems=${encodedOrderItems}&encodedOrderInfo=${encodedOrderInfo}`);
+    };
+
+    const createNewOrder = (formData: CheckoutFormData, e?: React.BaseSyntheticEvent) => {
+        e?.preventDefault();
+
+        const { voucher_id, ...restOrder } = newOrder;
+        let order;
+
+        if (voucher_id) {
+            order = {
+                ...newOrder,
+                order_id: generateOrderId(),
+                user_id: currentUser?.id,
+                address: addressValue,
+                order_items: selectedCartItems,
+            };
+        } else {
+            order = {
+                ...restOrder,
+                order_id: generateOrderId(),
+                user_id: currentUser?.id,
+                address: addressValue,
+                order_items: selectedCartItems,
+            };
+        }
+
+        if (newOrder.payment_method === "cash") {
+            createOrderWithCash(order);
+        } else {
+            createOrderWithOnlinePayment(order);
+        }
+    };
+
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
@@ -138,40 +234,79 @@ export default function CheckoutPage(): React.ReactNode {
                     <Breadcrumbs breadcumbItems={breadcumbItems} />
                 </div>
 
-                <form>
+                <form onSubmit={handleSubmit(createNewOrder)}>
                     <div className="grid grid-cols-12 h-full gap-10">
                         {/* Shipping - Payment method */}
                         <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <section>
-                                <h2 className="font-medium text-lg">
-                                    Thông tin giao hàng
-                                </h2>
+                                <h2 className="font-medium text-lg">Thông tin giao hàng</h2>
 
                                 <div className="mt-4 grid grid-cols-12 gap-5">
                                     <Autocomplete
+                                        isLoading={storeLoading}
                                         isRequired
-                                        defaultItems={locations}
+                                        defaultItems={stores}
                                         labelPlacement="inside"
-                                        label="Chọn chi nhánh"
+                                        label="Chọn cửa hàng"
                                         className="col-span-12"
+                                        {...register("store_id", {
+                                            required: true,
+                                        })}
+                                        isInvalid={errors?.store_id?.type === "required"}
+                                        errorMessage={
+                                            errors?.store_id?.type === "required" ? "Hãy chọn cửa hàng cần mua" : null
+                                        }
+                                        onSelectionChange={(key: React.Key) => {
+                                            setNewOrder((prev) => ({ ...prev, store_id: Number(key) }));
+                                        }}
                                     >
                                         {(item: any) => (
-                                            <AutocompleteItem key={item.value}>
-                                                {item.label}
+                                            <AutocompleteItem key={item.id} textValue={item.store_name}>
+                                                <div className="flex items-center">
+                                                    <Avatar
+                                                        alt={item.store_name}
+                                                        className="flex-shrink-0"
+                                                        radius="sm"
+                                                        size="sm"
+                                                        src={item.image}
+                                                    />
+                                                    <div className="ms-2">
+                                                        <p className="font-medium">{item.store_name}</p>
+                                                        <p className="text-sm text-default-400">{item.address}</p>
+                                                    </div>
+                                                </div>
                                             </AutocompleteItem>
                                         )}
                                     </Autocomplete>
                                     <Autocomplete
+                                        allowsEmptyCollection={false}
+                                        allowsCustomValue
+                                        isLoading={loading}
+                                        onInputChange={(value) => {
+                                            setAddressSearch(value);
+                                        }}
+                                        onClear={() => {
+                                            setAddressSearch("");
+                                            setAdressList([]);
+                                        }}
+                                        inputValue={addressSearch}
                                         isRequired
-                                        defaultItems={locations}
+                                        defaultItems={addressList}
                                         labelPlacement="inside"
                                         label="Địa chỉ giao hàng"
                                         className="col-span-12"
-                                        selectorIcon={<MdLocationSearching />}
+                                        {...register("address", {
+                                            required: true,
+                                        })}
+                                        isInvalid={errors?.address?.type === "required"}
+                                        errorMessage={
+                                            errors?.address?.type === "required" ? "Hãy nhập địa chỉ giao hàng" : null
+                                        }
+                                        onSelectionChange={(key: React.Key) => setAddressSearch(key.toString())}
                                     >
                                         {(item: any) => (
-                                            <AutocompleteItem key={item.value}>
-                                                {item.label}
+                                            <AutocompleteItem textValue={item?.display_name} key={item?.display_name}>
+                                                {item?.display_name}
                                             </AutocompleteItem>
                                         )}
                                     </Autocomplete>
@@ -181,67 +316,99 @@ export default function CheckoutPage(): React.ReactNode {
                                         className="col-span-6"
                                         type="text"
                                         label="Tên người nhận"
+                                        {...register("receiver_name", {
+                                            required: true,
+                                        })}
+                                        isInvalid={errors?.receiver_name?.type === "required"}
+                                        errorMessage={
+                                            errors?.receiver_name?.type === "required"
+                                                ? "Hãy nhập tên người nhận"
+                                                : null
+                                        }
+                                        onValueChange={(value) =>
+                                            setNewOrder((prev) => ({
+                                                ...prev,
+                                                receiver_name: value,
+                                            }))
+                                        }
                                     />
                                     <Input
                                         isRequired
                                         className="col-span-6"
                                         type="text"
                                         label="Số điện thoại"
+                                        {...register("phone_number", {
+                                            required: true,
+                                            pattern: {
+                                                value: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/,
+                                                message: "Hãy nhập đúng định dạng số điện thoại",
+                                            },
+                                        })}
+                                        isInvalid={
+                                            errors?.phone_number?.type === "required" ||
+                                            errors?.phone_number?.type === "pattern"
+                                        }
+                                        errorMessage={
+                                            (errors?.phone_number?.type === "required" &&
+                                                "Hãy nhập số điện thoại người nhận") ||
+                                            (errors?.phone_number?.type === "pattern" && "Số điện thoại không hợp lệ")
+                                        }
+                                        onValueChange={(value) =>
+                                            setNewOrder((prev) => ({
+                                                ...prev,
+                                                phone_number: value,
+                                            }))
+                                        }
                                     />
                                     <Input
                                         className="col-span-12"
                                         type="text"
                                         label="Ghi chú cho đơn hàng"
+                                        {...register("order_note", {
+                                            required: false,
+                                            maxLength: 30,
+                                        })}
+                                        isInvalid={errors?.order_note?.type === "maxLength"}
+                                        errorMessage={
+                                            errors?.order_note?.type === "maxLength"
+                                                ? "Hãy nhập ghi chú tối đa 30 ký tự"
+                                                : null
+                                        }
+                                        onValueChange={(value) =>
+                                            setNewOrder((prev) => ({
+                                                ...prev,
+                                                order_note: value,
+                                            }))
+                                        }
                                     />
                                 </div>
                             </section>
 
                             <section className="mt-10">
-                                <h2 className="font-medium text-lg">
-                                    Phương thức thanh toán
-                                </h2>
+                                <h2 className="font-medium text-lg">Phương thức thanh toán</h2>
 
                                 <div className="mt-4">
                                     <RadioGroup
+                                        onValueChange={handleSelectPaymentMethod}
                                         color="default"
-                                        defaultValue="money"
+                                        defaultValue={newOrder.payment_method}
                                     >
-                                        <PaymentMethodRadio value="money">
+                                        <PaymentMethodRadio value="cash">
                                             <div className="flex items-center">
-                                                <Image
-                                                    width={24}
-                                                    src={moneyIcon.src}
-                                                    alt="money icon"
-                                                />
-                                                <span className="ms-3">
-                                                    Tiền mặt
-                                                </span>
+                                                <Image width={24} src={moneyIcon.src} alt="money icon" />
+                                                <span className="ms-3">Tiền mặt</span>
                                             </div>
                                         </PaymentMethodRadio>
                                         <PaymentMethodRadio value="vnpay">
                                             <div className="flex items-center">
-                                                <Image
-                                                    width={24}
-                                                    src={vnpayIcon.src}
-                                                    alt="money icon"
-                                                    radius="none"
-                                                />
-                                                <span className="ms-3">
-                                                    VNPAY
-                                                </span>
+                                                <Image width={24} src={vnpayIcon.src} alt="money icon" radius="none" />
+                                                <span className="ms-3">VNPAY</span>
                                             </div>
                                         </PaymentMethodRadio>
-                                        <PaymentMethodRadio value="mommo">
+                                        <PaymentMethodRadio value="momo">
                                             <div className="flex items-center">
-                                                <Image
-                                                    width={24}
-                                                    src={momoIcon.src}
-                                                    alt="money icon"
-                                                    radius="none"
-                                                />
-                                                <span className="ms-3">
-                                                    Momo
-                                                </span>
+                                                <Image width={24} src={momoIcon.src} alt="money icon" radius="none" />
+                                                <span className="ms-3">Momo</span>
                                             </div>
                                         </PaymentMethodRadio>
                                     </RadioGroup>
@@ -254,67 +421,45 @@ export default function CheckoutPage(): React.ReactNode {
                             <div className="shadow-lg border rounded-xl">
                                 <div className="p-4 ">
                                     <section>
-                                        <h2 className="font-medium text-lg">
-                                            Các món đã chọn
-                                        </h2>
+                                        <h2 className="font-medium text-lg">Các món đã chọn</h2>
 
                                         <ul className="mt-4">
-                                            {selectedCartItems.map(
-                                                (cartItem) => (
-                                                    <CartItem
-                                                        isSelected={false}
-                                                        isDeleted={false}
-                                                        isEdited={false}
-                                                        cartItem={cartItem}
-                                                        key={cartItem.id}
-                                                    />
-                                                )
-                                            )}
-                                            {/* <CartItem
-                                                isSelected={false}
-                                                isDeleted={false}
-                                                isEdited={false}
-                                                cartItem={{}}
-                                            />
-                                            <CartItem
-                                                isSelected={false}
-                                                isDeleted={false}
-                                                isEdited={false}
-                                                cartItem={{}}
-                                            /> */}
+                                            {selectedCartItems.map((cartItem) => (
+                                                <CartItem
+                                                    isSelected={false}
+                                                    isDeleted={false}
+                                                    isEdited={false}
+                                                    cartItem={cartItem}
+                                                    key={cartItem.id}
+                                                />
+                                            ))}
                                         </ul>
                                     </section>
 
                                     <section className="mt-10">
-                                        <h2 className="font-medium text-lg">
-                                            Tổng cộng
-                                        </h2>
+                                        <h2 className="font-medium text-lg">Tổng cộng</h2>
 
                                         <ul className="mt-1">
                                             <li className="flex items-center justify-between py-4 border-b">
-                                                <span className="text-sm">
-                                                    Thành tiền
-                                                </span>
-                                                <span>100.000 đ</span>
+                                                <span className="text-sm">Thành tiền</span>
+                                                <span>{formatVNCurrency(totalItemPrice)}</span>
                                             </li>
                                             <li className="flex items-center justify-between py-4 border-b">
-                                                <span className="text-sm">
-                                                    Phí giao hàng
-                                                </span>
+                                                <span className="text-sm">Phí giao hàng</span>
                                                 <span>18.000 đ</span>
                                             </li>
                                             <li className="flex items-center justify-between py-4">
-                                                <span className="text-sm">
-                                                    Khuyến mãi
-                                                </span>
-                                                <Button
-                                                    color="primary"
-                                                    variant="flat"
-                                                    radius="full"
-                                                    size="sm"
-                                                >
-                                                    Chọn
-                                                </Button>
+                                                <span className="text-sm">Khuyến mãi</span>
+
+                                                <ShowVoucherButton
+                                                    buttonProps={{
+                                                        color: "primary",
+                                                        variant: "flat",
+                                                        radius: "full",
+                                                        size: "sm",
+                                                        children: "Chọn",
+                                                    }}
+                                                />
                                             </li>
                                         </ul>
                                     </section>
@@ -323,11 +468,13 @@ export default function CheckoutPage(): React.ReactNode {
                                     <div>
                                         <p>Tổng thanh toán</p>
                                         <p className="text-primary mt-2 text-lg">
-                                            120.000 đ
+                                            {formatVNCurrency(newOrder.total_payment)}
                                         </p>
                                     </div>
 
                                     <Button
+                                        isLoading={submitLoading}
+                                        type="submit"
                                         radius="full"
                                         color="primary"
                                         size="lg"

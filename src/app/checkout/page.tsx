@@ -61,7 +61,7 @@ type CheckoutFormData = Pick<
     IOrder,
     "store_id" | "address" | "receiver_name" | "phone_number" | "order_note" | "payment_method"
 >;
-type NewOrder = Omit<IOrder, "order_date" | "order_status" | "id" | "address" | "user_id" | "order_items">;
+type NewOrder = Omit<IOrder, "order_date" | "id" | "address" | "user_id" | "order_items">;
 
 export default function CheckoutPage(): React.ReactNode {
     const { startLoading, stopLoading, loading } = useLoading();
@@ -90,6 +90,7 @@ export default function CheckoutPage(): React.ReactNode {
         phone_number: "",
         store_id: 0,
         voucher_id: 0,
+        order_status: "Đang chờ",
     });
 
     const {

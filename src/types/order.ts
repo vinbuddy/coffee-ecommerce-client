@@ -9,7 +9,7 @@ export interface IOrder {
     order_status: string;
     order_type: "online" | "offline";
     order_date: string;
-    order_note: string | Date;
+    order_note: string;
     shipping_cost: number | string;
     receiver_name: string;
     phone_number: string;
@@ -17,4 +17,13 @@ export interface IOrder {
     store_id: number | string;
     voucher_id: number | string;
     order_items: ICart[];
+}
+
+export interface IOrderInfo extends IOrder {
+    user_name: string;
+    email: string;
+    password: string | null;
+    role_id: number;
+    account_type: string;
+    avatar: string | null;
 }

@@ -17,7 +17,8 @@ export default function WishlistPage() {
     return (
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
-                <div className="mt-5">
+                <h1 className="text-xl font-bold mb-7">Sản phẩm yêu thích của bạn</h1>
+                <div>
                     {wishlist.length > 0 ? (
                         <div className="grid grid-cols-12 gap-5">
                             {wishlist.map((wishlistItem) => (

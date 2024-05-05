@@ -7,18 +7,63 @@ import {
     useDisclosure,
     Image,
     ButtonProps,
+    Chip,
 } from "@nextui-org/react";
 import { IVoucher } from "@/types/voucher";
 import React from "react";
 import { formatDateTime, formatVNCurrency } from "@/lib/utils";
+import useCheckoutStore from "@/hooks/useCheckoutStore";
+import { ICart } from "@/types/cart";
+import { toast } from "sonner";
 
 interface IProps {
     voucher: IVoucher;
     isApplyButton?: boolean;
+    onAfterApplied?: () => void;
 }
 
-export default function VoucherItem({ voucher, isApplyButton = false }: IProps): React.ReactNode {
+export default function VoucherItem({
+    voucher,
+    isApplyButton = false,
+    onAfterApplied = () => {},
+}: IProps): React.ReactNode {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+    const { applyVoucher, storeId } = useCheckoutStore();
+
+    const handleApplyVoucher = () => {
+        const applyAll: boolean = true;
+
+        // Check voucher.applicable_products and voucher.applicable_stores
+        const cartItemStorage: string | null = localStorage.getItem("cart");
+        const selectedCartItems: ICart[] = cartItemStorage ? JSON.parse(cartItemStorage) : [];
+
+        const isApplicableProducts =
+            voucher.applicable_products?.every((product) =>
+                selectedCartItems.some((item) => item.product_id === product.id)
+            ) ?? applyAll;
+
+        const isApplicableStores = voucher.applicable_stores?.some((store) => store.id === storeId) ?? applyAll;
+        console.log("storeId: ", storeId);
+        console.log("isApplicableStores: ", isApplicableStores);
+
+        if (!storeId && isApplicableStores) {
+            toast.error("Hãy chọn cửa hàng để áp dụng khuyến mãi", {
+                position: "bottom-center",
+            });
+            return;
+        }
+
+        if (!isApplicableProducts || !isApplicableStores) {
+            toast.error("Không thể áp dụng khuyến mãi cho sản phẩm hoặc cửa hàng này", {
+                position: "bottom-center",
+            });
+            return;
+        }
+
+        applyVoucher(voucher);
+        onClose();
+        onAfterApplied();
+    };
 
     return (
         <div className="border flex bg-white shadow-md rounded-xl">
@@ -49,10 +94,13 @@ export default function VoucherItem({ voucher, isApplyButton = false }: IProps):
                                                     {formatVNCurrency(voucher?.discount_price)}
                                                 </span>
                                             </p>
-                                            {/* <p className="text-sm">Hết hạn: {formatDateTime(voucher?.end_date)}</p> */}
                                         </div>
                                     </div>
-                                    <p className="my-3 text-sm">{voucher.description}</p>
+                                    <p className="mt-3 text-sm">{voucher.description}</p>
+
+                                    <Chip className="mt-3 mb-2" color="default" variant="flat">
+                                        Hết hạn: {formatDateTime(voucher?.end_date)}
+                                    </Chip>
                                 </div>
                                 <div className="border-t border-dashed pt-4">
                                     {voucher.applicable_products.length > 0 && (
@@ -81,7 +129,7 @@ export default function VoucherItem({ voucher, isApplyButton = false }: IProps):
                                     )}
                                 </div>
                                 {isApplyButton && (
-                                    <Button color="primary" variant="flat">
+                                    <Button onClick={handleApplyVoucher} color="primary" variant="flat">
                                         Sử dụng
                                     </Button>
                                 )}
@@ -104,7 +152,7 @@ export default function VoucherItem({ voucher, isApplyButton = false }: IProps):
                     </p>
 
                     {isApplyButton && (
-                        <Button radius="full" size="sm" variant="flat" color="primary">
+                        <Button onClick={handleApplyVoucher} radius="full" size="sm" variant="flat" color="primary">
                             Sử dụng
                         </Button>
                     )}

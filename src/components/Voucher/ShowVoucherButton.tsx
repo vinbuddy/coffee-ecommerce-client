@@ -51,7 +51,7 @@ export default function ShowVoucherButton({ buttonProps }: IProps): React.ReactN
                                 {vouchers.length > 0 ? (
                                     vouchers.map((voucher) => (
                                         <div key={voucher.id} className="mb-4 last:mb-0">
-                                            <VoucherItem isApplyButton voucher={voucher} />
+                                            <VoucherItem isApplyButton voucher={voucher} onAfterApplied={onClose} />
                                         </div>
                                     ))
                                 ) : (

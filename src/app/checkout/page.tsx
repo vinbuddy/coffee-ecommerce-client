@@ -2,7 +2,7 @@
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import { Image, Input, Radio, RadioGroup, cn, Autocomplete, AutocompleteItem, Button, Avatar } from "@nextui-org/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { IOrder } from "@/types/order";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { SHIPPING_COST } from "@/lib/constants";
+import useCheckoutStore from "@/hooks/useCheckoutStore";
+import AppliedVoucher from "@/components/Voucher/AppliedVoucher";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -67,6 +69,7 @@ export default function CheckoutPage(): React.ReactNode {
     const { startLoading, stopLoading, loading } = useLoading();
     const { startLoading: startSubmitLoading, stopLoading: stopSubmitLoading, loading: submitLoading } = useLoading();
     const { currentUser } = useCurrentUser();
+    const { voucher: appliedVoucher, selectStoreId } = useCheckoutStore();
     const router = useRouter();
     const {
         register,
@@ -119,9 +122,14 @@ export default function CheckoutPage(): React.ReactNode {
     useEffect(() => {
         setNewOrder((prev) => ({
             ...prev,
-            total_payment: totalItemPrice + SHIPPING_COST,
+            total_payment: totalItemPrice + SHIPPING_COST - (Number(appliedVoucher?.discount_price) || 0),
         }));
-    }, [totalItemPrice]);
+
+        setNewOrder((prev) => ({
+            ...prev,
+            voucher_id: appliedVoucher?.id || 0,
+        }));
+    }, [totalItemPrice, appliedVoucher]);
 
     useEffect(() => {
         if (addressValue.length > 0) {
@@ -258,6 +266,7 @@ export default function CheckoutPage(): React.ReactNode {
                                             errors?.store_id?.type === "required" ? "Hãy chọn cửa hàng cần mua" : null
                                         }
                                         onSelectionChange={(key: React.Key) => {
+                                            selectStoreId(Number(key));
                                             setNewOrder((prev) => ({ ...prev, store_id: Number(key) }));
                                         }}
                                     >
@@ -452,15 +461,19 @@ export default function CheckoutPage(): React.ReactNode {
                                             <li className="flex items-center justify-between py-4">
                                                 <span className="text-sm">Khuyến mãi</span>
 
-                                                <ShowVoucherButton
-                                                    buttonProps={{
-                                                        color: "primary",
-                                                        variant: "flat",
-                                                        radius: "full",
-                                                        size: "sm",
-                                                        children: "Chọn",
-                                                    }}
-                                                />
+                                                {appliedVoucher ? (
+                                                    <AppliedVoucher />
+                                                ) : (
+                                                    <ShowVoucherButton
+                                                        buttonProps={{
+                                                            color: "primary",
+                                                            variant: "flat",
+                                                            radius: "full",
+                                                            size: "sm",
+                                                            children: "Chọn",
+                                                        }}
+                                                    />
+                                                )}
                                             </li>
                                         </ul>
                                     </section>

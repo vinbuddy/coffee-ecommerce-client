@@ -8,12 +8,18 @@ import { RiCoupon3Line } from "react-icons/ri";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import MainLayout from "@/components/UI/MainLayout";
 import { usePathname } from "next/navigation";
+import { TbBasketHeart } from "react-icons/tb";
 
 const navLinks = [
     {
         content: "Trang cá nhân",
         href: "/profile",
         icon: <BiUser />,
+    },
+    {
+        content: "Sản phẩm yêu thích",
+        href: "/profile/wishlist",
+        icon: <TbBasketHeart />,
     },
     {
         content: "Đơn hàng",

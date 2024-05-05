@@ -1,13 +1,5 @@
 "use client";
-import {
-    Avatar,
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-    NavbarItem,
-} from "@nextui-org/react";
+import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem } from "@nextui-org/react";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import avatarFallback from "@/assets/images/avatar-fallback.jpg";
@@ -33,40 +25,25 @@ export default function NavbarUserInfo() {
                                 src={currentUser?.avatar || avatarFallback.src}
                             />
                         </DropdownTrigger>
-                        <DropdownMenu
-                            aria-label="Profile Actions"
-                            variant="flat"
-                        >
+                        <DropdownMenu aria-label="Profile Actions" variant="flat">
                             <DropdownItem key="profile" className="h-14 gap-2">
                                 <p className="font-semibold">Đăng nhập bằng</p>
-                                <p className="font-semibold">
-                                    {currentUser?.email}
-                                </p>
+                                <p className="font-semibold">{currentUser?.email}</p>
                             </DropdownItem>
-                            <DropdownItem
-                                as={Link}
-                                href="/profile"
-                                key="profile"
-                            >
+                            <DropdownItem as={Link} href="/profile" key="profile">
                                 Trang cá nhân
                             </DropdownItem>
                             <DropdownItem as={Link} href="/cart" key="cart">
                                 Giỏ hàng
                             </DropdownItem>
+                            <DropdownItem as={Link} href="/profile/wishlist" key="cart">
+                                Sản phẩm yêu thích
+                            </DropdownItem>
 
-                            <DropdownItem
-                                as={Link}
-                                href="/profile/order"
-                                key="user-order"
-                            >
+                            <DropdownItem as={Link} href="/profile/order" key="user-order">
                                 Các đơn hàng
                             </DropdownItem>
-                            <DropdownItem
-                                key="logout"
-                                color="danger"
-                                className="text-danger"
-                                onClick={handleSignOut}
-                            >
+                            <DropdownItem key="logout" color="danger" className="text-danger" onClick={handleSignOut}>
                                 Đăng xuất
                             </DropdownItem>
                         </DropdownMenu>
@@ -78,12 +55,7 @@ export default function NavbarUserInfo() {
                         <Link href="/register">Đăng ký</Link>
                     </NavbarItem>
                     <NavbarItem>
-                        <Button
-                            as={Link}
-                            color="primary"
-                            href="/login"
-                            variant="flat"
-                        >
+                        <Button as={Link} color="primary" href="/login" variant="flat">
                             Đăng nhập
                         </Button>
                     </NavbarItem>

@@ -7,10 +7,8 @@ import useSWR from "swr";
 
 export default function VoucherPage() {
     const { currentUser } = useCurrentUser();
-    console.log("currentUser: ", currentUser);
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/voucher/user/${currentUser?.id}`;
     const { data: voucherData, isLoading, error } = useSWR(url);
-    console.log("voucherData: ", voucherData);
 
     const vouchers: IVoucher[] = voucherData?.data || [];
 

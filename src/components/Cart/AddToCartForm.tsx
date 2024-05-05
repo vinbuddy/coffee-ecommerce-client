@@ -2,14 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { toast } from "sonner";
-import {
-    Button,
-    Checkbox,
-    CheckboxGroup,
-    Radio,
-    RadioGroup,
-    Skeleton,
-} from "@nextui-org/react";
+import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 
 import useCartStore from "@/hooks/useCartStore";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -23,19 +16,12 @@ interface IProps {
     product: IProduct;
 }
 
-export default function AddToCartForm({
-    product,
-    onDone = () => {},
-}: IProps): React.ReactNode {
+export default function AddToCartForm({ product, onDone = () => {} }: IProps): React.ReactNode {
     const [sizes, setSizes] = useState<IProductSize[]>([]);
     const [toppings, setToppings] = useState<IProductTopping[]>([]);
 
     const { loading, startLoading, stopLoading } = useLoading();
-    const {
-        loading: submitLoading,
-        startLoading: startSubmitLoading,
-        stopLoading: stopSubmitLoading,
-    } = useLoading();
+    const { loading: submitLoading, startLoading: startSubmitLoading, stopLoading: stopSubmitLoading } = useLoading();
 
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
@@ -49,12 +35,8 @@ export default function AddToCartForm({
             try {
                 startLoading();
                 let [toppingData, sizeData] = await Promise.all([
-                    fetchData(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${product.id}`
-                    ),
-                    fetchData(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${product.id}`
-                    ),
+                    fetchData(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${product.id}`),
+                    fetchData(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${product.id}`),
                 ]);
 
                 setToppings(toppingData.data);
@@ -63,9 +45,7 @@ export default function AddToCartForm({
 
                 // Preview Price = product.price + first size price
                 if (sizeData.data[0]?.size_price) {
-                    const initPreviewPrice: number =
-                        Number(product.price) +
-                        Number(sizeData.data[0]?.size_price);
+                    const initPreviewPrice: number = Number(product.price) + Number(sizeData.data[0]?.size_price);
 
                     setPreviewPrice(initPreviewPrice);
                 } else {
@@ -106,9 +86,7 @@ export default function AddToCartForm({
         let totalPrice: number = Number(product.price);
 
         // Calculate size price
-        const selectedSize = sizes.find(
-            (size) => size.size_id === selectedSizeId
-        );
+        const selectedSize = sizes.find((size) => size.size_id === selectedSizeId);
 
         if (selectedSize && selectedSize.size_price) {
             totalPrice += Number(selectedSize.size_price);
@@ -116,9 +94,7 @@ export default function AddToCartForm({
 
         // Calculate toppings price
         selectedToppings.forEach((toppingId) => {
-            const selectedTopping = toppings.find(
-                (topping) => topping.id === Number(toppingId)
-            );
+            const selectedTopping = toppings.find((topping) => topping.id === Number(toppingId));
 
             if (selectedTopping && selectedTopping.topping_price) {
                 totalPrice += Number(selectedTopping.topping_price);
@@ -130,9 +106,7 @@ export default function AddToCartForm({
         setPreviewPrice(totalPrice);
     };
 
-    const addToCart = async (
-        e: React.FormEvent<HTMLFormElement>
-    ): Promise<void> => {
+    const addToCart = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         try {
@@ -146,16 +120,13 @@ export default function AddToCartForm({
                 toppings: selectedToppings,
             };
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart`,
-                {
-                    method: "POST",
-                    body: JSON.stringify(body),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const resData = await response.json();
 
@@ -191,12 +162,8 @@ export default function AddToCartForm({
                         onValueChange={handleSelectSize}
                     >
                         {sizes.map((size) => (
-                            <Radio
-                                key={size?.size_id}
-                                value={size?.size_id?.toString()}
-                            >
-                                {size?.size_name} +{" "}
-                                {formatVNCurrency(size.size_price)}
+                            <Radio key={size?.size_id} value={size?.size_id?.toString()}>
+                                {size?.size_name} + {formatVNCurrency(size.size_price)}
                             </Radio>
                         ))}
                     </RadioGroup>
@@ -208,31 +175,30 @@ export default function AddToCartForm({
                     </div>
                 )}
             </div>
-            <div className="mt-5">
-                <CheckboxGroup
-                    color="primary"
-                    label={toppings.length > 0 ? "Chọn topping" : null}
-                    defaultValue={[]}
-                    onChange={handleSelectToppings}
-                >
-                    {toppings.map((topping) => (
-                        <Checkbox
-                            key={topping?.id}
-                            value={topping?.id.toString()}
+            <div>
+                {toppings.length > 0 && (
+                    <div className="mt-5">
+                        <CheckboxGroup
+                            color="primary"
+                            label={toppings.length > 0 ? "Chọn topping" : null}
+                            defaultValue={[]}
+                            onChange={handleSelectToppings}
                         >
-                            {topping.topping_name} +{" "}
-                            {formatVNCurrency(topping.topping_price)}
-                        </Checkbox>
-                    ))}
-                </CheckboxGroup>
-                {loading && (
-                    <div>
-                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
-                        <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                            {toppings.map((topping) => (
+                                <Checkbox key={topping?.id} value={topping?.id.toString()}>
+                                    {topping.topping_name} + {formatVNCurrency(topping.topping_price)}
+                                </Checkbox>
+                            ))}
+                        </CheckboxGroup>
+                        {loading && (
+                            <div>
+                                <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                                <Skeleton className="h-5 w-1/2 rounded-xl mb-2" />
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
-
             {/* Select quantity - Add to cart */}
             <div className=" mt-5">
                 <p className="font-medium mb-2">Chọn số lượng</p>
@@ -248,9 +214,7 @@ export default function AddToCartForm({
                         >
                             <AiOutlineMinus />
                         </Button>
-                        <Button className="border-0 w-[50px] h-[35px] min-w-0 px-0 bg-transparent">
-                            {quantity}
-                        </Button>
+                        <Button className="border-0 w-[50px] h-[35px] min-w-0 px-0 bg-transparent">{quantity}</Button>
                         <Button
                             onClick={handleIncrease}
                             color="primary"
@@ -262,14 +226,8 @@ export default function AddToCartForm({
                         </Button>
                     </div>
 
-                    <Button
-                        isLoading={submitLoading}
-                        type="submit"
-                        className="w-full ms-3"
-                        color="primary"
-                    >
-                        {formatVNCurrency(previewPrice)} &#x2022; Thêm vào giỏ
-                        hàng
+                    <Button isLoading={submitLoading} type="submit" className="w-full ms-3" color="primary">
+                        {formatVNCurrency(previewPrice)} &#x2022; Thêm vào giỏ hàng
                     </Button>
                 </div>
             </div>

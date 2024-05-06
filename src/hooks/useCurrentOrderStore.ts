@@ -1,26 +1,28 @@
 import { realTimeDb } from "@/config/firebase";
-import { IFirebaseOrder } from "@/types/order";
+import { getCurrentDateTimeString } from "@/lib/utils";
+import { ICurrentOrder, IFirebaseOrder } from "@/types/order";
 import { set as setDb, ref, onValue, remove, update } from "firebase/database";
 import { create } from "zustand";
 
 interface CurrentOrderState {
-    currentOrder: IFirebaseOrder | null;
-    setCurrentOrder: (order: IFirebaseOrder) => void;
+    currentOrder: ICurrentOrder | null;
+    setCurrentOrder: (order: ICurrentOrder) => void;
     insertOrderToFirebase: (order: IFirebaseOrder) => Promise<void>;
     updateOrderStatusToFirebase: (orderId: string, status: string) => Promise<void>;
+    completeOrder: (orderId: string) => void;
 }
 
 const useCurrentOrderStore = create<CurrentOrderState>((set, get) => ({
     currentOrder: null,
-    setCurrentOrder: (order) => set({ currentOrder: order }),
+    setCurrentOrder: (order) => set((state) => ({ ...state, currentOrder: order })),
     insertOrderToFirebase: async (order) => {
         // insert order to firebase using async await
         const orderRef = ref(realTimeDb, "orders/" + order.orderId);
         try {
             await setDb(orderRef, {
-                status: order.status,
+                statuses: order.statuses,
                 userId: order.userId,
-                isClose: order.isClose,
+                isCompleted: order.isCompleted,
             });
         } catch (error) {
             // Handle error here
@@ -28,7 +30,30 @@ const useCurrentOrderStore = create<CurrentOrderState>((set, get) => ({
         }
     },
     updateOrderStatusToFirebase: async (orderId, status) => {
-        // update order status using async await
+        // update order status using async await like insertOrderToFirebase
+        const orderRef = ref(realTimeDb, "orders/" + orderId + "/statuses");
+        const newStatus = {
+            status: {
+                status: status,
+                time: getCurrentDateTimeString(),
+            },
+        };
+        try {
+            await update(orderRef, newStatus);
+        } catch (error) {
+            console.error("Failed to update order status to Firebase:", error);
+        }
+    },
+    completeOrder: (orderId) => {
+        // update isCompleted field in order item using async await
+        const orderRef = ref(realTimeDb, "orders/" + orderId);
+        try {
+            update(orderRef, {
+                isCompleted: true,
+            });
+        } catch (error) {
+            console.error("Failed to complete order:", error);
+        }
     },
 }));
 

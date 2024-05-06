@@ -13,6 +13,7 @@ import { MOMO_MESSAGE, VNPAY_MESSAGE } from "@/lib/constants";
 import { IoIosWarning } from "react-icons/io";
 import useCheckoutStore from "@/hooks/useCheckoutStore";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
+import { getCurrentDateTimeString } from "@/lib/utils";
 
 type OrderType = Omit<IOrder, "order_date" | "order_status">;
 
@@ -120,8 +121,13 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
                 clearStoreId();
                 await insertOrderToFirebase({
                     userId: order.user_id,
-                    status: "Đang chờ," + new Date().toLocaleTimeString(),
-                    isClose: false,
+                    statuses: {
+                        "Đang chờ": {
+                            status: "Đang chờ",
+                            time: getCurrentDateTimeString(),
+                        },
+                    },
+                    isCompleted: false,
                     orderId: resOrder.id,
                 });
 

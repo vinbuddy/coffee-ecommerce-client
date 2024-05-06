@@ -1,7 +1,9 @@
 "use client";
 import { realTimeDb } from "@/config/firebase";
+import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { child, equalTo, get, onValue, orderByChild, query, ref } from "firebase/database";
+import { ICurrentOrder, IFirebaseOrder, IOrderStatus } from "@/types/order";
+import { equalTo, get, onValue, orderByChild, query, ref } from "firebase/database";
 import React, { useEffect } from "react";
 
 export const TrackingOrderContext = React.createContext({});
@@ -9,6 +11,7 @@ export const useTrackingOrderContext = () => React.useContext(TrackingOrderConte
 
 export const TrackingOrderProvider = ({ children }: { children: any }) => {
     const { currentUser } = useCurrentUser();
+    const { setCurrentOrder } = useCurrentOrderStore();
     useEffect(() => {
         if (!currentUser) return;
 
@@ -17,11 +20,26 @@ export const TrackingOrderProvider = ({ children }: { children: any }) => {
         const userOrdersQuery = query(ordersRef, orderByChild("userId"), equalTo(currentUser?.id));
 
         onValue(
-            ordersRef,
+            userOrdersQuery,
             (snapshot) => {
-                console.log("snapshot", snapshot.val());
-                const orders = Object.values(snapshot.val());
-                console.log("orders", orders);
+                snapshot.forEach((childSnapshot) => {
+                    const orderData = childSnapshot.val();
+                    console.log("orderData: ", orderData);
+                    const orderId = childSnapshot.key;
+
+                    if (orderData && !orderData?.isCompleted) {
+                        const statuses = Object.values(orderData.statuses) as IOrderStatus[];
+
+                        const order: ICurrentOrder = {
+                            userId: orderData.userId,
+                            orderId: orderId,
+                            statuses: statuses,
+                            isCompleted: orderData.isCompleted,
+                        };
+
+                        setCurrentOrder(order);
+                    }
+                });
             },
             (error) => {
                 console.error(error);

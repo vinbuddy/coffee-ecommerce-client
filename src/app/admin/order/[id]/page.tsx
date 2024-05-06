@@ -2,7 +2,7 @@
 
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { formatDateTime, formatVNCurrency } from "@/lib/utils";
+import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
 import { IOrderInfo } from "@/types/order";
 import {
     Select,
@@ -55,32 +55,6 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     const totalItemPrice = useMemo(() => {
         return order?.order_items.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
     }, [order]);
-
-    const getOrderStatusColor = (status: string) => {
-        let color: "default" | "primary" | "secondary" | "success" | "warning" | "danger" | undefined;
-
-        switch (status) {
-            case "Hoàn thành":
-                color = "success";
-                break;
-            case "Đang chờ":
-                color = "default";
-                break;
-            case "Đang xử lý":
-                color = "secondary";
-                break;
-            case "Đang giao":
-                color = "warning";
-                break;
-            case "Đã hủy":
-                color = "danger";
-                break;
-
-            default:
-                break;
-        }
-        return color;
-    };
 
     const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedStatus: string = e.target.value;

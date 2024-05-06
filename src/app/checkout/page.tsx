@@ -15,7 +15,7 @@ import { IStore } from "@/types/store";
 import useSearchDebounce from "@/hooks/useSearchDebounce";
 import useLoading from "@/hooks/useLoading";
 import { PaymentMethodType } from "@/types";
-import { formatVNCurrency, generateOrderId } from "@/lib/utils";
+import { formatVNCurrency, generateOrderId, getCurrentDateTimeString } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { IOrder } from "@/types/order";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -189,8 +189,13 @@ export default function CheckoutPage(): React.ReactNode {
                 clearStoreId();
                 await insertOrderToFirebase({
                     userId: currentUser?.id,
-                    status: "Đang chờ," + new Date().toLocaleTimeString(),
-                    isClose: false,
+                    statuses: {
+                        "Đang chờ": {
+                            status: "Đang chờ",
+                            time: getCurrentDateTimeString(),
+                        },
+                    },
+                    isCompleted: false,
                     orderId: resOrder.id,
                 });
                 router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}`);

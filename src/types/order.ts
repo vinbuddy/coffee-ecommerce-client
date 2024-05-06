@@ -28,9 +28,23 @@ export interface IOrderInfo extends IOrder {
     avatar: string | null;
 }
 
+export interface IOrderStatus {
+    status: string;
+    time: string;
+}
+
+export interface ICurrentOrder {
+    orderId: string;
+    userId: string;
+    statuses: IOrderStatus[];
+    isCompleted: boolean;
+}
+
 export interface IFirebaseOrder {
     orderId: string;
     userId: string;
-    status: string;
-    isClose: boolean;
+    statuses: {
+        [key: string]: IOrderStatus;
+    };
+    isCompleted: boolean;
 }

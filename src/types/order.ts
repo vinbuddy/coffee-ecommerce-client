@@ -27,3 +27,10 @@ export interface IOrderInfo extends IOrder {
     account_type: string;
     avatar: string | null;
 }
+
+export interface IFirebaseOrder {
+    orderId: string;
+    userId: string;
+    status: string;
+    isClose: boolean;
+}

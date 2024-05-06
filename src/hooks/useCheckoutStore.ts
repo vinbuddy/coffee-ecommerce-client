@@ -8,6 +8,7 @@ type CheckoutState = {
     applyVoucher: (voucher: IVoucher) => void;
     clearVoucher: () => void;
     selectStoreId: (store: number) => void;
+    clearStoreId: () => void;
 };
 
 const useCheckoutStore = create<CheckoutState>((set) => ({
@@ -20,6 +21,7 @@ const useCheckoutStore = create<CheckoutState>((set) => ({
         set((state) => ({ ...state, storeId: storeId }));
     },
     clearVoucher: () => set((state) => ({ ...state, voucher: null })),
+    clearStoreId: () => set((state) => ({ ...state, storeId: null })),
 }));
 
 export default useCheckoutStore;

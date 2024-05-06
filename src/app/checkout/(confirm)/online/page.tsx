@@ -11,6 +11,8 @@ import useLoading from "@/hooks/useLoading";
 import { useRouter } from "next/navigation";
 import { MOMO_MESSAGE, VNPAY_MESSAGE } from "@/lib/constants";
 import { IoIosWarning } from "react-icons/io";
+import useCheckoutStore from "@/hooks/useCheckoutStore";
+import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 
 type OrderType = Omit<IOrder, "order_date" | "order_status">;
 
@@ -28,6 +30,9 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
     const { startLoading, stopLoading, loading } = useLoading();
     const [checkoutURL, setCheckoutURL] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string | null>("");
+    const { voucher: appliedVoucher, selectStoreId, clearVoucher, clearStoreId } = useCheckoutStore();
+    const { insertOrderToFirebase } = useCurrentOrderStore();
+
     const router = useRouter();
 
     // Init order state
@@ -111,6 +116,14 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
 
                 const resOrder: IOrder = resData.data;
                 const orderDate = resOrder.order_date;
+                clearVoucher();
+                clearStoreId();
+                await insertOrderToFirebase({
+                    userId: order.user_id,
+                    status: "Đang chờ," + new Date().toLocaleTimeString(),
+                    isClose: false,
+                    orderId: resOrder.id,
+                });
 
                 router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}`);
             } else {

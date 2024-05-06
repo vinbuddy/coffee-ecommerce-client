@@ -13,12 +13,9 @@ export default function CartBadge() {
     useEffect(() => {
         (async () => {
             try {
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/total/${currentUser?.id}`,
-                    {
-                        method: "GET",
-                    }
-                );
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/total/${currentUser?.id}`, {
+                    method: "GET",
+                });
 
                 const resData = await response.json();
                 const count: number = resData?.data;
@@ -31,14 +28,9 @@ export default function CartBadge() {
     }, [currentUser]);
 
     return (
-        <Tooltip content="Giỏ hàng" placement="left-start" closeDelay={0}>
-            <Link href="/cart" className="relative me-5">
-                <Badge
-                    color="danger"
-                    content={totalItem}
-                    size="md"
-                    shape="circle"
-                >
+        <Tooltip content="Giỏ hàng" placement="bottom" closeDelay={0}>
+            <Link href="/cart" className="relative">
+                <Badge color="danger" content={totalItem} size="md" shape="circle">
                     <CiCoffeeCup size={28} />
                 </Badge>
             </Link>

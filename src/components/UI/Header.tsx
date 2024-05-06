@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import CartBadge from "../Cart/CartBadge";
 import NavbarUserInfo from "./NavbarUserInfo";
 import NavbarLinks from "./NavbarLinks";
+import ShowOrderStatusButton from "../Order/ShowOrderStatusButton";
 
 const navLinks = [
     {
@@ -38,7 +39,8 @@ export default function Header(): React.ReactNode {
                         <NavbarLinks navLinks={navLinks} />
                     </NavbarContent>
                     <NavbarContent justify="end" as="div">
-                        <div className="flex items-center ">
+                        <div className="flex items-center gap-x-5">
+                            <ShowOrderStatusButton />
                             <CartBadge />
 
                             <NavbarUserInfo />

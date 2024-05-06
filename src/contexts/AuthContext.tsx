@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import { setCookie, getCookie } from "cookies-next";
 import { app } from "@/config/firebase";
-import useCurrentUser from "./useCurrentUser";
+import useCurrentUser from "../hooks/useCurrentUser";
 import LoadingPage from "@/components/UI/LoadingPage";
 import { IUser } from "@/types/user";
 
@@ -24,12 +24,9 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
                 setCookie("uid", user.uid);
 
                 // Or using uid fetch user -> setCurrentUser
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${user.uid}`,
-                    {
-                        method: "Get",
-                    }
-                );
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${user.uid}`, {
+                    method: "Get",
+                });
                 const resData = await res.json();
 
                 useCurrentUser.setState((state) => ({
@@ -44,9 +41,5 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
         return () => unsubscribe();
     }, []);
 
-    return (
-        <AuthContext.Provider value={{}}>
-            {loading ? <LoadingPage /> : children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{}}>{loading ? <LoadingPage /> : children}</AuthContext.Provider>;
 };

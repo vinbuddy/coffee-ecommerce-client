@@ -2,13 +2,11 @@
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import { Image, Input, Radio, RadioGroup, cn, Autocomplete, AutocompleteItem, Button, Avatar } from "@nextui-org/react";
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
 
-import { MdLocationSearching } from "react-icons/md";
-import { HiOutlineBuildingStorefront } from "react-icons/hi2";
 import { ICart } from "@/types/cart";
 import { useRouter } from "next/navigation";
 import ShowVoucherButton from "@/components/Voucher/ShowVoucherButton";
@@ -24,6 +22,8 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { SHIPPING_COST } from "@/lib/constants";
 import useCheckoutStore from "@/hooks/useCheckoutStore";
 import AppliedVoucher from "@/components/Voucher/AppliedVoucher";
+import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
+import { toast } from "sonner";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -69,7 +69,8 @@ export default function CheckoutPage(): React.ReactNode {
     const { startLoading, stopLoading, loading } = useLoading();
     const { startLoading: startSubmitLoading, stopLoading: stopSubmitLoading, loading: submitLoading } = useLoading();
     const { currentUser } = useCurrentUser();
-    const { voucher: appliedVoucher, selectStoreId } = useCheckoutStore();
+    const { voucher: appliedVoucher, selectStoreId, clearVoucher, clearStoreId } = useCheckoutStore();
+    const { insertOrderToFirebase } = useCurrentOrderStore();
     const router = useRouter();
     const {
         register,
@@ -168,6 +169,7 @@ export default function CheckoutPage(): React.ReactNode {
     };
 
     const createOrderWithCash = async (order: any): Promise<void> => {
+        if (!currentUser) return;
         try {
             startSubmitLoading();
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order`, {
@@ -183,12 +185,21 @@ export default function CheckoutPage(): React.ReactNode {
             if (response.status === 200) {
                 const resOrder: IOrder = resData.data;
                 const orderDate = resOrder.order_date;
+                clearVoucher();
+                clearStoreId();
+                await insertOrderToFirebase({
+                    userId: currentUser?.id,
+                    status: "Đang chờ," + new Date().toLocaleTimeString(),
+                    isClose: false,
+                    orderId: resOrder.id,
+                });
                 router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}`);
             } else {
                 throw new Error(resData.message);
             }
         } catch (error: any) {
             console.log("error: ", error.message);
+            toast.error(error.message);
         } finally {
             stopSubmitLoading();
         }

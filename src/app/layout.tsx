@@ -4,7 +4,8 @@ import { Toaster } from "sonner";
 
 import { NextProvider as NextUIProvider, SWRConfigProvider } from "./providers";
 import "./globals.css";
-import { AuthContextProvider } from "@/hooks/useAuthContext";
+import { AuthContextProvider } from "@/contexts/AuthContext";
+import { TrackingOrderProvider } from "@/contexts/TrackingOrderContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const teko = Teko({ subsets: ["latin"], variable: "--font-teko" });
@@ -21,15 +22,15 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning={true}>
-            <body
-                className={`min-h-[100vh] ${teko.variable}  ${inter.className}`}
-            >
+            <body className={`min-h-[100vh] ${teko.variable}  ${inter.className}`}>
                 <NextUIProvider>
                     <AuthContextProvider>
-                        <SWRConfigProvider>
-                            {children}
-                            <Toaster />
-                        </SWRConfigProvider>
+                        <TrackingOrderProvider>
+                            <SWRConfigProvider>
+                                {children}
+                                <Toaster />
+                            </SWRConfigProvider>
+                        </TrackingOrderProvider>
                     </AuthContextProvider>
                 </NextUIProvider>
             </body>

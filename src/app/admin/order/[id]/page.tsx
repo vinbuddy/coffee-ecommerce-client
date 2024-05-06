@@ -22,6 +22,7 @@ import useSWR from "swr";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import { IoIosWarning } from "react-icons/io";
+import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -47,9 +48,9 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     const order: IOrderInfo = orderData?.data;
     const [currentStatus, setCurrentStatus] = useState<string>("Đang chờ");
     const [disabledStatuses, setDisabledStatuses] = useState<string[]>([]);
-    console.log("disabledStatuses: ", disabledStatuses);
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+    const { updateOrderStatusToFirebase } = useCurrentOrderStore();
 
     const totalItemPrice = useMemo(() => {
         return order?.order_items.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
@@ -111,6 +112,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 mutate();
                 onClose();
                 handleDisableStatusItem();
+                updateOrderStatusToFirebase(params.id, currentStatus);
 
                 toast.success("Cập nhật trạng thái đơn hàng thành công", {
                     position: "bottom-center",
@@ -121,14 +123,6 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         } catch (error) {
             console.log("error: ", error);
         }
-    };
-
-    const renderSelectItems = (): JSX.Element[] => {
-        return STATUS_LIST.map((status) => (
-            <SelectItem variant="flat" color={status === "Đã hủy" ? "danger" : "default"} value={status} key={status}>
-                <span className={`${status === "Đã hủy" && "text-danger"}`}>{status}</span>
-            </SelectItem>
-        ));
     };
 
     const handleDisableStatusItem = (): void => {

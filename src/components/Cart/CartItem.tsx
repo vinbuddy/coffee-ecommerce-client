@@ -30,24 +30,19 @@ export default function CartItem({
     const { addSelectedCartItems, removeSelectedCartItems } = useCartStore();
     const handleDeleteCartItem = async (): Promise<void> => {
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartItem.id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartItem.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const resData = await response.json();
 
             if (response.status === 200) {
                 // Mutate Cart page
 
-                mutate(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`
-                );
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`);
 
                 // Update cart badge
                 useCartStore.setState((state) => ({
@@ -67,9 +62,7 @@ export default function CartItem({
         }
     };
 
-    const handleSelectCartItem = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
+    const handleSelectCartItem = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let isChecked = e.target.checked;
 
         if (isChecked) {
@@ -92,17 +85,11 @@ export default function CartItem({
             )}
 
             <div className="flex-1 h-full flex justify-between ">
-                <Image
-                    className="h-full border object-cover"
-                    src={cartItem?.product_image || ""}
-                    alt=""
-                />
+                <Image className="h-full border object-cover" src={cartItem?.product_image || ""} alt="" />
 
                 <div className="flex-1 ms-4">
                     <div className="flex items-center justify-between">
-                        <p className="font-medium mb-2">
-                            {cartItem?.product_name}
-                        </p>
+                        <p className="font-medium mb-2">{cartItem?.product_name}</p>
                         <div className="flex items-center">
                             {isEdited && (
                                 <AddToCartPreviewButton
@@ -112,11 +99,8 @@ export default function CartItem({
                                         variant: "light",
                                         size: "md",
                                         radius: "full",
-                                        className:
-                                            "w-[30px] h-[30px] px-0 min-w-0",
-                                        children: (
-                                            <MdOutlineDraw className="text-lg" />
-                                        ),
+                                        className: "w-[30px] h-[30px] px-0 min-w-0",
+                                        children: <MdOutlineDraw className="text-lg" />,
                                     }}
                                 />
                             )}
@@ -128,27 +112,19 @@ export default function CartItem({
                                         variant: "light",
                                         radius: "full",
                                         size: "md",
-                                        className:
-                                            "w-[30px] h-[30px] px-0 min-w-0 ms-2",
-                                        children: (
-                                            <AiOutlineDelete className="text-lg" />
-                                        ),
+                                        className: "w-[30px] h-[30px] px-0 min-w-0 ms-2",
+                                        children: <AiOutlineDelete className="text-lg" />,
                                     }}
                                 />
                             )}
                         </div>
                     </div>
                     <div className="flex items-center justify-between">
-                        <p className="text-gray-500 mb-2">
-                            {formatVNCurrency(cartItem.product_price)}
-                        </p>
-                        <p className="text-gray-500 mb-2">
-                            Tổng: {formatVNCurrency(cartItem.total_item_price)}
-                        </p>
+                        <p className="text-gray-500 mb-2">{formatVNCurrency(cartItem.product_price)}</p>
+                        <p className="text-gray-500 mb-2">Tổng: {formatVNCurrency(cartItem.order_item_price)}</p>
                     </div>
                     <p className="text-gray-500 mb-2">
-                        +{cartItem.quantity}, size{" "}
-                        {cartItem.size_name.toLowerCase()}
+                        +{cartItem.quantity}, size {cartItem.size_name.toLowerCase()}
                     </p>
                     {cartItem.toppings && cartItem.toppings.length > 0 && (
                         <div className="flex gap-x-2">
@@ -160,11 +136,7 @@ export default function CartItem({
                                     content={topping.topping_price}
                                     placement="bottom"
                                 >
-                                    <Chip
-                                        className="cursor-pointer"
-                                        color="default"
-                                        variant="flat"
-                                    >
+                                    <Chip className="cursor-pointer" color="default" variant="flat">
                                         {topping.topping_name}
                                     </Chip>
                                 </Tooltip>

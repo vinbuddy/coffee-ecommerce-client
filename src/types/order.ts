@@ -16,6 +16,8 @@ export interface IOrder {
     address: string;
     store_id: number | string;
     voucher_id: number | string;
+    voucher_name?: string;
+    store_name?: string;
     order_items: ICart[];
 }
 

@@ -16,5 +16,5 @@ export interface ICart {
     size_price: string | number;
     quantity: number;
     toppings: ICartTopping[];
-    total_item_price: number | string;
+    order_item_price: number | string;
 }

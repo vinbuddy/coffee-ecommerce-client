@@ -46,6 +46,7 @@ export default function OrderStatusWidget() {
                                             toast.success("Đã hủy đơn hàng", {
                                                 position: "bottom-center",
                                             });
+                                            onClose();
                                         }}
                                     />
                                 )}
@@ -57,6 +58,7 @@ export default function OrderStatusWidget() {
                                             toast.success("Đã hoàn thành đơn hàng", {
                                                 position: "bottom-center",
                                             });
+                                            onClose();
                                         }}
                                     />
                                 ) : (
@@ -69,13 +71,14 @@ export default function OrderStatusWidget() {
                     )}
                 </ModalContent>
             </Modal>
-            <Tooltip content={lastStatus} placement="bottom">
+            <Tooltip closeDelay={0} content={lastStatus || "Chưa có đơn hàng"} placement="bottom">
                 <button onClick={onOpen} className="text-sm">
                     <Badge
                         content=""
                         color={getOrderStatusColor(lastStatus || "Đang chờ")}
                         shape="circle"
                         placement="top-right"
+                        isInvisible={!lastStatus}
                     >
                         <MdDeliveryDining size={28} />
                     </Badge>

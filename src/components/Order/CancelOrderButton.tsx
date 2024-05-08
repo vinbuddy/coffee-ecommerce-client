@@ -1,6 +1,7 @@
 "use client";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 import { Button } from "@nextui-org/react";
+import DeleteConfirmationButton from "../UI/DeleteConfirmationButton";
 
 interface IProps {
     onAfterCanceled: () => void | Promise<void>;
@@ -14,7 +15,6 @@ export default function CancelOrderButton({ onAfterCanceled, isFullWidth = false
     const handleCancelOrder = async () => {
         try {
             if (!orderId) return;
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/edit-status/${orderId}`, {
                 method: "PUT",
                 body: JSON.stringify({ order_status: "Đã hủy" }),
@@ -22,9 +22,7 @@ export default function CancelOrderButton({ onAfterCanceled, isFullWidth = false
                     "Content-Type": "application/json",
                 },
             });
-
             const resData = await response.json();
-
             if (response.status == 200) {
                 completeOrder(orderId);
                 onAfterCanceled();
@@ -37,8 +35,21 @@ export default function CancelOrderButton({ onAfterCanceled, isFullWidth = false
     };
 
     return (
-        <Button fullWidth={isFullWidth} color="danger" radius="md" variant="flat" onClick={handleCancelOrder}>
-            Hủy đơn hàng
-        </Button>
+        <>
+            <DeleteConfirmationButton
+                title="Hủy đơn hàng"
+                description="Đơn hàng sẽ bị hủy, bạn đồng ý chứ?"
+                buttonProps={{
+                    color: "danger",
+                    radius: "md",
+                    variant: "flat",
+                    fullWidth: true,
+                    children: "Hủy đơn hàng",
+                }}
+                deleteButtonContent="Hủy đơn hàng"
+                modalBackdrop="blur"
+                onDelete={handleCancelOrder}
+            />
+        </>
     );
 }

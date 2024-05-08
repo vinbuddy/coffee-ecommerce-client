@@ -33,7 +33,7 @@ export default function CartPage(): React.ReactNode {
     const carts: ICart[] = cartData?.data || [];
 
     const totalPayment = useMemo(() => {
-        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
+        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.order_item_price), 0);
     }, [selectedCartItems]);
 
     const handleNavigateToCheckout = (): void => {
@@ -85,7 +85,14 @@ export default function CartPage(): React.ReactNode {
                                     carts.map((cartItem) => <CartItem key={cartItem?.id} cartItem={cartItem} />)
                                 ) : (
                                     <div className="flex items-center justify-center flex-col">
-                                        <Image className="w-[250px]" src={emptyCartImage.src} alt="empty cart" />
+                                        <Image
+                                            classNames={{
+                                                img: "grayscale",
+                                            }}
+                                            className="w-[250px]"
+                                            src={emptyCartImage.src}
+                                            alt="empty cart"
+                                        />
                                         <p className="mt-1 text-gray-500 text-lg">Giỏ hàng của bạn đang trống</p>
                                     </div>
                                 )}

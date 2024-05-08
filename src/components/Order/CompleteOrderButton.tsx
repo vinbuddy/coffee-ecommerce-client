@@ -1,5 +1,6 @@
 "use client";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
+import useLoading from "@/hooks/useLoading";
 import { Button } from "@nextui-org/react";
 
 interface IProps {
@@ -10,10 +11,12 @@ interface IProps {
 
 export default function CompleteOrderButton({ onAfterCompleted, isFullWidth = false, orderId }: IProps) {
     const { completeOrder } = useCurrentOrderStore();
+    const { startLoading, stopLoading, loading } = useLoading();
 
     const handleCompleteOrder = async () => {
         try {
             if (!orderId) return;
+            startLoading();
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/edit-status/${orderId}`, {
                 method: "PUT",
@@ -33,12 +36,21 @@ export default function CompleteOrderButton({ onAfterCompleted, isFullWidth = fa
             }
         } catch (error) {
             console.error("Error canceling order: ", error);
+        } finally {
+            stopLoading();
         }
     };
 
     return (
-        <Button fullWidth={isFullWidth} color="success" radius="md" variant="flat" onClick={handleCompleteOrder}>
-            Hủy đơn hàng
+        <Button
+            isLoading={loading}
+            fullWidth={isFullWidth}
+            color="success"
+            radius="md"
+            variant="flat"
+            onClick={handleCompleteOrder}
+        >
+            Hoàn thành đơn hàng
         </Button>
     );
 }

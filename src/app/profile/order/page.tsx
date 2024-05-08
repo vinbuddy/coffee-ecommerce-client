@@ -9,12 +9,15 @@ import CompleteOrderButton from "@/components/Order/CompleteOrderButton";
 import { toast } from "sonner";
 import useSWR from "swr";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import OrderCard from "@/components/Order/OrderCard";
+import { IOrder } from "@/types/order";
 
 export default function UserOrderPage(): React.ReactNode {
     const { currentOrder } = useCurrentOrderStore();
     const { currentUser } = useCurrentUser();
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/order/user-order/${currentUser?.id}`;
     const { data: orderData, isLoading, error, mutate } = useSWR(url);
+    const orders: IOrder[] = orderData?.data || [];
 
     const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;
     const isCancelable = currentOrder?.statuses.length === 1 && lastStatus === "Đang chờ";
@@ -58,43 +61,41 @@ export default function UserOrderPage(): React.ReactNode {
             <div>
                 <Tabs variant="underlined" aria-label="Options">
                     <Tab key="all" title="Tất cả">
-                        <Card>
-                            <CardBody>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </CardBody>
-                        </Card>
+                        {orders.map((order) => (
+                            <Card key={order?.id} className="mb-5 last:mb-0 px-4">
+                                <CardBody>
+                                    <OrderCard order={order} />
+                                </CardBody>
+                            </Card>
+                        ))}
                     </Tab>
 
                     <Tab key="complete" title="Đã giao">
-                        <Card>
-                            <CardBody>
-                                <ul>
-                                    {/* <CartItem
-                                        isSelected={false}
-                                        isDeleted={false}
-                                        isEdited={false}
-                                        cartItem={{}}
-                                    />
-                                    <CartItem
-                                        isSelected={false}
-                                        isDeleted={false}
-                                        isEdited={false}
-                                        cartItem={{}}
-                                    /> */}
-                                </ul>
-                            </CardBody>
-                        </Card>
+                        {orders.map((order) => {
+                            if (order.order_status === "Hoàn thành") {
+                                return (
+                                    <Card key={order.id} className="mb-5 last:mb-0 px-4">
+                                        <CardBody>
+                                            <OrderCard order={order} />
+                                        </CardBody>
+                                    </Card>
+                                );
+                            }
+                        })}
                     </Tab>
 
-                    <Tab key="Shipping" title="Đã hủy">
-                        <Card>
-                            <CardBody>
-                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                                mollit anim id est laborum.
-                            </CardBody>
-                        </Card>
+                    <Tab key="Cancel" title="Đã hủy">
+                        {orders.map((order) => {
+                            if (order.order_status === "Đã hủy") {
+                                return (
+                                    <Card key={order.id} className="mb-5 last:mb-0 px-4">
+                                        <CardBody>
+                                            <OrderCard order={order} />
+                                        </CardBody>
+                                    </Card>
+                                );
+                            }
+                        })}
                     </Tab>
                 </Tabs>
             </div>

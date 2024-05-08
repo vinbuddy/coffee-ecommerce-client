@@ -24,11 +24,12 @@ export const TrackingOrderProvider = ({ children }: { children: any }) => {
             (snapshot) => {
                 snapshot.forEach((childSnapshot) => {
                     const orderData = childSnapshot.val();
-                    console.log("orderData: ", orderData);
                     const orderId = childSnapshot.key;
 
                     if (orderData && !orderData?.isCompleted) {
                         const statuses = Object.values(orderData.statuses) as IOrderStatus[];
+
+                        statuses.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
                         const order: ICurrentOrder = {
                             userId: orderData.userId,

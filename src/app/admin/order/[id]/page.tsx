@@ -23,6 +23,7 @@ import { IoInformationCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import { IoIosWarning } from "react-icons/io";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
+import useLoading from "@/hooks/useLoading";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -50,10 +51,11 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     const [disabledStatuses, setDisabledStatuses] = useState<string[]>([]);
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+    const { startLoading, stopLoading, loading } = useLoading();
     const { updateOrderStatusToFirebase } = useCurrentOrderStore();
 
     const totalItemPrice = useMemo(() => {
-        return order?.order_items.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
+        return order?.order_items.reduce((acc, curr) => acc + Number(curr.order_item_price), 0);
     }, [order]);
 
     const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -70,6 +72,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
     const handleUpdateStatus = async (): Promise<void> => {
         try {
+            startLoading();
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/edit-status/${params.id}`, {
                 method: "PUT",
                 body: JSON.stringify({
@@ -83,10 +86,10 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
             const data = await response.json();
 
             if (response.status === 200) {
+                updateOrderStatusToFirebase(params.id, currentStatus);
                 mutate();
                 onClose();
                 handleDisableStatusItem();
-                updateOrderStatusToFirebase(params.id, currentStatus);
 
                 toast.success("Cập nhật trạng thái đơn hàng thành công", {
                     position: "bottom-center",
@@ -96,6 +99,8 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
             }
         } catch (error) {
             console.log("error: ", error);
+        } finally {
+            stopLoading();
         }
     };
 
@@ -112,7 +117,10 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 disabledKeys.push("Đang chờ", "Đang xử lý");
                 break;
             case "Đã hủy":
-                disabledKeys.push("Đang chờ", "Đang xử lý", "Đang giao", "Hoàn thành");
+                disabledKeys.push("Đang chờ", "Đang xử lý", "Đang giao", "Hoàn thành", "Đã hủy");
+                break;
+            case "Hoàn thành":
+                disabledKeys.push("Đang chờ", "Đang xử lý", "Đang giao", "Hoàn thành", "Đã hủy");
                 break;
             default:
                 disabledKeys.push("Đang chờ", "Đang xử lý", "Đang giao");
@@ -165,8 +173,9 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                                     Hủy
                                 </Button>
                                 <Button
+                                    isLoading={loading}
                                     fullWidth
-                                    className={`${currentStatus === "Đã hủy" && "bg-danger"} text-white`}
+                                    className={`${currentStatus === "Đã hủy" ? "bg-danger" : "bg-black"} text-white`}
                                     radius="full"
                                     onPress={handleUpdateStatus}
                                 >

@@ -1,11 +1,19 @@
 "use client";
+import { realTimeDb } from "@/config/firebase";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 import { formatDateTime } from "@/lib/utils";
+import { ICurrentOrder, IOrderStatus } from "@/types/order";
 import { Chip, Tooltip } from "@nextui-org/react";
+import { get, onValue, ref } from "firebase/database";
+import { useEffect, useState } from "react";
 import { FaRegHandPointer } from "react-icons/fa";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { PiCookingPotBold } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
+
+interface IProps {
+    orderId: string;
+}
 
 const orderStatuses = [
     { status: "Đang chờ", label: "Xác nhận đơn hàng", icon: <FaRegHandPointer /> },
@@ -18,10 +26,48 @@ const orderStatuses = [
     },
 ];
 
-export default function OrderStatusProgress() {
-    const { currentOrder } = useCurrentOrderStore();
-    const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;
-    const currentStatusIndex = orderStatuses.findIndex((status) => status.status === lastStatus);
+export default function OrderDetailStatusProgress({ orderId }: IProps) {
+    const [currentOrder, setCurrentOrder] = useState<ICurrentOrder | null>(null);
+    const [currentStatusIndex, setCurrentStatusIndex] = useState<number>(0);
+    useEffect(() => {
+        if (currentOrder) {
+            const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;
+            const _currentStatusIndex = orderStatuses.findIndex((status) => status.status === lastStatus);
+            setCurrentStatusIndex(_currentStatusIndex);
+        }
+    }, [currentOrder]);
+
+    useEffect(() => {
+        const orderDetailRef = ref(realTimeDb, `orders/${orderId}`);
+
+        onValue(
+            orderDetailRef,
+            (snapshot) => {
+                if (snapshot.exists()) {
+                    const orderData = snapshot.val();
+
+                    if (orderData) {
+                        const statuses = Object.values(orderData.statuses) as IOrderStatus[];
+                        statuses.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+
+                        const order: ICurrentOrder = {
+                            userId: orderData.userId,
+                            orderId: orderId,
+                            statuses: statuses,
+                            isCompleted: orderData.isCompleted,
+                        };
+
+                        setCurrentOrder(order);
+                    }
+                } else {
+                    console.log("No data available for this order");
+                }
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+    }, []);
 
     return (
         <div>
@@ -54,7 +100,7 @@ export default function OrderStatusProgress() {
                             <div className="pt-1 pb-8">
                                 <p
                                     className={`mb-2 font-medium ${
-                                        index <= currentStatusIndex ? "text-black/85" : "text-gray-700"
+                                        index <= currentStatusIndex ? "text-black/85" : "text-gray-700 "
                                     }`}
                                 >
                                     {status.label}

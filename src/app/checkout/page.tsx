@@ -81,7 +81,7 @@ export default function CheckoutPage(): React.ReactNode {
 
     const [selectedCartItems, setSelectedCartItems] = useState<ICart[]>([]);
     const totalItemPrice = useMemo(() => {
-        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.total_item_price), 0);
+        return selectedCartItems.reduce((acc, curr) => acc + Number(curr.order_item_price), 0);
     }, [selectedCartItems]);
 
     const [newOrder, setNewOrder] = useState<NewOrder>({
@@ -169,6 +169,7 @@ export default function CheckoutPage(): React.ReactNode {
     };
 
     const createOrderWithCash = async (order: any): Promise<void> => {
+        console.log("order: ", order);
         if (!currentUser) return;
         try {
             startSubmitLoading();

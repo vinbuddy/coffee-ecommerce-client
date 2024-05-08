@@ -33,7 +33,7 @@ const useCurrentOrderStore = create<CurrentOrderState>((set, get) => ({
         // update order status using async await like insertOrderToFirebase
         const orderRef = ref(realTimeDb, "orders/" + orderId + "/statuses");
         const newStatus = {
-            status: {
+            [status]: {
                 status: status,
                 time: getCurrentDateTimeString(),
             },
@@ -44,13 +44,15 @@ const useCurrentOrderStore = create<CurrentOrderState>((set, get) => ({
             console.error("Failed to update order status to Firebase:", error);
         }
     },
-    completeOrder: (orderId) => {
+    completeOrder: async (orderId) => {
         // update isCompleted field in order item using async await
         const orderRef = ref(realTimeDb, "orders/" + orderId);
         try {
-            update(orderRef, {
+            await update(orderRef, {
                 isCompleted: true,
             });
+
+            set((state) => ({ ...state, currentOrder: null }));
         } catch (error) {
             console.error("Failed to complete order:", error);
         }

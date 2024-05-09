@@ -6,7 +6,7 @@ export interface IOrder {
     user_id: string;
     total_payment: number | string;
     payment_method: PaymentMethodType;
-    order_status: string;
+    order_status: "Hoàn thành" | "Đang giao" | "Đã hủy" | "Đang xử lý" | "Đang chờ";
     order_type: "online" | "offline";
     order_date: string;
     order_note: string;
@@ -19,6 +19,7 @@ export interface IOrder {
     voucher_name?: string;
     store_name?: string;
     order_items: ICart[];
+    is_reviewed?: boolean;
 }
 
 export interface IOrderInfo extends IOrder {

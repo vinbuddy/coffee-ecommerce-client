@@ -18,12 +18,14 @@ interface IProps {
     isSelected?: boolean;
     isDeleted?: boolean;
     isEdited?: boolean;
+    isProductLink?: boolean;
 }
 
 export default function CartItem({
     isSelected = true,
     isDeleted = true,
     isEdited = true,
+    isProductLink = true,
     cartItem,
 }: IProps): React.ReactNode {
     const { currentUser } = useCurrentUser();
@@ -85,7 +87,18 @@ export default function CartItem({
             )}
 
             <div className="flex-1 h-full flex justify-between ">
-                <Image className="h-full border object-cover" src={cartItem?.product_image || ""} alt="" />
+                {isProductLink ? (
+                    <Link href={`/product/${cartItem.product_id}`} className=" block h-full ">
+                        <Image
+                            removeWrapper
+                            className="h-full border object-cover"
+                            src={cartItem?.product_image || ""}
+                            alt=""
+                        />
+                    </Link>
+                ) : (
+                    <Image className="h-full border object-cover" src={cartItem?.product_image || ""} alt="" />
+                )}
 
                 <div className="flex-1 ms-4">
                     <div className="flex items-center justify-between">

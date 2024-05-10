@@ -1,13 +1,12 @@
 import React from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-
 import RouterRefresh from "@/components/UI/RouterRefresh";
 
 import { fetchData } from "@/lib/utils";
-import { ICategory } from "@/types/category";
-import CategoryTable from "@/components/Category/CategoryTable";
-import AddEditCategoryButton from "@/components/Category/AddEditCategoryButton";
+import SizeTable from "@/components/Size/SizeTable";
+import { ISize } from "@/types/size";
+import AddEditSizeButton from "@/components/Size/AddEditSizeButton";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -19,14 +18,14 @@ const breadcumbItems: IBreadcumbItem[] = [
         href: "/admin/product",
     },
     {
-        content: "Danh mục",
-        href: "/admin/category",
+        content: "Size",
+        href: "/admin/size",
     },
 ];
 
-export default async function AdminCategoryPage() {
-    const categoryData = await fetchData(`${process.env.NEXT_PUBLIC_API_BASE_URL}/category`);
-    const categories: ICategory[] = categoryData.data || [];
+export default async function AdminSizePage() {
+    const sizeData = await fetchData(`${process.env.NEXT_PUBLIC_API_BASE_URL}/size`);
+    const sizes: ISize[] = sizeData.data || [];
     return (
         <div>
             <RouterRefresh />
@@ -35,9 +34,9 @@ export default async function AdminCategoryPage() {
             </div>
             <div>
                 <div className="mb-5 flex items-center justify-between">
-                    <h3 className="font-bold text-xl">Danh mục sản phẩm</h3>
+                    <h3 className="font-bold text-xl">Size sản phẩm</h3>
                     <div className="flex items-center justify-end">
-                        <AddEditCategoryButton
+                        <AddEditSizeButton
                             buttonProps={{
                                 className: "bg-black text-white ms-3",
                                 radius: "sm",
@@ -48,7 +47,7 @@ export default async function AdminCategoryPage() {
                     </div>
                 </div>
                 <div>
-                    <CategoryTable categories={categories} />
+                    <SizeTable sizes={sizes} />
                 </div>
             </div>
         </div>

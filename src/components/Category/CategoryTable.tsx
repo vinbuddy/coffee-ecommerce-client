@@ -13,7 +13,7 @@ export default function CategoryTable({ categories }: IProps): React.ReactNode {
         <Table color="default" selectionMode="single" removeWrapper aria-label="Example static collection table">
             <TableHeader>
                 <TableColumn>#</TableColumn>
-                <TableColumn>Tên sản danh mục</TableColumn>
+                <TableColumn>Tên danh mục</TableColumn>
                 <TableColumn>Thao tác</TableColumn>
             </TableHeader>
             <TableBody>

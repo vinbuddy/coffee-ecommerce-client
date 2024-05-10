@@ -16,21 +16,21 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface IProps {
-    categoryValue?: string;
-    categoryId?: number;
+    sizeValue?: string;
+    sizeId?: number;
     buttonProps: ButtonProps;
 }
 
-export default function AddEditCategoryButton({ categoryValue = "", categoryId, buttonProps }: IProps) {
+export default function AddEditSizeButton({ sizeValue = "", sizeId, buttonProps }: IProps) {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    const [categoryName, setCategoryName] = useState<string>(categoryValue);
+    const [sizeName, setSizeName] = useState<string>(sizeValue);
     const { startLoading, stopLoading, loading } = useLoading();
     const router = useRouter();
 
     const handleSubmit = (): void => {
-        if (categoryName === "") return;
+        if (sizeName === "") return;
 
-        if (Boolean(categoryValue)) {
+        if (Boolean(sizeValue)) {
             handleEditCategory();
         } else {
             handleAddCategory();
@@ -40,26 +40,26 @@ export default function AddEditCategoryButton({ categoryValue = "", categoryId, 
     const handleAddCategory = async (): Promise<void> => {
         try {
             startLoading();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/category`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/size`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ category_name: categoryName.trim() }),
+                body: JSON.stringify({ size_name: sizeName.trim() }),
             });
 
             const data = await response.json();
 
             if (response.status === 200) {
                 router.refresh();
-                toast.success("Thêm danh mục thành công", {
+                toast.success("Thêm size thành công", {
                     position: "bottom-center",
                 });
             } else {
                 throw new Error(data.message);
             }
         } catch (error: any) {
-            toast.error("Thêm danh mục thất bại", {
+            toast.error("Thêm size thất bại", {
                 position: "bottom-center",
                 description: error.message,
             });
@@ -70,29 +70,29 @@ export default function AddEditCategoryButton({ categoryValue = "", categoryId, 
     };
 
     const handleEditCategory = async (): Promise<void> => {
-        if (!categoryId) return;
+        if (!sizeId) return;
         try {
             startLoading();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/category/${categoryId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/category/${sizeId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ category_name: categoryName.trim() }),
+                body: JSON.stringify({ size_name: sizeName.trim() }),
             });
 
             const data = await response.json();
 
             if (response.status === 200) {
                 router.refresh();
-                toast.success("Chỉnh sửa danh mục thành công", {
+                toast.success("Chỉnh sửa size thành công", {
                     position: "bottom-center",
                 });
             } else {
                 throw new Error(data.message);
             }
         } catch (error: any) {
-            toast.error("Chỉnh sửa danh mục thất bại", {
+            toast.error("Chỉnh sửa size thất bại", {
                 position: "bottom-center",
                 description: error.message,
             });
@@ -109,13 +109,13 @@ export default function AddEditCategoryButton({ categoryValue = "", categoryId, 
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                {Boolean(categoryValue) ? "Chỉnh sửa danh mục" : "Thêm danh mục"}
+                                {Boolean(sizeValue) ? "Chỉnh sửa size" : "Thêm size"}
                             </ModalHeader>
                             <ModalBody className="pt-0 px-6">
                                 <Input
-                                    onValueChange={(value) => setCategoryName(value)}
-                                    value={categoryName}
-                                    placeholder="Nhập tên danh mục"
+                                    onValueChange={(value) => setSizeName(value)}
+                                    value={sizeName}
+                                    placeholder="Nhập tên size"
                                     variant="bordered"
                                     radius="md"
                                 />
@@ -124,12 +124,12 @@ export default function AddEditCategoryButton({ categoryValue = "", categoryId, 
                                 <Button
                                     isLoading={loading}
                                     onClick={handleSubmit}
-                                    isDisabled={categoryValue.trim() === categoryName.trim()}
+                                    isDisabled={sizeValue.trim() === sizeName.trim()}
                                     fullWidth
                                     radius="md"
                                     className="bg-black text-white"
                                 >
-                                    {Boolean(categoryValue) ? "Chỉnh sửa" : "Thêm mới"}
+                                    {Boolean(sizeValue) ? "Chỉnh sửa" : "Thêm mới"}
                                 </Button>
                             </ModalFooter>
                         </>

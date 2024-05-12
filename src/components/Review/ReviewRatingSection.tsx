@@ -60,108 +60,11 @@ export default function ReviewRatingSection({ reviews = [] }: IProps) {
             </div>
             <div className="mb-5">
                 <h4 className="flex items-center font-bold text-primary text-lg">
-                    <span className="text-[#ff9f00] me-2">{Math.round(ratingAverage * 10) / 10}</span>
+                    <span className="text-[#ff9f00] me-2">{Math.round(ratingAverage * 10) / 10 || 0}</span>
                     <BiSolidStar className="text-[#ff9f00]" />
                 </h4>
             </div>
-            <ul>
-                {renderRatingProgress()}
-                {/* <li className="flex items-center justify-between mb-2">
-                    <div className="flex-1 flex items-center">
-                        <BiSolidStar className="text-default" />
-
-                        <span className="ms-1.5 me-3">5</span>
-
-                        <Progress
-                            aria-label="Loading..."
-                            value={60}
-                            size="sm"
-                            className="max-w-sm"
-                            classNames={{
-                                track: "h-2",
-                                indicator: "!bg-[#ff9f00]",
-                            }}
-                        />
-                    </div>
-                    <span className="text-black/55">3</span>
-                </li>
-                <li className="flex items-center justify-between mb-2">
-                    <div className="flex-1 flex items-center">
-                        <BiSolidStar className="text-default" />
-
-                        <span className="ms-1.5 me-3">4</span>
-
-                        <Progress
-                            aria-label="Loading..."
-                            value={10}
-                            size="sm"
-                            className="max-w-sm"
-                            classNames={{
-                                track: "h-2",
-                                indicator: "bg-[#ff9f00]",
-                            }}
-                        />
-                    </div>
-                    <span className="text-black/55">3</span>
-                </li>
-                <li className="flex items-center justify-between mb-2">
-                    <div className="flex-1 flex items-center">
-                        <BiSolidStar className="text-default" />
-
-                        <span className="ms-1.5 me-3">3</span>
-
-                        <Progress
-                            aria-label="Loading..."
-                            value={20}
-                            size="sm"
-                            className="max-w-sm"
-                            classNames={{
-                                track: "h-2",
-                                indicator: "bg-[#ff9f00]",
-                            }}
-                        />
-                    </div>
-                    <span className="text-black/55">3</span>
-                </li>
-                <li className="flex items-center mb-2">
-                    <div className="flex-1 flex items-center me-3">
-                        <BiSolidStar className="text-default" />
-
-                        <span className="ms-1.5 me-3">2</span>
-
-                        <Progress
-                            aria-label="Loading..."
-                            value={0}
-                            size="sm"
-                            className="max-w-sm"
-                            classNames={{
-                                track: "h-2",
-                                indicator: "bg-[#ff9f00]",
-                            }}
-                        />
-                    </div>
-                    <span className="text-black/55">3</span>
-                </li>
-                <li className="flex items-center justify-between mb-2">
-                    <div className="flex-1 flex items-center">
-                        <BiSolidStar className="text-default" />
-
-                        <span className="ms-1.5 me-3">1</span>
-
-                        <Progress
-                            aria-label="Loading..."
-                            value={0}
-                            size="sm"
-                            className="max-w-sm"
-                            classNames={{
-                                track: "h-2",
-                                indicator: "bg-[#ff9f00]",
-                            }}
-                        />
-                    </div>
-                    <span className="text-black/55">3</span>
-                </li> */}
-            </ul>
+            <ul>{renderRatingProgress()}</ul>
         </div>
     );
 }

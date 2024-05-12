@@ -78,6 +78,7 @@ export default function CartItem({
         <li className="flex items-start h-[140px] mb-5 last:mb-0">
             {isSelected && (
                 <Checkbox
+                    isDisabled
                     className="me-1.5"
                     size="lg"
                     radius="full"
@@ -86,9 +87,9 @@ export default function CartItem({
                 ></Checkbox>
             )}
 
-            <div className="flex-1 h-full flex justify-between ">
+            <div className="flex-1 h-full flex justify-between">
                 {isProductLink ? (
-                    <Link href={`/product/${cartItem.product_id}`} className=" block h-full ">
+                    <Link href={`/product/${cartItem.product_id}`} className=" block h-full">
                         <Image
                             removeWrapper
                             className="h-full border object-cover"
@@ -104,7 +105,12 @@ export default function CartItem({
                     <div className="flex items-center justify-between">
                         <p className="font-medium mb-2">{cartItem?.product_name}</p>
                         <div className="flex items-center">
-                            {isEdited && (
+                            {!cartItem?.product_status && (
+                                <Chip size="sm" color="danger" variant="faded">
+                                    Sản phẩm đã hết
+                                </Chip>
+                            )}
+                            {isEdited && cartItem?.product_status && (
                                 <AddToCartPreviewButton
                                     cartItem={cartItem}
                                     buttonProps={{
@@ -132,7 +138,7 @@ export default function CartItem({
                             )}
                         </div>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between ">
                         <p className="text-gray-500 mb-2">{formatVNCurrency(cartItem.product_price)}</p>
                         <p className="text-gray-500 mb-2">Tổng: {formatVNCurrency(cartItem.order_item_price)}</p>
                     </div>

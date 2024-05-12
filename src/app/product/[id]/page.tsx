@@ -99,7 +99,13 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 <p className="mt-3 text-gray-500">{product?.description}</p>
 
                                 <div className="mt-4">
-                                    <AddToCartForm product={product} />
+                                    {product && product?.status ? (
+                                        <AddToCartForm product={product} />
+                                    ) : (
+                                        <Button isDisabled fullWidth>
+                                            Sản phẩm đã hết
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </section>

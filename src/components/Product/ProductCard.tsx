@@ -1,9 +1,10 @@
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
 import AddToCartPreviewButton from "../Cart/AddToCartPreviewButton";
 import { IProduct } from "@/types/product";
 import { formatVNCurrency } from "@/lib/utils";
+import { AiOutlineStop } from "react-icons/ai";
 
 interface IProps {
     product: IProduct;
@@ -11,7 +12,14 @@ interface IProps {
 
 export default function ProductCard({ product }: IProps): React.ReactNode {
     return (
-        <Card className="" shadow="none">
+        <Card shadow="none">
+            {!product?.status && (
+                <CardHeader className="absolute z-[11] top-1 right-1 flex-col !items-end">
+                    <Chip className="px-2" startContent={<AiOutlineStop />} color="danger" variant="faded">
+                        Hết
+                    </Chip>
+                </CardHeader>
+            )}
             <CardBody className="overflow-visible p-0">
                 <Link href={`/product/${product?.id}`}>
                     <Image
@@ -26,12 +34,8 @@ export default function ProductCard({ product }: IProps): React.ReactNode {
             </CardBody>
             <CardFooter className="text-small justify-between py-4 px-0">
                 <div className="flex flex-col w-[80%]">
-                    <b className="text-medium truncate max-w-[90%]">
-                        {product?.name}
-                    </b>
-                    <p className="text-default-500">
-                        {formatVNCurrency(product?.price)}
-                    </p>
+                    <b className="text-medium truncate max-w-[90%]">{product?.name}</b>
+                    <p className="text-default-500">{formatVNCurrency(product?.price)}</p>
                 </div>
                 <div className="w-[20%] flex justify-end">
                     <AddToCartPreviewButton

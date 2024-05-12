@@ -11,6 +11,7 @@ export interface ICart {
     product_name: string;
     product_price: string | number;
     product_image: string;
+    product_status: number;
     size_id: number;
     size_name: string;
     size_price: string | number;

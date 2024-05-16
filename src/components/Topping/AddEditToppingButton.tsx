@@ -16,88 +16,104 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface IProps {
-    sizeValue?: string;
-    sizeId?: number;
+    toppingValue?: string;
+    toppingPriceValue?: string;
+    toppingId?: number;
     buttonProps: ButtonProps;
 }
 
-export default function AddEditSizeButton({ sizeValue = "", sizeId, buttonProps }: IProps) {
+export default function AddEditToppingButton({
+    toppingValue = "",
+    toppingPriceValue = "",
+    toppingId,
+    buttonProps,
+}: IProps) {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    const [sizeName, setSizeName] = useState<string>(sizeValue);
+    const [toppingName, setToppingName] = useState<string>(toppingValue);
+    const [toppingPrice, setToppingPrice] = useState<string | number>(toppingPriceValue);
     const { startLoading, stopLoading, loading } = useLoading();
     const router = useRouter();
 
     const handleSubmit = (): void => {
-        if (sizeName === "") return;
+        if (toppingName === "") return;
 
-        if (Boolean(sizeValue)) {
-            handleEditSize();
+        if (Boolean(toppingValue)) {
+            handleEditTopping();
         } else {
-            handleAddSize();
+            handleAddTopping();
         }
     };
 
-    const handleAddSize = async (): Promise<void> => {
+    const handleAddTopping = async (): Promise<void> => {
         try {
             startLoading();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/size`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/topping`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ size_name: sizeName.trim() }),
+                body: JSON.stringify({ topping_name: toppingName.trim(), topping_price: Number(toppingPrice) }),
             });
 
             const data = await response.json();
 
             if (response.status === 200) {
                 router.refresh();
-                toast.success("Thêm size thành công", {
+
+                toast.success("Thêm topping thành công", {
                     position: "bottom-center",
                 });
             } else {
                 throw new Error(data.message);
             }
         } catch (error: any) {
-            toast.error("Thêm size thất bại", {
+            toast.error("Thêm topping thất bại", {
                 position: "bottom-center",
                 description: error.message,
             });
         } finally {
             stopLoading();
+
+            setToppingName("");
+            setToppingPrice("");
+
             onClose();
         }
     };
 
-    const handleEditSize = async (): Promise<void> => {
-        if (!sizeId) return;
+    const handleEditTopping = async (): Promise<void> => {
+        if (!toppingId) return;
         try {
             startLoading();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/size/${sizeId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/topping/${toppingId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ size_name: sizeName.trim() }),
+                body: JSON.stringify({ topping_name: toppingName.trim(), topping_price: Number(toppingPrice) }),
             });
 
             const data = await response.json();
 
             if (response.status === 200) {
                 router.refresh();
-                toast.success("Chỉnh sửa size thành công", {
+                toast.success("Chỉnh sửa topping thành công", {
                     position: "bottom-center",
                 });
             } else {
                 throw new Error(data.message);
             }
         } catch (error: any) {
-            toast.error("Chỉnh sửa size thất bại", {
+            toast.error("Chỉnh sửa topping thất bại", {
                 position: "bottom-center",
                 description: error.message,
             });
         } finally {
             stopLoading();
+
+            setToppingName("");
+            setToppingPrice("");
+
             onClose();
         }
     };
@@ -109,13 +125,22 @@ export default function AddEditSizeButton({ sizeValue = "", sizeId, buttonProps 
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                {Boolean(sizeValue) ? "Chỉnh sửa size" : "Thêm size"}
+                                {Boolean(toppingValue) ? "Chỉnh sửa topping" : "Thêm topping"}
                             </ModalHeader>
                             <ModalBody className="pt-0 px-6">
                                 <Input
-                                    onValueChange={(value) => setSizeName(value)}
-                                    value={sizeName}
-                                    placeholder="Nhập tên size"
+                                    onValueChange={(value) => setToppingName(value)}
+                                    value={toppingName}
+                                    placeholder="Nhập tên"
+                                    variant="bordered"
+                                    radius="md"
+                                />
+                                <Input
+                                    type="number"
+                                    min={0}
+                                    onValueChange={(value) => setToppingPrice(value)}
+                                    value={toppingPrice.toString()}
+                                    placeholder="Nhập giá"
                                     variant="bordered"
                                     radius="md"
                                 />
@@ -124,12 +149,15 @@ export default function AddEditSizeButton({ sizeValue = "", sizeId, buttonProps 
                                 <Button
                                     isLoading={loading}
                                     onClick={handleSubmit}
-                                    isDisabled={sizeValue.trim() === sizeName.trim()}
+                                    isDisabled={
+                                        toppingValue.trim() === toppingName.trim() ||
+                                        toppingPriceValue.trim() === toppingPrice.toString()
+                                    }
                                     fullWidth
                                     radius="md"
                                     className="bg-black text-white"
                                 >
-                                    {Boolean(sizeValue) ? "Chỉnh sửa" : "Thêm mới"}
+                                    {Boolean(toppingValue) ? "Chỉnh sửa" : "Thêm mới"}
                                 </Button>
                             </ModalFooter>
                         </>

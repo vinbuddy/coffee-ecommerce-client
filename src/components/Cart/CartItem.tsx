@@ -78,7 +78,7 @@ export default function CartItem({
         <li className="flex items-start h-[140px] mb-5 last:mb-0">
             {isSelected && (
                 <Checkbox
-                    isDisabled
+                    isDisabled={!cartItem?.product_status}
                     className="me-1.5"
                     size="lg"
                     radius="full"

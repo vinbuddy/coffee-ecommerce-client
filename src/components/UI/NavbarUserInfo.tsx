@@ -5,6 +5,9 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import avatarFallback from "@/assets/images/avatar-fallback.jpg";
 import Link from "next/link";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import { BiLogOut, BiPackage, BiUser } from "react-icons/bi";
+import { CiCoffeeCup } from "react-icons/ci";
+import { TbBasketHeart } from "react-icons/tb";
 
 export default function NavbarUserInfo() {
     const { currentUser } = useCurrentUser();
@@ -30,20 +33,31 @@ export default function NavbarUserInfo() {
                                 <p className="font-semibold">Đăng nhập bằng</p>
                                 <p className="font-semibold">{currentUser?.email}</p>
                             </DropdownItem>
-                            <DropdownItem as={Link} href="/profile" key="profile">
+                            <DropdownItem startContent={<BiUser />} as={Link} href="/profile" key="profile">
                                 Trang cá nhân
                             </DropdownItem>
-                            <DropdownItem as={Link} href="/cart" key="cart">
+                            <DropdownItem startContent={<CiCoffeeCup />} as={Link} href="/cart" key="cart">
                                 Giỏ hàng
                             </DropdownItem>
-                            <DropdownItem as={Link} href="/profile/wishlist" key="cart">
+                            <DropdownItem
+                                startContent={<TbBasketHeart />}
+                                as={Link}
+                                href="/profile/wishlist"
+                                key="cart"
+                            >
                                 Sản phẩm yêu thích
                             </DropdownItem>
 
-                            <DropdownItem as={Link} href="/profile/order" key="user-order">
+                            <DropdownItem startContent={<BiPackage />} as={Link} href="/profile/order" key="user-order">
                                 Các đơn hàng
                             </DropdownItem>
-                            <DropdownItem key="logout" color="danger" className="text-danger" onClick={handleSignOut}>
+                            <DropdownItem
+                                startContent={<BiLogOut />}
+                                key="logout"
+                                color="danger"
+                                className="text-danger"
+                                onClick={handleSignOut}
+                            >
                                 Đăng xuất
                             </DropdownItem>
                         </DropdownMenu>

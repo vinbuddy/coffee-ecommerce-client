@@ -14,9 +14,14 @@ import { IProduct, IProductSize, IProductTopping } from "@/types/product";
 interface IProps {
     onDone?: () => void;
     product: IProduct;
+    buttonRadius?: "full" | "none" | "sm" | "md" | "lg" | undefined;
 }
 
-export default function AddToCartForm({ product, onDone = () => {} }: IProps): React.ReactNode {
+export default function AddToCartForm({
+    product,
+    onDone = () => {},
+    buttonRadius = undefined,
+}: IProps): React.ReactNode {
     const [sizes, setSizes] = useState<IProductSize[]>([]);
     const [toppings, setToppings] = useState<IProductTopping[]>([]);
 
@@ -226,7 +231,13 @@ export default function AddToCartForm({ product, onDone = () => {} }: IProps): R
                         </Button>
                     </div>
 
-                    <Button isLoading={submitLoading} type="submit" className="w-full ms-3" color="primary">
+                    <Button
+                        radius={buttonRadius}
+                        isLoading={submitLoading}
+                        type="submit"
+                        className="w-full ms-3"
+                        color="primary"
+                    >
                         {formatVNCurrency(previewPrice)} &#x2022; Thêm vào giỏ hàng
                     </Button>
                 </div>

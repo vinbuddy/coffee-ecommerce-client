@@ -18,8 +18,16 @@ export default function WishlistPage() {
         <div className="container pb-10 min-h-[400px]">
             <div className="px-6 h-full">
                 <h1 className="text-xl font-bold mb-7">Sản phẩm yêu thích của bạn</h1>
+
+                {!isLoading && wishlist.length === 0 && (
+                    <div className="flex items-center justify-center flex-col">
+                        <Image className="w-full" src={emptyProduct.src} alt="empty product" />
+                        <p className="mt-5 text-gray-500 text-lg">Không tìm thấy sản phẩm</p>
+                    </div>
+                )}
+
                 <div>
-                    {wishlist.length > 0 ? (
+                    {!isLoading && wishlist.length > 0 && (
                         <div className="grid grid-cols-12 gap-5">
                             {wishlist.map((wishlistItem) => (
                                 <div
@@ -29,11 +37,6 @@ export default function WishlistPage() {
                                     <WishlistCard wishlistItem={wishlistItem} />
                                 </div>
                             ))}
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center flex-col">
-                            <Image className="w-full" src={emptyProduct.src} alt="empty product" />
-                            <p className="mt-5 text-gray-500 text-lg">Không tìm thấy sản phẩm</p>
                         </div>
                     )}
                 </div>

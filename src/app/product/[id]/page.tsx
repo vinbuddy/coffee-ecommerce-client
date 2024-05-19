@@ -100,7 +100,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                                 <div className="mt-4">
                                     {product && product?.status ? (
-                                        <AddToCartForm product={product} />
+                                        <AddToCartForm buttonRadius="full" product={product} />
                                     ) : (
                                         <Button isDisabled fullWidth>
                                             Sản phẩm đã hết

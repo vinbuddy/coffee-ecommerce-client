@@ -70,9 +70,9 @@ export default function CartPage(): React.ReactNode {
                     <Breadcrumbs breadcumbItems={breadcumbItems} />
                 </div>
 
-                <div className="grid grid-cols-12 h-full gap-10">
+                <div className="grid grid-cols-12 h-full lg:gap-20 gap-10">
                     {/* Products */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-7 lg:col-span-7 xl:col-span-7 2xl:col-span-7">
                         {isLoading ? (
                             <div>
                                 {Array.from({ length: 3 }, (_, index) => index + 1).map((index) => (
@@ -80,7 +80,7 @@ export default function CartPage(): React.ReactNode {
                                 ))}
                             </div>
                         ) : (
-                            <ul>
+                            <ul className="">
                                 {carts.length > 0 ? (
                                     carts.map((cartItem) => <CartItem key={cartItem?.id} cartItem={cartItem} />)
                                 ) : (
@@ -100,25 +100,23 @@ export default function CartPage(): React.ReactNode {
                         )}
                     </section>
 
-                    <section className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-5 lg:col-span-5 xl:col-span-5 2xl:col-span-5">
                         <aside className="sticky top-[80px] z-[1]">
-                            <div className="rounded-lg shadow p-4 border">
-                                <p className="mb-3">
+                            <div className="">
+                                <p className="flex justify-between items-center mb-3 border-b pb-3">
                                     <span className="text-black/70">Số món đã chọn:</span>
                                     &nbsp;
                                     <b>{selectedCartItems.length} </b>
                                 </p>
-                                <p className="mb-4">
+                                <p className="flex justify-between items-center mb-4">
                                     <span className="text-black/70">Tổng tiền thanh toán:</span>
                                     &nbsp;
-                                    <b id="total-payment" className="text-primary/70">
-                                        {formatVNCurrency(totalPayment)}
-                                    </b>
+                                    <b id="total-payment">{formatVNCurrency(totalPayment)}</b>
                                 </p>
                                 <Button
                                     isDisabled={selectedCartItems.length <= 0}
                                     onClick={handleNavigateToCheckout}
-                                    radius="sm"
+                                    radius="full"
                                     className="w-full"
                                     color="primary"
                                 >

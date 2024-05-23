@@ -19,17 +19,10 @@ interface FirebaseAuthStoreState {
     loading: boolean;
     error: string;
     handleSignInGoogle: () => Promise<void>;
-    handleSignInGoogleEmailPassword: (
-        email: string,
-        password: string
-    ) => Promise<void>;
-    handleCreateAccount: (
-        name: string,
-        email: string,
-        password: string
-    ) => void;
+    handleSignInGoogleEmailPassword: (email: string, password: string) => Promise<void>;
+    handleCreateAccount: (name: string, email: string, password: string) => void;
     handleSignOut: () => void;
-    // setErrorCodeToMessage: (error: AuthError) => void;
+    handleUpdateProfile: (name: string, photoURL?: string) => Promise<void>;
 }
 
 const googleProvider = new GoogleAuthProvider();
@@ -81,22 +74,19 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
             const userCredential = await signInWithPopup(auth, googleProvider);
             const token: string = await userCredential.user.getIdToken();
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/create-user-account`,
-                {
-                    method: "post",
-                    body: JSON.stringify({
-                        id: userCredential.user.uid,
-                        user_name: userCredential.user.displayName,
-                        avatar: userCredential.user.photoURL,
-                        email: userCredential.user.email,
-                        account_type: "google",
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/create-user-account`, {
+                method: "post",
+                body: JSON.stringify({
+                    id: userCredential.user.uid,
+                    user_name: userCredential.user.displayName,
+                    avatar: userCredential.user.photoURL,
+                    email: userCredential.user.email,
+                    account_type: "google",
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const data = await response.json();
 
@@ -121,11 +111,7 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
         try {
             set(() => ({ loading: true }));
 
-            const userCredential = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
         } catch (error: any) {
             setErrorCodeToMessage(error);
@@ -137,32 +123,25 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
         set(() => ({ loading: true }));
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             const res = await updateProfile(user, {
                 displayName: name,
             });
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/create-user-account`,
-                {
-                    method: "post",
-                    body: JSON.stringify({
-                        id: userCredential.user.uid,
-                        user_name: userCredential.user.displayName,
-                        avatar: userCredential.user.photoURL,
-                        email: userCredential.user.email,
-                        account_type: "email",
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/create-user-account`, {
+                method: "post",
+                body: JSON.stringify({
+                    id: userCredential.user.uid,
+                    user_name: userCredential.user.displayName,
+                    avatar: userCredential.user.photoURL,
+                    email: userCredential.user.email,
+                    account_type: "email",
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const data = await response.json();
         } catch (error: any) {
@@ -177,6 +156,20 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
                 console.log("Log out successfully");
             })
             .catch((error) => {});
+    },
+    handleUpdateProfile: async (name, photoURL) => {
+        const auth = getAuth();
+
+        if (!auth.currentUser) return;
+
+        try {
+            await updateProfile(auth.currentUser, {
+                displayName: name === auth.currentUser.displayName ? auth.currentUser.displayName : name,
+                photoURL: photoURL || auth.currentUser.photoURL,
+            });
+        } catch (error) {
+            console.error(error);
+        }
     },
 }));
 

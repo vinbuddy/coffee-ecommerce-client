@@ -105,7 +105,7 @@ export default function CartItem({
                     <div className="flex items-center justify-between">
                         <p className="font-medium mb-2">{cartItem?.product_name}</p>
                         <div className="flex items-center">
-                            {!cartItem?.product_status && (
+                            {isDeleted && isEdited && !cartItem?.product_status && (
                                 <Chip size="sm" color="danger" variant="faded">
                                     Sản phẩm đã hết
                                 </Chip>

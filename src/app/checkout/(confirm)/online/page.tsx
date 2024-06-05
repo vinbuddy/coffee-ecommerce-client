@@ -14,6 +14,7 @@ import { IoIosWarning } from "react-icons/io";
 import useCheckoutStore from "@/hooks/useCheckoutStore";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 import { getCurrentDateTimeString } from "@/lib/utils";
+import { set } from "firebase/database";
 
 type OrderType = Omit<IOrder, "order_date" | "order_status">;
 
@@ -27,6 +28,15 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
         }
 
         return null;
+    });
+    const [checkoutFrom, setCheckoutFrom] = useState<string>(() => {
+        const checkoutFromStorage = localStorage.getItem("checkoutFrom");
+
+        if (checkoutFromStorage) {
+            return checkoutFromStorage;
+        }
+
+        return "web";
     });
     const { startLoading, stopLoading, loading } = useLoading();
     const [checkoutURL, setCheckoutURL] = useState<string>("");
@@ -50,7 +60,10 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
             };
 
             setOrder(orderData);
+            setCheckoutFrom(searchParams?.checkoutFrom?.toString() ?? "web");
+
             localStorage.setItem("order", JSON.stringify(orderData));
+            localStorage.setItem("checkoutFrom", searchParams?.checkoutFrom?.toString() ?? "web");
         }
     }, []);
 
@@ -60,15 +73,23 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
             try {
                 if (!order) return;
 
-                let url: string = `${process.env.NEXT_PUBLIC_API_BASE_URL}/payment/vnpay`;
+                let _checkoutFrom = searchParams?.checkoutFrom?.toString() ?? checkoutFrom;
+                let baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+                if (_checkoutFrom && _checkoutFrom == "android") {
+                    baseURL = process.env.NEXT_PUBLIC_API_BASE_URL_ANDROID;
+                }
+
+                let url: string = `${baseURL}/payment/vnpay`;
                 if (order.payment_method === "momo") {
-                    url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/payment/momo`;
+                    url = `${baseURL}/payment/momo`;
                 }
 
                 const response = await fetch(url, {
                     method: "POST",
                     body: JSON.stringify({
                         total_payment: order.total_payment,
+                        checkoutFrom: _checkoutFrom,
                     }),
                     headers: {
                         "Content-Type": "application/json",
@@ -77,8 +98,13 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
                 const data = await response.json();
                 if (response.status === 200) {
                     setCheckoutURL(data.payment_url);
+                } else {
+                    // ***
+                    localStorage.removeItem("order");
+                    throw new Error(data.message);
                 }
-            } catch (error) {
+            } catch (error: any) {
+                setErrorMessage(error.message);
             } finally {
             }
         })();
@@ -94,6 +120,7 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
             handleCreateOrder();
         } else {
             const message = order.payment_method === "momo" ? MOMO_MESSAGE[statusCode] : VNPAY_MESSAGE[statusCode];
+            console.log("error payment: ", message);
             setErrorMessage(message);
         }
     }, []);
@@ -103,9 +130,20 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
 
         try {
             startLoading();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order`, {
+
+            let _checkoutFrom = searchParams?.checkoutFrom?.toString() ?? checkoutFrom;
+            let baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+            if (_checkoutFrom && _checkoutFrom == "android") {
+                baseURL = process.env.NEXT_PUBLIC_API_BASE_URL_ANDROID;
+            }
+
+            const response = await fetch(`${baseURL}/order`, {
                 method: "POST",
-                body: JSON.stringify(order),
+                body: JSON.stringify({
+                    ...order,
+                    order_id: order.id,
+                }),
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -114,6 +152,7 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
 
             if (response.status === 200) {
                 localStorage.removeItem("order");
+                localStorage.removeItem("checkoutFrom");
 
                 const resOrder: IOrder = resData.data;
                 const orderDate = resOrder.order_date;
@@ -131,12 +170,12 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
                     orderId: resOrder.id,
                 });
 
-                router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}`);
+                router.push(`/checkout/result?orderId=${resOrder.id}&orderDate=${orderDate}&orderStatus=success`);
             } else {
                 throw new Error(resData.message);
             }
         } catch (error: any) {
-            console.log("error: ", error.message);
+            console.log("error create order: ", error.message);
         } finally {
             stopLoading();
         }
@@ -163,14 +202,13 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
                                 alt="Payment method image"
                             />
                             <h4 className="mt-3 text-xl font-bold">
-                                Thanh toán bằng {order?.payment_method.toLocaleUpperCase()}
+                                Thanh toán bằng {order?.payment_method?.toLocaleUpperCase()}
                             </h4>
 
                             <p className="mt-1.5 mb-4">
                                 Sau khi xác nhận thanh toán sẽ chuyển hướng bạn đến trang thanh toán của{" "}
-                                {order?.payment_method.toLocaleUpperCase()}
+                                {order?.payment_method?.toLocaleUpperCase()}
                             </p>
-
                             <Button
                                 as={Link}
                                 href={checkoutURL}

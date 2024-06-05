@@ -23,6 +23,7 @@ interface FirebaseAuthStoreState {
     handleCreateAccount: (name: string, email: string, password: string) => void;
     handleSignOut: () => void;
     handleUpdateProfile: (name: string, photoURL?: string) => Promise<void>;
+    handelResetPassword: (email: string) => Promise<void>;
 }
 
 const googleProvider = new GoogleAuthProvider();
@@ -170,6 +171,10 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
         } catch (error) {
             console.error(error);
         }
+    },
+    handelResetPassword: async (email: string) => {
+        const auth = getAuth();
+        await sendPasswordResetEmail(auth, email);
     },
 }));
 

@@ -58,15 +58,10 @@ export default function LoginPage(): React.ReactNode {
     return (
         <Card>
             <CardBody className="px-5">
-                <form
-                    onSubmit={handleSubmit(onSubmitHandler)}
-                    className="w-[400px] "
-                >
+                <form onSubmit={handleSubmit(onSubmitHandler)} className="w-[400px] ">
                     <div>
                         <Logo className="flex justify-center" />
-                        <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">
-                            Login
-                        </h4>
+                        <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">Đăng Nhập</h4>
                     </div>
                     <div className="mb-5">
                         <input
@@ -75,20 +70,15 @@ export default function LoginPage(): React.ReactNode {
                             placeholder="Email address"
                             {...register("email", {
                                 required: true,
-                                pattern:
-                                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                             })}
                         />
 
                         {errors.email?.type === "required" && (
-                            <p className="text-red-500 mt-3">
-                                Please enter email
-                            </p>
+                            <p className="text-red-500 mt-3">Hãy nhập địa chỉ email</p>
                         )}
                         {errors.email?.type === "pattern" && (
-                            <p className="text-red-500 mt-3">
-                                Please enter invalid email
-                            </p>
+                            <p className="text-red-500 mt-3">Hãy nhập địa chỉ email hợp lệ</p>
                         )}
                     </div>
                     <div className="mb-5">
@@ -103,36 +93,25 @@ export default function LoginPage(): React.ReactNode {
                             })}
                         />
 
-                        {errors.password?.type === "required" && (
-                            <p className="text-red-500 mt-3">
-                                Please enter password
-                            </p>
-                        )}
+                        {errors.password?.type === "required" && <p className="text-red-500 mt-3">Hãy nhập mật khẩu</p>}
                         {errors.password?.type === "minLength" && (
-                            <p className="text-red-500 mt-3">
-                                Please enter at least 6 characters
-                            </p>
+                            <p className="text-red-500 mt-3">Hãy nhập mật khẩu tối thiểu 6 ký tự</p>
                         )}
                         {errors.password?.type === "maxLength" && (
-                            <p className="text-red-500 mt-3">
-                                Please enter up to 15 characters
-                            </p>
+                            <p className="text-red-500 mt-3">Hãy nhập mật khẩu tối đa 15 ký tự</p>
                         )}
                     </div>
-                    {authErrorMessage.length > 0 && (
-                        <p className="text-red-500 my-3 text-center">
-                            {authErrorMessage}
-                        </p>
-                    )}
+                    {authErrorMessage.length > 0 && <p className="text-red-500 my-3 text-center">{authErrorMessage}</p>}
 
                     <Button
                         isLoading={loading}
                         type="submit"
                         color="primary"
                         size="lg"
+                        radius="sm"
                         className="w-full text-lg"
                     >
-                        Login
+                        Đăng nhập
                     </Button>
 
                     <div className="pt-5 mt-5 border-t border-t-gray-100">
@@ -143,16 +122,16 @@ export default function LoginPage(): React.ReactNode {
                             className="bg-transparent border w-full"
                             startContent={<FcGoogle className="text-xl" />}
                         >
-                            Google
+                            Tiếp tục với Google
                         </Button>
                     </div>
 
                     <div className="flex items-center justify-between  mt-4 ">
                         <Link className="text-gray-600" href="/forgot">
-                            Forgot password?
+                            Quên mật khẩu?
                         </Link>
                         <Link className="text-primary" href="/register">
-                            Register
+                            Đăng ký
                         </Link>
                     </div>
                 </form>

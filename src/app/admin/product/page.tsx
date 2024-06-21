@@ -1,23 +1,11 @@
 import React from "react";
-import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    User,
-    Button,
-    Input,
-    Pagination,
-} from "@nextui-org/react";
+import { Button, Pagination } from "@nextui-org/react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { CiSearch } from "react-icons/ci";
-
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import Link from "next/link";
 import ProductTable from "@/components/Product/ProductTable";
 import { Metadata } from "next";
+import ProductSearchBar from "@/components/Product/ProductSearchBar";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -34,11 +22,11 @@ export const metadata: Metadata = {
     title: "Quản lý sản phẩm",
 };
 
-export default async function AdminProductPage() {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product`,
-        { method: "GET", cache: "no-cache" }
-    );
+export default async function AdminProductPage({ searchParams }: { searchParams: { name: string } }) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?name=${searchParams.name || ""}`, {
+        method: "GET",
+        cache: "no-cache",
+    });
 
     const productData = await response.json();
 
@@ -53,18 +41,7 @@ export default async function AdminProductPage() {
                 <div className="mb-5 flex items-center justify-between">
                     <h3 className="font-bold text-xl">Sản phẩm</h3>
                     <div className="flex items-center justify-end">
-                        <Input
-                            isClearable
-                            classNames={{
-                                base: "w-full sm:max-w-[60%]",
-                                inputWrapper: "border-1",
-                            }}
-                            placeholder="Tìm tên sản phẩm"
-                            size="md"
-                            startContent={<CiSearch />}
-                            variant="bordered"
-                            radius="sm"
-                        />
+                        <ProductSearchBar />
                         <Button
                             as={Link}
                             href="/admin/product/new"

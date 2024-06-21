@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import useLoading from "@/hooks/useLoading";
 import { useTransition } from "react";
+import { toast } from "sonner";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -192,6 +193,9 @@ export default function AdminNewProductPage(): React.ReactNode {
             });
 
             if (response.status === 200) {
+                toast.success("Thêm sản phẩm thành công", {
+                    position: "bottom-center",
+                });
                 startTransition(() => router.push("/admin/product"));
                 startTransition(() => router.refresh());
             }
@@ -298,7 +302,9 @@ export default function AdminNewProductPage(): React.ReactNode {
                             </div>
                         </div>
                         <div className="rounded-xl p-5 mt-5">
-                            <h4 className="text-xl font-bold mb-6">Chọn topping</h4>
+                            <h4 className={`text-xl font-bold ${newProduct.product_toppings.length > 0 && "mb-6"}`}>
+                                Chọn topping
+                            </h4>
                             <div className=" flex gap-3">
                                 {newProduct.product_toppings.map((topping, index) => {
                                     const matchedTopping = toppings.find((_topping) => _topping.id === topping);
@@ -339,7 +345,9 @@ export default function AdminNewProductPage(): React.ReactNode {
                             </div>
                         </div>
                         <div className="rounded-xl p-5 mt-5">
-                            <h4 className="text-xl font-bold mb-6">Chọn size</h4>
+                            <h4 className={`text-xl font-bold ${newProduct.product_sizes.length > 0 && "mb-6"}`}>
+                                Chọn size
+                            </h4>
                             <div className="mb-4 flex gap-3">
                                 {newProduct.product_sizes.map((size, index) => {
                                     const matchedSize = sizes.find((_size) => _size.id === size.size_id);

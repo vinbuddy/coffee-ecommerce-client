@@ -21,12 +21,7 @@ interface IProps {
 
 export default function ProductTable({ products }: IProps): React.ReactNode {
     return (
-        <Table
-            color="default"
-            selectionMode="single"
-            removeWrapper
-            aria-label="Example static collection table"
-        >
+        <Table color="default" selectionMode="single" removeWrapper aria-label="Example static collection table">
             <TableHeader>
                 <TableColumn>Tên sản phẩm</TableColumn>
                 <TableColumn>Giá</TableColumn>
@@ -46,9 +41,7 @@ export default function ProductTable({ products }: IProps): React.ReactNode {
                             ></User>
                         </TableCell>
 
-                        <TableCell>
-                            {formatVNCurrency(product?.price) || 0}
-                        </TableCell>
+                        <TableCell>{formatVNCurrency(product?.price) || 0}</TableCell>
                         <TableCell>
                             {product.status === 1 ? (
                                 <Chip color="success" variant="flat">
@@ -72,17 +65,14 @@ export default function ProductTable({ products }: IProps): React.ReactNode {
                                 </Tooltip>
                                 <Tooltip content="Chỉnh sửa">
                                     <Link
-                                        href=""
+                                        href={`/admin/product/edit/${product.id}`}
                                         className="text-lg text-default-400 cursor-pointer active:opacity-50"
                                     >
                                         <EditIcon />
                                     </Link>
                                 </Tooltip>
                                 <Tooltip color="danger" content="Xóa">
-                                    <Link
-                                        href=""
-                                        className="text-lg text-danger cursor-pointer active:opacity-50"
-                                    >
+                                    <Link href="" className="text-lg text-danger cursor-pointer active:opacity-50">
                                         <DeleteIcon />
                                     </Link>
                                 </Tooltip>

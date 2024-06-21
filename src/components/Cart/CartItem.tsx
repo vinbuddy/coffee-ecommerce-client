@@ -143,7 +143,7 @@ export default function CartItem({
                         <p className="text-gray-500 mb-2">Tổng: {formatVNCurrency(cartItem.order_item_price)}</p>
                     </div>
                     <p className="text-gray-500 mb-2">
-                        +{cartItem.quantity}, size {cartItem.size_name.toLowerCase()}
+                        +{cartItem.quantity} {cartItem?.size_name && `,size ${cartItem?.size_name.toLowerCase()}`}
                     </p>
                     {cartItem.toppings && cartItem.toppings.length > 0 && (
                         <div className="flex gap-x-2">

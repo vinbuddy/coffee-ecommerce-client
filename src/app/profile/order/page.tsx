@@ -18,7 +18,6 @@ export default function UserOrderPage(): React.ReactNode {
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/order/user-order/${currentUser?.id}`;
     const { data: orderData, isLoading, error, mutate } = useSWR(url);
     const orders: IOrder[] = orderData?.data || [];
-    console.log("orders: ", orders);
 
     const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;
     const isCancelable = currentOrder?.statuses.length === 1 && lastStatus === "Đang chờ";
@@ -29,28 +28,40 @@ export default function UserOrderPage(): React.ReactNode {
             <div className="mb-10">
                 <div className="flex items-center justify-between mb-5">
                     <h3 className="text-xl font-bold">Đơn hàng hiện tại</h3>
-                    {isCancelable && (
-                        <CancelOrderButton
-                            orderId={currentOrder?.orderId}
-                            onAfterCanceled={() => {
-                                toast.success("Đã hủy đơn hàng", {
-                                    position: "bottom-center",
-                                });
-                            }}
-                        />
-                    )}
-                    {isCompletable ? (
-                        <CompleteOrderButton
-                            orderId={currentOrder?.orderId}
-                            onAfterCompleted={() => {
-                                toast.success("Đã hoàn thành đơn hàng", {
-                                    position: "bottom-center",
-                                });
-                            }}
-                        />
-                    ) : (
-                        <Button isDisabled>Hoàn thành đơn hàng</Button>
-                    )}
+                    <div className="flex items-center">
+                        {isCancelable && (
+                            <CancelOrderButton
+                                orderId={currentOrder?.orderId}
+                                onAfterCanceled={() => {
+                                    toast.success("Đã hủy đơn hàng", {
+                                        position: "bottom-center",
+                                    });
+                                }}
+                            />
+                        )}
+                        {isCompletable && (
+                            <CompleteOrderButton
+                                orderId={currentOrder?.orderId}
+                                onAfterCompleted={() => {
+                                    toast.success("Đã hoàn thành đơn hàng", {
+                                        position: "bottom-center",
+                                    });
+                                }}
+                            />
+                        )}
+                        {/* {isCompletable ? (
+                            <CompleteOrderButton
+                                orderId={currentOrder?.orderId}
+                                onAfterCompleted={() => {
+                                    toast.success("Đã hoàn thành đơn hàng", {
+                                        position: "bottom-center",
+                                    });
+                                }}
+                            />
+                        ) : (
+                            <Button isDisabled>Hoàn thành đơn hàng</Button>
+                        )} */}
+                    </div>
                 </div>
                 <Card shadow="none" className="p-0">
                     <CardBody className="p-0">

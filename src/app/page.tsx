@@ -22,23 +22,19 @@ const COFFEE_CATEGORY_NAME: string = "Cà phê";
 const TEA_CATEGORY_NAME: string = "Trà";
 
 export default async function Home() {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product`,
-        { method: "GET", cache: "no-store" }
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`, {
+        method: "GET",
+        cache: "no-store",
+    });
 
     const productData = await response.json();
     const products: IProduct[] = productData.data;
 
     const coffeeProducts = products.filter(
-        (product) =>
-            product.category_name?.toLocaleLowerCase() ===
-            COFFEE_CATEGORY_NAME.toLocaleLowerCase()
+        (product) => product.category_name?.toLocaleLowerCase() === COFFEE_CATEGORY_NAME.toLocaleLowerCase()
     );
     const teaProducts = products.filter(
-        (product) =>
-            product.category_name?.toLocaleLowerCase() ===
-            TEA_CATEGORY_NAME.toLocaleLowerCase()
+        (product) => product.category_name?.toLocaleLowerCase() === TEA_CATEGORY_NAME.toLocaleLowerCase()
     );
 
     return (
@@ -47,7 +43,7 @@ export default async function Home() {
                 <div className="px-6">
                     {/* Banner */}
                     <section className="gap-5 grid grid-cols-12">
-                        <Card className="w-full h-[300px] col-span-12 sm:col-span-6">
+                        <Card className="w-full h-[300px] col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <Link className="h-full" href="">
                                 <Image
                                     removeWrapper
@@ -57,7 +53,7 @@ export default async function Home() {
                                 />
                             </Link>
                         </Card>
-                        <Card className="col-span-12 sm:col-span-3 h-[300px]">
+                        <Card className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3 h-[300px]">
                             <Link className="h-full" href="">
                                 <Image
                                     removeWrapper
@@ -67,7 +63,7 @@ export default async function Home() {
                                 />
                             </Link>
                         </Card>
-                        <Card className="col-span-12 sm:col-span-3 h-[300px]">
+                        <Card className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3 h-[300px]">
                             <Link className="h-full" href="">
                                 <CardHeader className="absolute z-[1] top-1 flex-col !items-start">
                                     <h4 className="text-primary bg-white rounded-xl px-3 font-medium">
@@ -85,52 +81,25 @@ export default async function Home() {
                     </section>
 
                     <section className="mt-12 flex justify-center flex-col text-center">
-                        <h2 className="font-teko text-4xl font-medium">
-                            Discover The Art Of Perfect Coffee And Tea
-                        </h2>
+                        <h2 className="font-teko text-4xl font-medium">Discover The Art Of Perfect Coffee And Tea</h2>
 
                         <p className="mt-2 text-gray-500">
-                            Hãy trải nghiệm sự khác biệt khi chúng tôi tỉ mỉ lựa
-                            chọn và rang những hạt cà phê ngon nhất để tạo ra
-                            một tách cà phê thực sự khó quên. Hãy tham gia cùng
-                            chúng tôi trên hành trình nếm thử và đánh thức các
-                            giác quan của bạn, từng ngụm một.
+                            Hãy trải nghiệm sự khác biệt khi chúng tôi tỉ mỉ lựa chọn và rang những hạt cà phê ngon nhất
+                            để tạo ra một tách cà phê thực sự khó quên. Hãy tham gia cùng chúng tôi trên hành trình nếm
+                            thử và đánh thức các giác quan của bạn, từng ngụm một.
                         </p>
 
                         <div className="flex items-center justify-center my-5">
-                            <Tooltip
-                                content="Coffee"
-                                placement="left"
-                                closeDelay={0}
-                            >
-                                <Image
-                                    width={85}
-                                    height={85}
-                                    src={coffeeIcon.src}
-                                    alt="coffe icon"
-                                />
+                            <Tooltip content="Coffee" placement="left" closeDelay={0}>
+                                <Image width={85} height={85} src={coffeeIcon.src} alt="coffe icon" />
                             </Tooltip>
                             <div className="mx-10">
                                 <Tooltip content="Tea" closeDelay={0}>
-                                    <Image
-                                        width={85}
-                                        height={85}
-                                        src={teaIcon.src}
-                                        alt="tea icon"
-                                    />
+                                    <Image width={85} height={85} src={teaIcon.src} alt="tea icon" />
                                 </Tooltip>
                             </div>
-                            <Tooltip
-                                content="Foods"
-                                placement="right"
-                                closeDelay={0}
-                            >
-                                <Image
-                                    width={85}
-                                    height={85}
-                                    src={foodIcon.src}
-                                    alt="food icon"
-                                />
+                            <Tooltip content="Foods" placement="right" closeDelay={0}>
+                                <Image width={85} height={85} src={foodIcon.src} alt="food icon" />
                             </Tooltip>
                         </div>
 
@@ -176,20 +145,16 @@ export default async function Home() {
 
                     {/* Outlet Coffee */}
                     <section className="mt-12">
-                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">
-                            Cà phê
-                        </h2>
+                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">Cà phê</h2>
                         <div className="grid grid-cols-12 gap-5">
-                            {coffeeProducts
-                                .splice(0, 6)
-                                .map((coffeeProduct) => (
-                                    <div
-                                        key={coffeeProduct.id}
-                                        className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
-                                    >
-                                        <ProductCard product={coffeeProduct} />
-                                    </div>
-                                ))}
+                            {coffeeProducts.splice(0, 6).map((coffeeProduct) => (
+                                <div
+                                    key={coffeeProduct.id}
+                                    className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                                >
+                                    <ProductCard product={coffeeProduct} />
+                                </div>
+                            ))}
                             {/* <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                                 <ProductCard product={[]} />
                             </div>
@@ -212,9 +177,7 @@ export default async function Home() {
                     </section>
 
                     <section className="mt-12">
-                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">
-                            Trà
-                        </h2>
+                        <h2 className="font-teko text-4xl mb-5 font-medium text-center">Trà</h2>
                         <div className="grid grid-cols-12 gap-5">
                             {teaProducts.splice(0, 6).map((teaProduct) => (
                                 <div
@@ -252,21 +215,14 @@ export default async function Home() {
                         <div className="gap-5 grid grid-cols-12">
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-6 xl:col-span-6 2xl:col-span-6"></div>
                             <div className="flex flex-col col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                                <Image
-                                    src={productTitleBg.src}
-                                    alt="product bg"
-                                />
+                                <Image src={productTitleBg.src} alt="product bg" />
                                 <p className="mt-7 text-gray-500 leading-6">
-                                    Được trồng trọt và chăm chút kỹ lưỡng, nuôi
-                                    dưỡng từ thổ nhưỡng phì nhiêu, nguồn nước
-                                    mát lành, bao bọc bởi mây và sương cùng nền
-                                    nhiệt độ mát mẻ quanh năm, những búp trà ở
-                                    Tây Bắc mập mạp và xanh mướt, hội tụ đầy đủ
-                                    dưỡng chất, sinh khí, và tinh hoa đất trời.
-                                    Chính khí hậu đặc trưng cùng phương pháp
-                                    canh tác của đồng bào dân tộc nơi đây đã tạo
-                                    ra Trà Xanh vị mộc dễ uống, dễ yêu, không
-                                    thể trộn lẫn với bất kỳ vùng miền nào khác.
+                                    Được trồng trọt và chăm chút kỹ lưỡng, nuôi dưỡng từ thổ nhưỡng phì nhiêu, nguồn
+                                    nước mát lành, bao bọc bởi mây và sương cùng nền nhiệt độ mát mẻ quanh năm, những
+                                    búp trà ở Tây Bắc mập mạp và xanh mướt, hội tụ đầy đủ dưỡng chất, sinh khí, và tinh
+                                    hoa đất trời. Chính khí hậu đặc trưng cùng phương pháp canh tác của đồng bào dân tộc
+                                    nơi đây đã tạo ra Trà Xanh vị mộc dễ uống, dễ yêu, không thể trộn lẫn với bất kỳ
+                                    vùng miền nào khác.
                                 </p>
 
                                 <Button

@@ -79,7 +79,7 @@ export default function CartItem({
             {isSelected && (
                 <Checkbox
                     isDisabled={!cartItem?.product_status}
-                    className="me-1.5"
+                    className="me-1.5 hidden md:block"
                     size="lg"
                     radius="full"
                     value={cartItem?.id.toString()}
@@ -89,14 +89,30 @@ export default function CartItem({
 
             <div className="flex-1 h-full flex justify-between">
                 {isProductLink ? (
-                    <Link href={`/product/${cartItem.product_id}`} className=" block h-full">
-                        <Image
-                            removeWrapper
-                            className="h-full border object-cover"
-                            src={cartItem?.product_image || ""}
-                            alt=""
-                        />
-                    </Link>
+                    <div className="relative">
+                        <Link href={`/product/${cartItem.product_id}`} className=" block h-full">
+                            <Image
+                                removeWrapper
+                                className="h-full border object-cover"
+                                src={cartItem?.product_image || ""}
+                                alt=""
+                            />
+                        </Link>
+
+                        {isSelected && (
+                            <Checkbox
+                                isDisabled={!cartItem?.product_status}
+                                className="me-1.5 z-10 absolute top-3 left-3 md:hidden"
+                                classNames={{
+                                    wrapper: "bg-white",
+                                }}
+                                size="lg"
+                                radius="full"
+                                value={cartItem?.id.toString()}
+                                onChange={handleSelectCartItem}
+                            ></Checkbox>
+                        )}
+                    </div>
                 ) : (
                     <Image className="h-full border object-cover" src={cartItem?.product_image || ""} alt="" />
                 )}
@@ -140,7 +156,9 @@ export default function CartItem({
                     </div>
                     <div className="flex items-center justify-between ">
                         <p className="text-gray-500 mb-2">{formatVNCurrency(cartItem.product_price)}</p>
-                        <p className="text-gray-500 mb-2">Tổng: {formatVNCurrency(cartItem.order_item_price)}</p>
+                        <p className="hidden md:block text-gray-500 mb-2">
+                            Tổng: {formatVNCurrency(cartItem.order_item_price)}
+                        </p>
                     </div>
                     <p className="text-gray-500 mb-2">
                         +{cartItem.quantity} {cartItem?.size_name && `,size ${cartItem?.size_name.toLowerCase()}`}

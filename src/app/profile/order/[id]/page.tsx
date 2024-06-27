@@ -24,12 +24,14 @@ export default function UserOrderDetailPage({ params }: { params: { id: string }
                         <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
                             <Card className="p-5 rounded-xl">
                                 <CardBody>
-                                    <div className="flex items-center justify-between mb-5 pb-5 border-b border-dashed">
+                                    <div className="flex flex-wrap items-center justify-between mb-5 pb-5 border-b border-dashed">
                                         <h5 className="font-medium text-lg">#{order.id}</h5>
 
-                                        <Chip color={getOrderStatusColor(order.order_status)} variant="flat">
-                                            {order.order_status}
-                                        </Chip>
+                                        <div className="w-full mt-3 sm:mt-0 sm:w-auto">
+                                            <Chip color={getOrderStatusColor(order.order_status)} variant="flat">
+                                                {order.order_status}
+                                            </Chip>
+                                        </div>
                                     </div>
                                     <div>
                                         <p className="mb-3">

@@ -14,15 +14,17 @@ export default function OrderCard({ order, isShowReview = true }: IProps) {
         <div>
             {!isShowReview ? (
                 <div>
-                    <header className="flex items-center justify-between py-4 border-b border-dashed">
-                        <p>
+                    <header className="flex items-center flex-wrap justify-between py-4 border-b border-dashed">
+                        <p className="w-full sm:w-auto">
                             Ngày đặt hàng:{" "}
                             <span className="text-black/55 font-medium">{formatDateTime(order?.order_date)}</span>
                         </p>
 
-                        <Chip color={getOrderStatusColor(order?.order_status)} variant="flat">
-                            {order?.order_status}
-                        </Chip>
+                        <div className="w-full mt-2 sm:mt-0 sm:w-auto">
+                            <Chip color={getOrderStatusColor(order?.order_status)} variant="flat">
+                                {order?.order_status}
+                            </Chip>
+                        </div>
                     </header>
                     <ul className="py-5">
                         {order.order_items.map((item) => (
@@ -39,15 +41,17 @@ export default function OrderCard({ order, isShowReview = true }: IProps) {
                 </div>
             ) : (
                 <Link href={`/profile/order/${order.id}`}>
-                    <header className="flex items-center justify-between py-4 border-b border-dashed">
-                        <p>
+                    <header className="flex items-center justify-between flex-wrap py-4 border-b border-dashed">
+                        <p className="w-full sm:w-auto">
                             Ngày đặt hàng:{" "}
                             <span className="text-black/55 font-medium">{formatDateTime(order?.order_date)}</span>
                         </p>
 
-                        <Chip color={getOrderStatusColor(order?.order_status)} variant="flat">
-                            {order?.order_status}
-                        </Chip>
+                        <div className="w-full mt-2 sm:mt-0 sm:w-auto">
+                            <Chip color={getOrderStatusColor(order?.order_status)} variant="flat">
+                                {order?.order_status}
+                            </Chip>
+                        </div>
                     </header>
                     <ul className="py-5">
                         {order.order_items.map((item) => (
@@ -64,13 +68,19 @@ export default function OrderCard({ order, isShowReview = true }: IProps) {
                 </Link>
             )}
 
-            <footer className="flex items-center justify-between py-4 border-t border-dashed">
-                <div className="flex items-center">
+            <footer className="flex items-center flex-wrap justify-between py-4 border-t border-dashed">
+                <div className="w-full sm:w-auto flex items-center">
                     <span>Thành tiền: &nbsp;</span>
                     <span className="text-primary">{formatVNCurrency(order?.total_payment || 0)}</span>
                 </div>
                 {isShowReview && order.order_status === "Hoàn thành" && order.is_reviewed === false && (
-                    <Button href={`/profile/order/review/${order.id}`} as={Link} color="primary" radius="full">
+                    <Button
+                        className="mt-3 w-full sm:w-auto sm:mt-0"
+                        href={`/profile/order/review/${order.id}`}
+                        as={Link}
+                        color="primary"
+                        radius="full"
+                    >
                         Đánh giá
                     </Button>
                 )}

@@ -44,7 +44,7 @@ export default async function ProductPage({ searchParams }: { searchParams: { na
 
                 <div className="grid grid-cols-12 h-full gap-5">
                     {/* Filter sidebar */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <aside className="sticky top-[80px] z-[1]">
                             <ProductSearchBar />
                             <ul className="py-3">
@@ -68,7 +68,7 @@ export default async function ProductPage({ searchParams }: { searchParams: { na
                     </section>
 
                     {/* Products */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
                         {products.length > 0 ? (
                             <div className="grid grid-cols-12 gap-5">
                                 {products.map((product) => (

@@ -41,10 +41,10 @@ export default async function StorePage({ searchParams }: { searchParams: { city
 
                 <div className="grid grid-cols-12 h-full gap-5">
                     {/* Filter sidebar */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                         <aside
                             style={{ height: "calc(100vh - 100px)" }}
-                            className="sticky top-[80px] z-[1] overflow-y-auto scrollbar"
+                            className="!h-auto sm:!h-auto md:!h-auto sticky top-[80px] z-[1] overflow-y-auto scrollbar"
                         >
                             <ul className="">
                                 {storeLocations.map((storeLocation) => {
@@ -69,18 +69,18 @@ export default async function StorePage({ searchParams }: { searchParams: { city
                     </section>
 
                     {/* Stores */}
-                    <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
                         <div className="grid grid-cols-12 gap-x-5 gap-y-10">
                             {stores.map((store) => (
                                 <div
                                     key={store.id}
-                                    className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6"
+                                    className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6"
                                 >
                                     <Link className="block" href={`/store/${store.id}`}>
                                         <Image
                                             src={store.image || ""}
                                             alt="store thumbnail"
-                                            className="h-[300px] object-cover"
+                                            className="h-[300px] !w-full object-cover"
                                         />
                                         <h3 className="font-bold mt-2 text-lg">{store.store_name}</h3>
 

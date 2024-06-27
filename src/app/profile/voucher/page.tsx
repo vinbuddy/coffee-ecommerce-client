@@ -15,8 +15,8 @@ export default function VoucherPage() {
     const vouchers: IVoucher[] = voucherData?.data || [];
 
     return (
-        <div className="container">
-            <div className="px-6 h-full pb-5">
+        <div className="">
+            <div className="h-full pb-5">
                 <h1 className="text-xl font-bold mb-5">Các khuyến mãi</h1>
 
                 {!isLoading && vouchers.length === 0 && (

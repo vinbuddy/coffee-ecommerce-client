@@ -15,8 +15,8 @@ export default function WishlistPage() {
     const wishlist: IWishList[] = wishlistData?.data || [];
 
     return (
-        <div className="container pb-10 min-h-[400px]">
-            <div className="px-6 h-full">
+        <div className="pb-10 min-h-[400px]">
+            <div className="h-full">
                 <h1 className="text-xl font-bold mb-7">Sản phẩm yêu thích của bạn</h1>
 
                 {!isLoading && wishlist.length === 0 && (

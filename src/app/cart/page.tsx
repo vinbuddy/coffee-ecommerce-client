@@ -70,9 +70,9 @@ export default function CartPage(): React.ReactNode {
                     <Breadcrumbs breadcumbItems={breadcumbItems} />
                 </div>
 
-                <div className="grid grid-cols-12 h-full lg:gap-20 gap-10">
+                <div className="grid grid-cols-12 h-full gap-0 sm:gap-0 md:gap-0 lg:gap-20">
                     {/* Products */}
-                    <section className="col-span-12 sm:col-span-12 md:col-span-7 lg:col-span-7 xl:col-span-7 2xl:col-span-7">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-7 xl:col-span-7 2xl:col-span-7 pb-5">
                         {isLoading ? (
                             <div>
                                 {Array.from({ length: 3 }, (_, index) => index + 1).map((index) => (
@@ -100,7 +100,7 @@ export default function CartPage(): React.ReactNode {
                         )}
                     </section>
 
-                    <section className="col-span-12 sm:col-span-12 md:col-span-5 lg:col-span-5 xl:col-span-5 2xl:col-span-5">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-5 xl:col-span-5 2xl:col-span-5">
                         <aside className="sticky top-[80px] z-[1]">
                             <div className="">
                                 <p className="flex justify-between items-center mb-3 border-b pb-3">

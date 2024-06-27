@@ -41,9 +41,9 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
         <MainLayout>
             <div className="container pb-10 min-h-[400px]">
                 <div className="px-6 h-full">
-                    <div className="grid grid-cols-12 h-full gap-10">
+                    <div className="grid grid-cols-12 h-full gap-0 lg:gap-10">
                         {/* Filter sidebar */}
-                        <section className="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 xl:col-span-3 2xl:col-span-3 mb-5">
                             <aside className="sticky top-[80px] z-[1]">
                                 <div className="pb-3">
                                     <User
@@ -71,7 +71,7 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
                         </section>
 
                         {/* Products */}
-                        <section className="col-span-6 sm:col-span-6 md:col-span-9 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
                             {children}
                         </section>
                     </div>

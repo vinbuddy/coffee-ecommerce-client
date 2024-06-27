@@ -261,257 +261,279 @@ export default function CheckoutPage(): React.ReactNode {
                 </div>
 
                 <form onSubmit={handleSubmit(createNewOrder)}>
-                    <div className="grid grid-cols-12 h-full gap-10">
+                    <div className="grid grid-cols-12 h-full gap-0">
                         {/* Shipping - Payment method */}
-                        <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                            <section>
-                                <h2 className="font-medium text-lg">Thông tin giao hàng</h2>
+                        <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                            <div className="">
+                                <section className="">
+                                    <h2 className="font-medium text-lg">Thông tin giao hàng</h2>
 
-                                <div className="mt-4 grid grid-cols-12 gap-5">
-                                    <Autocomplete
-                                        isLoading={storeLoading}
-                                        isRequired
-                                        defaultItems={stores}
-                                        labelPlacement="inside"
-                                        label="Chọn cửa hàng"
-                                        className="col-span-12"
-                                        {...register("store_id", {
-                                            required: true,
-                                        })}
-                                        isInvalid={errors?.store_id?.type === "required"}
-                                        errorMessage={
-                                            errors?.store_id?.type === "required" ? "Hãy chọn cửa hàng cần mua" : null
-                                        }
-                                        onSelectionChange={(key: React.Key) => {
-                                            selectStoreId(Number(key));
-                                            setNewOrder((prev) => ({ ...prev, store_id: Number(key) }));
-                                        }}
-                                    >
-                                        {(item: any) => (
-                                            <AutocompleteItem key={item.id} textValue={item.store_name}>
-                                                <div className="flex items-center">
-                                                    <Avatar
-                                                        alt={item.store_name}
-                                                        className="flex-shrink-0"
-                                                        radius="sm"
-                                                        size="sm"
-                                                        src={item.image}
-                                                    />
-                                                    <div className="ms-2">
-                                                        <p className="font-medium">{item.store_name}</p>
-                                                        <p className="text-sm text-default-400">{item.address}</p>
+                                    <div className="mt-4 grid grid-cols-12 gap-5">
+                                        <Autocomplete
+                                            isLoading={storeLoading}
+                                            isRequired
+                                            defaultItems={stores}
+                                            labelPlacement="inside"
+                                            label="Chọn cửa hàng"
+                                            className="col-span-12"
+                                            {...register("store_id", {
+                                                required: true,
+                                            })}
+                                            isInvalid={errors?.store_id?.type === "required"}
+                                            errorMessage={
+                                                errors?.store_id?.type === "required"
+                                                    ? "Hãy chọn cửa hàng cần mua"
+                                                    : null
+                                            }
+                                            onSelectionChange={(key: React.Key) => {
+                                                selectStoreId(Number(key));
+                                                setNewOrder((prev) => ({ ...prev, store_id: Number(key) }));
+                                            }}
+                                        >
+                                            {(item: any) => (
+                                                <AutocompleteItem key={item.id} textValue={item.store_name}>
+                                                    <div className="flex items-center">
+                                                        <Avatar
+                                                            alt={item.store_name}
+                                                            className="flex-shrink-0"
+                                                            radius="sm"
+                                                            size="sm"
+                                                            src={item.image}
+                                                        />
+                                                        <div className="ms-2">
+                                                            <p className="font-medium">{item.store_name}</p>
+                                                            <p className="text-sm text-default-400">{item.address}</p>
+                                                        </div>
                                                     </div>
+                                                </AutocompleteItem>
+                                            )}
+                                        </Autocomplete>
+                                        <Autocomplete
+                                            allowsEmptyCollection={false}
+                                            allowsCustomValue
+                                            isLoading={loading}
+                                            onInputChange={(value) => {
+                                                setAddressSearch(value);
+                                            }}
+                                            onClear={() => {
+                                                setAddressSearch("");
+                                                setAdressList([]);
+                                            }}
+                                            inputValue={addressSearch}
+                                            isRequired
+                                            defaultItems={addressList}
+                                            labelPlacement="inside"
+                                            label="Địa chỉ giao hàng"
+                                            className="col-span-12"
+                                            {...register("address", {
+                                                required: true,
+                                            })}
+                                            isInvalid={errors?.address?.type === "required"}
+                                            errorMessage={
+                                                errors?.address?.type === "required"
+                                                    ? "Hãy nhập địa chỉ giao hàng"
+                                                    : null
+                                            }
+                                            onSelectionChange={(key: React.Key) => setAddressSearch(key.toString())}
+                                        >
+                                            {(item: any) => (
+                                                <AutocompleteItem
+                                                    textValue={item?.display_name}
+                                                    key={item?.display_name}
+                                                >
+                                                    {item?.display_name}
+                                                </AutocompleteItem>
+                                            )}
+                                        </Autocomplete>
+
+                                        <Input
+                                            isRequired
+                                            className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6"
+                                            type="text"
+                                            label="Tên người nhận"
+                                            {...register("receiver_name", {
+                                                required: true,
+                                            })}
+                                            isInvalid={errors?.receiver_name?.type === "required"}
+                                            errorMessage={
+                                                errors?.receiver_name?.type === "required"
+                                                    ? "Hãy nhập tên người nhận"
+                                                    : null
+                                            }
+                                            onValueChange={(value) =>
+                                                setNewOrder((prev) => ({
+                                                    ...prev,
+                                                    receiver_name: value,
+                                                }))
+                                            }
+                                        />
+                                        <Input
+                                            isRequired
+                                            className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6"
+                                            type="text"
+                                            label="Số điện thoại"
+                                            {...register("phone_number", {
+                                                required: true,
+                                                pattern: {
+                                                    value: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/,
+                                                    message: "Hãy nhập đúng định dạng số điện thoại",
+                                                },
+                                            })}
+                                            isInvalid={
+                                                errors?.phone_number?.type === "required" ||
+                                                errors?.phone_number?.type === "pattern"
+                                            }
+                                            errorMessage={
+                                                (errors?.phone_number?.type === "required" &&
+                                                    "Hãy nhập số điện thoại người nhận") ||
+                                                (errors?.phone_number?.type === "pattern" &&
+                                                    "Số điện thoại không hợp lệ")
+                                            }
+                                            onValueChange={(value) =>
+                                                setNewOrder((prev) => ({
+                                                    ...prev,
+                                                    phone_number: value,
+                                                }))
+                                            }
+                                        />
+                                        <Input
+                                            className="col-span-12"
+                                            type="text"
+                                            label="Ghi chú cho đơn hàng"
+                                            {...register("order_note", {
+                                                required: false,
+                                                maxLength: 30,
+                                            })}
+                                            isInvalid={errors?.order_note?.type === "maxLength"}
+                                            errorMessage={
+                                                errors?.order_note?.type === "maxLength"
+                                                    ? "Hãy nhập ghi chú tối đa 30 ký tự"
+                                                    : null
+                                            }
+                                            onValueChange={(value) =>
+                                                setNewOrder((prev) => ({
+                                                    ...prev,
+                                                    order_note: value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </section>
+
+                                <section className="mt-10">
+                                    <h2 className="font-medium text-lg">Phương thức thanh toán</h2>
+
+                                    <div className="mt-4">
+                                        <RadioGroup
+                                            onValueChange={handleSelectPaymentMethod}
+                                            color="default"
+                                            defaultValue={newOrder.payment_method}
+                                        >
+                                            <PaymentMethodRadio value="cash">
+                                                <div className="flex items-center">
+                                                    <Image width={24} src={moneyIcon.src} alt="money icon" />
+                                                    <span className="ms-3">Tiền mặt</span>
                                                 </div>
-                                            </AutocompleteItem>
-                                        )}
-                                    </Autocomplete>
-                                    <Autocomplete
-                                        allowsEmptyCollection={false}
-                                        allowsCustomValue
-                                        isLoading={loading}
-                                        onInputChange={(value) => {
-                                            setAddressSearch(value);
-                                        }}
-                                        onClear={() => {
-                                            setAddressSearch("");
-                                            setAdressList([]);
-                                        }}
-                                        inputValue={addressSearch}
-                                        isRequired
-                                        defaultItems={addressList}
-                                        labelPlacement="inside"
-                                        label="Địa chỉ giao hàng"
-                                        className="col-span-12"
-                                        {...register("address", {
-                                            required: true,
-                                        })}
-                                        isInvalid={errors?.address?.type === "required"}
-                                        errorMessage={
-                                            errors?.address?.type === "required" ? "Hãy nhập địa chỉ giao hàng" : null
-                                        }
-                                        onSelectionChange={(key: React.Key) => setAddressSearch(key.toString())}
-                                    >
-                                        {(item: any) => (
-                                            <AutocompleteItem textValue={item?.display_name} key={item?.display_name}>
-                                                {item?.display_name}
-                                            </AutocompleteItem>
-                                        )}
-                                    </Autocomplete>
-
-                                    <Input
-                                        isRequired
-                                        className="col-span-6"
-                                        type="text"
-                                        label="Tên người nhận"
-                                        {...register("receiver_name", {
-                                            required: true,
-                                        })}
-                                        isInvalid={errors?.receiver_name?.type === "required"}
-                                        errorMessage={
-                                            errors?.receiver_name?.type === "required"
-                                                ? "Hãy nhập tên người nhận"
-                                                : null
-                                        }
-                                        onValueChange={(value) =>
-                                            setNewOrder((prev) => ({
-                                                ...prev,
-                                                receiver_name: value,
-                                            }))
-                                        }
-                                    />
-                                    <Input
-                                        isRequired
-                                        className="col-span-6"
-                                        type="text"
-                                        label="Số điện thoại"
-                                        {...register("phone_number", {
-                                            required: true,
-                                            pattern: {
-                                                value: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/,
-                                                message: "Hãy nhập đúng định dạng số điện thoại",
-                                            },
-                                        })}
-                                        isInvalid={
-                                            errors?.phone_number?.type === "required" ||
-                                            errors?.phone_number?.type === "pattern"
-                                        }
-                                        errorMessage={
-                                            (errors?.phone_number?.type === "required" &&
-                                                "Hãy nhập số điện thoại người nhận") ||
-                                            (errors?.phone_number?.type === "pattern" && "Số điện thoại không hợp lệ")
-                                        }
-                                        onValueChange={(value) =>
-                                            setNewOrder((prev) => ({
-                                                ...prev,
-                                                phone_number: value,
-                                            }))
-                                        }
-                                    />
-                                    <Input
-                                        className="col-span-12"
-                                        type="text"
-                                        label="Ghi chú cho đơn hàng"
-                                        {...register("order_note", {
-                                            required: false,
-                                            maxLength: 30,
-                                        })}
-                                        isInvalid={errors?.order_note?.type === "maxLength"}
-                                        errorMessage={
-                                            errors?.order_note?.type === "maxLength"
-                                                ? "Hãy nhập ghi chú tối đa 30 ký tự"
-                                                : null
-                                        }
-                                        onValueChange={(value) =>
-                                            setNewOrder((prev) => ({
-                                                ...prev,
-                                                order_note: value,
-                                            }))
-                                        }
-                                    />
-                                </div>
-                            </section>
-
-                            <section className="mt-10">
-                                <h2 className="font-medium text-lg">Phương thức thanh toán</h2>
-
-                                <div className="mt-4">
-                                    <RadioGroup
-                                        onValueChange={handleSelectPaymentMethod}
-                                        color="default"
-                                        defaultValue={newOrder.payment_method}
-                                    >
-                                        <PaymentMethodRadio value="cash">
-                                            <div className="flex items-center">
-                                                <Image width={24} src={moneyIcon.src} alt="money icon" />
-                                                <span className="ms-3">Tiền mặt</span>
-                                            </div>
-                                        </PaymentMethodRadio>
-                                        <PaymentMethodRadio value="vnpay">
-                                            <div className="flex items-center">
-                                                <Image width={24} src={vnpayIcon.src} alt="money icon" radius="none" />
-                                                <span className="ms-3">VNPAY</span>
-                                            </div>
-                                        </PaymentMethodRadio>
-                                        <PaymentMethodRadio value="momo">
-                                            <div className="flex items-center">
-                                                <Image width={24} src={momoIcon.src} alt="money icon" radius="none" />
-                                                <span className="ms-3">Momo</span>
-                                            </div>
-                                        </PaymentMethodRadio>
-                                    </RadioGroup>
-                                </div>
-                            </section>
+                                            </PaymentMethodRadio>
+                                            <PaymentMethodRadio value="vnpay">
+                                                <div className="flex items-center">
+                                                    <Image
+                                                        width={24}
+                                                        src={vnpayIcon.src}
+                                                        alt="money icon"
+                                                        radius="none"
+                                                    />
+                                                    <span className="ms-3">VNPAY</span>
+                                                </div>
+                                            </PaymentMethodRadio>
+                                            <PaymentMethodRadio value="momo">
+                                                <div className="flex items-center">
+                                                    <Image
+                                                        width={24}
+                                                        src={momoIcon.src}
+                                                        alt="money icon"
+                                                        radius="none"
+                                                    />
+                                                    <span className="ms-3">Momo</span>
+                                                </div>
+                                            </PaymentMethodRadio>
+                                        </RadioGroup>
+                                    </div>
+                                </section>
+                            </div>
                         </div>
 
                         {/* Summary */}
-                        <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                            <div className="shadow-lg border rounded-xl">
-                                <div className="p-4 ">
-                                    <section>
-                                        <h2 className="font-medium text-lg">Các món đã chọn</h2>
+                        <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                            <div className="p-0 md:p-5">
+                                <div className="shadow-lg border rounded-xl ">
+                                    <div className="p-4 ">
+                                        <section>
+                                            <h2 className="font-medium text-lg">Các món đã chọn</h2>
 
-                                        <ul className="mt-4">
-                                            {selectedCartItems.map((cartItem) => (
-                                                <CartItem
-                                                    isSelected={false}
-                                                    isDeleted={false}
-                                                    isEdited={false}
-                                                    cartItem={cartItem}
-                                                    key={cartItem.id}
-                                                />
-                                            ))}
-                                        </ul>
-                                    </section>
-
-                                    <section className="mt-10">
-                                        <h2 className="font-medium text-lg">Tổng cộng</h2>
-
-                                        <ul className="mt-1">
-                                            <li className="flex items-center justify-between py-4 border-b">
-                                                <span className="text-sm">Thành tiền</span>
-                                                <span>{formatVNCurrency(totalItemPrice)}</span>
-                                            </li>
-                                            <li className="flex items-center justify-between py-4 border-b">
-                                                <span className="text-sm">Phí giao hàng</span>
-                                                <span>18.000 đ</span>
-                                            </li>
-                                            <li className="flex items-center justify-between py-4">
-                                                <span className="text-sm">Khuyến mãi</span>
-
-                                                {appliedVoucher ? (
-                                                    <AppliedVoucher />
-                                                ) : (
-                                                    <ShowVoucherButton
-                                                        buttonProps={{
-                                                            color: "primary",
-                                                            variant: "flat",
-                                                            radius: "full",
-                                                            size: "sm",
-                                                            children: "Chọn",
-                                                        }}
+                                            <ul className="mt-4">
+                                                {selectedCartItems.map((cartItem) => (
+                                                    <CartItem
+                                                        isSelected={false}
+                                                        isDeleted={false}
+                                                        isEdited={false}
+                                                        cartItem={cartItem}
+                                                        key={cartItem.id}
                                                     />
-                                                )}
-                                            </li>
-                                        </ul>
-                                    </section>
-                                </div>
-                                <div className="p-4  flex items-center justify-between bg-[#F4F4F5] ">
-                                    <div>
-                                        <p>Tổng thanh toán</p>
-                                        <p className="text-primary mt-2 text-lg">
-                                            {formatVNCurrency(newOrder.total_payment)}
-                                        </p>
-                                    </div>
+                                                ))}
+                                            </ul>
+                                        </section>
 
-                                    <Button
-                                        isLoading={submitLoading}
-                                        type="submit"
-                                        radius="full"
-                                        color="primary"
-                                        size="lg"
-                                    >
-                                        Đặt hàng
-                                    </Button>
+                                        <section className="mt-10">
+                                            <h2 className="font-medium text-lg">Tổng cộng</h2>
+
+                                            <ul className="mt-1">
+                                                <li className="flex items-center justify-between py-4 border-b">
+                                                    <span className="text-sm">Thành tiền</span>
+                                                    <span>{formatVNCurrency(totalItemPrice)}</span>
+                                                </li>
+                                                <li className="flex items-center justify-between py-4 border-b">
+                                                    <span className="text-sm">Phí giao hàng</span>
+                                                    <span>18.000 đ</span>
+                                                </li>
+                                                <li className="flex items-center justify-between py-4">
+                                                    <span className="text-sm">Khuyến mãi</span>
+
+                                                    {appliedVoucher ? (
+                                                        <AppliedVoucher />
+                                                    ) : (
+                                                        <ShowVoucherButton
+                                                            buttonProps={{
+                                                                color: "primary",
+                                                                variant: "flat",
+                                                                radius: "full",
+                                                                size: "sm",
+                                                                children: "Chọn",
+                                                            }}
+                                                        />
+                                                    )}
+                                                </li>
+                                            </ul>
+                                        </section>
+                                    </div>
+                                    <div className="p-4  flex items-center justify-between bg-[#F4F4F5] ">
+                                        <div>
+                                            <p>Tổng thanh toán</p>
+                                            <p className="text-primary mt-2 text-lg">
+                                                {formatVNCurrency(newOrder.total_payment)}
+                                            </p>
+                                        </div>
+
+                                        <Button
+                                            isLoading={submitLoading}
+                                            type="submit"
+                                            radius="full"
+                                            color="primary"
+                                            size="lg"
+                                        >
+                                            Đặt hàng
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -154,8 +154,8 @@ export default function ProfilePage(): React.ReactNode {
         <form className="rounded-xl">
             <h3 className="text-xl font-bold mb-5">Hồ sơ của tôi</h3>
 
-            <div className="grid grid-cols-12 gap-5">
-                <div className="col-span-7">
+            <div className="flex-col-reverse grid grid-cols-12 gap-5">
+                <div className="order-2 lg:order-1 col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-7 xl:col-span-7">
                     <div>
                         <Input
                             isDisabled
@@ -188,7 +188,7 @@ export default function ProfilePage(): React.ReactNode {
                         </Button>
                     </div>
                 </div>
-                <div className="col-span-5">
+                <div className="order-1 lg:order-2 col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-5 xl:col-span-5">
                     <div>
                         <Tooltip closeDelay={0} content="Cập nhật ảnh đại diện" placement="bottom" color="foreground">
                             <label htmlFor="avatar">

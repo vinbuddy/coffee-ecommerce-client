@@ -86,13 +86,13 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                 <div>
                     <div className="grid grid-cols-12 gap-5">
-                        <section className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <div>
                                 <Image className="w-full h-auto mb-5" src={product?.image} alt="" />
                                 {product?.id && <ProductDetailActions productId={product.id} />}
                             </div>
                         </section>
-                        <section className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <div>
                                 <h1 className="font-bold text-3xl">{product?.name}</h1>
                                 <p className="text-primary text-xl mt-3">{formatVNCurrency(product?.price)}</p>
@@ -112,10 +112,10 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                     </div>
 
                     <div className="grid grid-cols-12 gap-5 mt-14">
-                        <section className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <ReviewRatingSection reviews={reviews} />
                         </section>
-                        <section className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                        <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <div>
                                 <div>
                                     <h3 className="font-bold text-2xl mb-5">Các đánh giá</h3>

@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# The Coffee House Clone
 
-## Getting Started
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/cf051c67-5f8c-42b7-903c-77ea58825dfe)
 
-First, run the development server:
+## Tech stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+-   **Language and library**: NextJS, ReactJS, NextUI, Typescript, SWR, Zustand, TaiwindCSS
+-   **Service**: Firebase
+-   **Backend**: RESTful API
+-   **Payment Gateway**: MOMO and VNPAY
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Main features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   **Authentication**: Login, register, forgot password
+-   **Menu**: Show menu, search and filter product by category, view product detail.
+-   **cart**: Add to cart and view cart information
+-   **Order Tracking**: Track the order's status in real-time
+-   **Order History**: View past orders divided by completed and canceled status
+-   **Payment method**: Use cash or VNPAY, MOMO E-Wallet
+-   **Profile**: Update avatar and user name
+-   **Voucher**: Apply voucher to get discount
+-   **Wishlist**: Add to wishlist and view wishlist (favourite products)
+-   **Review**: Review order, product
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Preview
 
-## Learn More
+-   Menu
 
-To learn more about Next.js, take a look at the following resources:
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/5845f424-b566-4415-af55-4b692ea2c70b)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   Product
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/04f7606d-fdc5-4c66-91f2-8d71a55efe11)
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/46049d36-4c1f-4a7f-bff1-4a20f4cf3e3b)
 
-## Deploy on Vercel
+-   Cart
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/5fd018ed-0259-4d0c-a8ac-018f3ef3f571)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-   Checkout
+
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/79f3acac-ba6a-482f-af4a-9ef1bc5e8949)
+
+-   Profile
+
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/df76cbab-e987-46ab-b1a5-121f19ed3f97)
+
+-   Wishlist
+
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/5c6abb51-d8da-4b62-90c7-ef9d5cad2a1f)
+
+-   Order
+
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/6d308226-073c-4fde-9252-ffc615cb4d11)
+
+![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/996ae6c1-21d9-40be-a1df-d3d21df95adf)

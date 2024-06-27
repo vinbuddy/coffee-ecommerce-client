@@ -5,7 +5,7 @@ import useLoading from "@/hooks/useLoading";
 import { IOrderInfo } from "@/types/order";
 import { Button, Card, CardBody, Textarea, Tooltip } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { use, useCallback, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 
@@ -19,6 +19,10 @@ export default function CreateReviewPage({ params }: { params: { orderId: string
 
     const { startLoading, stopLoading, loading } = useLoading();
     const router = useRouter();
+
+    useEffect(() => {
+        document.title = "Đánh giá đơn hàng";
+    }, []);
 
     const getRatingLabel = useCallback(() => {
         switch (rating) {

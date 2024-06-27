@@ -6,6 +6,7 @@ import { IWishList } from "@/types/wishlist";
 import useSWR from "swr";
 import { Image } from "@nextui-org/react";
 import WishlistCard from "@/components/Wishlist/WishlistCard";
+import { useEffect } from "react";
 
 export default function WishlistPage() {
     const { currentUser } = useCurrentUser();
@@ -13,6 +14,10 @@ export default function WishlistPage() {
     const { data: wishlistData, isLoading, error } = useSWR(url);
 
     const wishlist: IWishList[] = wishlistData?.data || [];
+
+    useEffect(() => {
+        document.title = "Sản phẩm yêu thích";
+    }, []);
 
     return (
         <div className="pb-10 min-h-[400px]">

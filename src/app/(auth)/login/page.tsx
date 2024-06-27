@@ -36,6 +36,10 @@ export default function LoginPage(): React.ReactNode {
     const { currentUser } = useCurrentUser();
 
     useEffect(() => {
+        document.title = "Đăng nhập";
+    }, []);
+
+    useEffect(() => {
         // if (currentUser.role === "admin")router.push("/admin");
 
         if (currentUser) {

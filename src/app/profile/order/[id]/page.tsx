@@ -4,7 +4,7 @@ import OrderDetailStatusProgress from "@/components/Order/OrderDetailStatusProgr
 import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
 import { IOrderInfo } from "@/types/order";
 import { Card, CardBody, Chip, User } from "@nextui-org/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import useSWR from "swr";
 
 export default function UserOrderDetailPage({ params }: { params: { id: string } }) {
@@ -15,6 +15,10 @@ export default function UserOrderDetailPage({ params }: { params: { id: string }
     const totalItemPrice = useMemo(() => {
         return order?.order_items.reduce((acc, curr) => acc + Number(curr.order_item_price), 0);
     }, [order]);
+
+    useEffect(() => {
+        document.title = "Chi tiết đơn hàng";
+    }, []);
 
     return (
         <>

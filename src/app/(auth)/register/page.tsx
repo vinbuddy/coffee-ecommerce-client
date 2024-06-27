@@ -41,6 +41,10 @@ function Register() {
     };
 
     useEffect(() => {
+        document.title = "Đăng ký tài khoản";
+    }, []);
+
+    useEffect(() => {
         // if (currentUser.role === "admin")router.push("/admin");
 
         if (currentUser) {

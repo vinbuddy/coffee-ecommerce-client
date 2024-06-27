@@ -35,6 +35,10 @@ export default function ProfilePage(): React.ReactNode {
     const { handleUpdateProfile } = useFirebaseAuthStore();
 
     useEffect(() => {
+        document.title = "Trang cá nhân";
+    }, []);
+
+    useEffect(() => {
         return () => {
             if (imageURL && imageFile) URL.revokeObjectURL(imageURL);
         };

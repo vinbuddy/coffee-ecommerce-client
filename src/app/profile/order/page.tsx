@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, Tab, Card, CardBody, Chip, Button } from "@nextui-org/react";
 import CartItem from "@/components/Cart/CartItem";
 import OrderStatusProgress from "@/components/Order/OrderStatusProgress";
@@ -22,6 +22,10 @@ export default function UserOrderPage(): React.ReactNode {
     const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;
     const isCancelable = currentOrder?.statuses.length === 1 && lastStatus === "Đang chờ";
     const isCompletable = lastStatus === "Hoàn thành";
+
+    useEffect(() => {
+        document.title = "Đơn hàng của bạn";
+    }, []);
 
     return (
         <div className="rounded-xl">

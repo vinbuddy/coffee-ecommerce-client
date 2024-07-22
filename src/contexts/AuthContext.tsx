@@ -32,10 +32,11 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
                 useCurrentUser.setState((state) => ({
                     currentUser: resData.data,
                 }));
+                setLoading(false);
             } else {
                 useCurrentUser.setState((state) => ({ currentUser: null }));
+                setLoading(false);
             }
-            setLoading(false);
         });
 
         return () => unsubscribe();

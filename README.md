@@ -1,6 +1,7 @@
 # The Coffee House Clone
 
-![image](https://github.com/vinbuddy/coffee-ecommerce-client/assets/94288269/cf051c67-5f8c-42b7-903c-77ea58825dfe)
+![672_1x_shots_so](https://github.com/user-attachments/assets/0de05ddb-057b-4e07-b429-6db74dd7bc40)
+
 
 ## Tech stack
 

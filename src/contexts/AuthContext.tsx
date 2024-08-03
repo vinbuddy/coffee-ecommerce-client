@@ -42,5 +42,5 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
         return () => unsubscribe();
     }, []);
 
-    return <AuthContext.Provider value={{}}>{loading ? <LoadingPage /> : children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 };

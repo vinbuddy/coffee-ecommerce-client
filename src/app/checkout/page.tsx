@@ -231,7 +231,7 @@ export default function CheckoutPage(): React.ReactNode {
         if (voucher_id) {
             order = {
                 ...newOrder,
-                order_id: generateOrderId(),
+                id: generateOrderId(),
                 user_id: currentUser?.id,
                 address: addressValue,
                 order_items: selectedCartItems,
@@ -239,7 +239,7 @@ export default function CheckoutPage(): React.ReactNode {
         } else {
             order = {
                 ...restOrder,
-                order_id: generateOrderId(),
+                id: generateOrderId(),
                 user_id: currentUser?.id,
                 address: addressValue,
                 order_items: selectedCartItems,

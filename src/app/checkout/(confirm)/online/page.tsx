@@ -20,10 +20,6 @@ type OrderType = Omit<IOrder, "order_date" | "order_status">;
 
 export default function OnlineCheckoutPage({ searchParams }: { searchParams: any }): React.ReactNode {
     const [order, setOrder] = useState<OrderType | null>(() => {
-        if (typeof window === "undefined") {
-            return null;
-        }
-
         const orderStorage = localStorage.getItem("order");
 
         if (orderStorage) {
@@ -33,10 +29,7 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
 
         return null;
     });
-    const [checkoutFrom, setCheckoutFrom] = useState<string | null>(() => {
-        if (typeof window === "undefined") {
-            return null;
-        }
+    const [checkoutFrom, setCheckoutFrom] = useState<string>(() => {
         const checkoutFromStorage = localStorage.getItem("checkoutFrom");
 
         if (checkoutFromStorage) {
@@ -69,10 +62,8 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
             setOrder(orderData);
             setCheckoutFrom(searchParams?.checkoutFrom?.toString() ?? "web");
 
-            if (typeof window !== "undefined") {
-                localStorage.setItem("order", JSON.stringify(orderData));
-                localStorage.setItem("checkoutFrom", searchParams?.checkoutFrom?.toString() ?? "web");
-            }
+            localStorage.setItem("order", JSON.stringify(orderData));
+            localStorage.setItem("checkoutFrom", searchParams?.checkoutFrom?.toString() ?? "web");
         }
     }, []);
 
@@ -109,7 +100,7 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
                     setCheckoutURL(data.payment_url);
                 } else {
                     // ***
-                    if (typeof window !== "undefined") localStorage.removeItem("order");
+                    localStorage.removeItem("order");
                     throw new Error(data.message);
                 }
             } catch (error: any) {
@@ -160,10 +151,8 @@ export default function OnlineCheckoutPage({ searchParams }: { searchParams: any
             const resData = await response.json();
 
             if (response.status === 200) {
-                if (typeof window !== "undefined") {
-                    localStorage.removeItem("order");
-                    localStorage.removeItem("checkoutFrom");
-                }
+                localStorage.removeItem("order");
+                localStorage.removeItem("checkoutFrom");
 
                 const resOrder: IOrder = resData.data;
                 const orderDate = resOrder.order_date;

@@ -175,7 +175,10 @@ export default function CheckoutPage(): React.ReactNode {
             startSubmitLoading();
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order`, {
                 method: "POST",
-                body: JSON.stringify(order),
+                body: JSON.stringify({
+                    ...order,
+                    order_id: order.id,
+                }),
                 headers: {
                     "Content-Type": "application/json",
                 },

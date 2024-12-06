@@ -38,7 +38,12 @@ export default function ResultPage({
                             </div>
 
                             <div className="flex items-center justify-end border-t-2 border-dashed pt-4">
-                                <Button radius="full" className="bg-transparent text-black border-none">
+                                <Button
+                                    as={Link}
+                                    href="/"
+                                    radius="full"
+                                    className="bg-transparent text-black border-none"
+                                >
                                     Trang chủ
                                 </Button>
                                 <Button as={Link} href="/profile/order" color="primary" radius="full">

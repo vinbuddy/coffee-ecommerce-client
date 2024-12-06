@@ -31,7 +31,7 @@ export default function NavbarUserInfo() {
                         <DropdownMenu aria-label="Profile Actions" variant="flat">
                             <DropdownItem key="profile" className="h-14 gap-2">
                                 <p className="font-semibold">Đăng nhập bằng</p>
-                                <p className="font-semibold">{currentUser?.email}</p>
+                                <p className="font-semibold">{currentUser?.account_type}</p>
                             </DropdownItem>
                             <DropdownItem startContent={<BiUser />} as={Link} href="/profile" key="profile">
                                 Trang cá nhân

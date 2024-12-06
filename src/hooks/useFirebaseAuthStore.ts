@@ -73,6 +73,8 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
 
         try {
             const userCredential = await signInWithPopup(auth, googleProvider);
+            console.log("userCredential: ", userCredential);
+
             const token: string = await userCredential.user.getIdToken();
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/create-user-account`, {
@@ -144,7 +146,11 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
                 },
             });
 
-            const data = await response.json();
+            const resData = await response.json();
+
+            useCurrentUser.setState((state) => ({
+                currentUser: resData.data,
+            }));
         } catch (error: any) {
             setErrorCodeToMessage(error); // Handle error
         } finally {

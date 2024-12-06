@@ -65,7 +65,7 @@ export default function AddToCartForm({
     }, []);
 
     const handleIncrease = (): void => {
-        setQuantity((prevQuantity) => prevQuantity + 1);
+        setQuantity((prevQuantity) => (prevQuantity < 50 ? prevQuantity + 1 : prevQuantity));
     };
 
     const handleDecrease = (): void => {

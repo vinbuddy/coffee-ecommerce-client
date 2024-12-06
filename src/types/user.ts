@@ -3,4 +3,5 @@ export interface IUser {
     user_name: string | null;
     avatar: string | null;
     email: string | null;
+    account_type: string;
 }

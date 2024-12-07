@@ -4,6 +4,8 @@ import Link from "next/link";
 import { CiCoffeeCup } from "react-icons/ci";
 import { TbBasketHeart } from "react-icons/tb";
 import { BiLogOut, BiPackage, BiUser } from "react-icons/bi";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import avatarFallback from "@/assets/images/avatar-fallback.jpg";
 import { useCurrentUser, useFirebaseAuthStore } from "@/hooks";
@@ -11,6 +13,17 @@ import { useCurrentUser, useFirebaseAuthStore } from "@/hooks";
 export default function NavbarUserInfo() {
     const { currentUser } = useCurrentUser();
     const { handleSignOut } = useFirebaseAuthStore();
+    const router = useRouter();
+
+    const handleSignOutClick = () => {
+        handleSignOut(() => {
+            router.push("/login");
+            toast.success("Đăng xuất thành công", {
+                position: "bottom-center",
+            });
+        });
+    };
+
     return (
         <>
             {currentUser ? (
@@ -55,7 +68,7 @@ export default function NavbarUserInfo() {
                                 key="logout"
                                 color="danger"
                                 className="text-danger"
-                                onClick={handleSignOut}
+                                onClick={handleSignOutClick}
                             >
                                 Đăng xuất
                             </DropdownItem>

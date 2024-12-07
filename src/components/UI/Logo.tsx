@@ -7,13 +7,10 @@ interface IProps {
     href?: string;
 }
 
-export default function Logo({
-    className = "",
-    href = "/",
-}: IProps): React.ReactNode {
+export default function Logo({ className = "", href = "/" }: IProps): React.ReactNode {
     return (
         <Link className={className} href={href}>
-            <Image className="w-[230px] block" src={logoImg} alt="" />
+            <Image className="w-[230px] h-[35px] block" src={logoImg} alt="" />
         </Link>
     );
 }

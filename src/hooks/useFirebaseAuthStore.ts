@@ -21,7 +21,7 @@ interface FirebaseAuthStoreState {
     handleSignInGoogle: () => Promise<void>;
     handleSignInGoogleEmailPassword: (email: string, password: string) => Promise<void>;
     handleCreateAccount: (name: string, email: string, password: string) => void;
-    handleSignOut: () => void;
+    handleSignOut: (callback?: () => void) => void;
     handleUpdateProfile: (name: string, photoURL?: string) => Promise<void>;
     handelResetPassword: (email: string) => Promise<void>;
 }
@@ -157,10 +157,12 @@ const useFirebaseAuthStore = create<FirebaseAuthStoreState>((set) => ({
             set(() => ({ loading: false })); // Set loading to false regardless of success or failure
         }
     },
-    handleSignOut: () => {
+    handleSignOut: (callback) => {
         signOut(auth)
             .then(() => {
-                console.log("Log out successfully");
+                if (callback) {
+                    callback();
+                }
             })
             .catch((error) => {});
     },

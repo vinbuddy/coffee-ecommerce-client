@@ -40,9 +40,11 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
 
     // Redirect to login page if user is not logged in
     useEffect(() => {
-        if (!currentUser) {
-            router.push("/login");
-        }
+        console.log("currentUser", currentUser);
+
+        // if (!currentUser) {
+        //     router.push("/login");
+        // }
     }, [currentUser]);
 
     return (

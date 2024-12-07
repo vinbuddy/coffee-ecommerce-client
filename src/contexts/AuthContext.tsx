@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { setCookie } from "cookies-next";
+import { usePathname, useRouter } from "next/navigation";
 
 import { app } from "@/config/firebase";
 import { useCurrentUser } from "@/hooks";
@@ -14,6 +15,8 @@ export const useAuthContext = () => React.useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
     const [loading, setLoading] = useState(true);
+    const pathName = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -40,6 +43,12 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (pathName.includes("/profile") && !useCurrentUser.getState().currentUser && !loading) {
+            router.push("/login");
+        }
+    }, [loading, useCurrentUser.getState().currentUser]);
 
     return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 };

@@ -2,9 +2,9 @@
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-// import { signIn } from "next-auth/react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+
 import Logo from "@/components/UI/Logo";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -45,16 +45,14 @@ function Register() {
     }, []);
 
     useEffect(() => {
-        // if (currentUser.role === "admin")router.push("/admin");
-
         if (currentUser) {
             router.push("/");
         }
     }, [currentUser]);
     return (
         <>
-            <div>
-                <form onSubmit={handleSubmit(onSubmitHandler)} className="w-[400px] bg-white p-5 rounded-lg">
+            <div className="md:w-auto w-full rounded-2xl">
+                <form onSubmit={handleSubmit(onSubmitHandler)} className="md:w-[400px] w-full bg-white p-5 rounded-2xl">
                     <div>
                         <Logo className="flex justify-center" />
                         <h4 className="text-center text-primary text-2xl mb-5 mt-3">Tạo Tài Khoản</h4>
@@ -63,7 +61,7 @@ function Register() {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="text"
-                            placeholder="User name"
+                            placeholder="Tên người dùng"
                             {...register("username", {
                                 required: true,
                                 maxLength: 20,
@@ -77,7 +75,7 @@ function Register() {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="text"
-                            placeholder="Email address"
+                            placeholder="Địa chỉ email"
                             {...register("email", {
                                 required: true,
                                 pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -94,7 +92,7 @@ function Register() {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="password"
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                             {...register("password", {
                                 required: true,
                                 minLength: 6,
@@ -113,7 +111,7 @@ function Register() {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="password"
-                            placeholder="Confirm password"
+                            placeholder="Xác nhận mật khẩu"
                             {...register("confirm", {
                                 required: true,
                                 validate: (value) => {

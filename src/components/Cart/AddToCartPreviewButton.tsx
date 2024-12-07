@@ -9,11 +9,13 @@ import {
     Image,
     ButtonProps,
 } from "@nextui-org/react";
-import { AiOutlinePlus } from "react-icons/ai";
+
 import AddToCartForm from "./AddToCartForm";
-import { IProduct } from "@/types/product";
 import { formatVNCurrency } from "@/lib/utils";
+
+import { IProduct } from "@/types/product";
 import { ICart } from "@/types/cart";
+
 import EditCartForm from "./EditCartForm";
 
 interface IDefaultProps {
@@ -58,16 +60,19 @@ export default function AddToCartPreviewButton({ buttonProps, product, cartItem 
                                 {product ? "Thêm vào giỏ hàng" : "Chỉnh sửa giỏ hàng"}
                             </ModalHeader>
                             <ModalBody className="pt-0 px-6 pb-6">
-                                <div className="h-[80px] flex bg-[#F4F4F5] rounded-xl p-2.5">
-                                    <div className="flex-1 h-full flex justify-between">
+                                <div className=" flex bg-[#F4F4F5] rounded-xl p-2.5">
+                                    <div className="flex-1 flex justify-between items-center overflow-hidden">
                                         <Image
-                                            className="h-full border object-cover"
+                                            className="h-[80px] w-[80px] border object-cover"
+                                            classNames={{
+                                                wrapper: "w-[80px] h-[80px]",
+                                            }}
                                             src={product ? product.image : cartItem.product_image}
                                             alt=""
                                         />
 
-                                        <div className="flex-1 ms-3 ">
-                                            <p className="font-medium mb-1">
+                                        <div className="flex-1 ms-3 overflow-hidden">
+                                            <p className="font-medium mb-1 truncate">
                                                 {product ? product?.name : cartItem.product_name}
                                             </p>
                                             <span className="text-gray-500 ">

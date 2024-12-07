@@ -238,7 +238,9 @@ export default function AddToCartForm({
                         className="w-full ms-3"
                         color="primary"
                     >
-                        {formatVNCurrency(previewPrice)} &#x2022; Thêm vào giỏ hàng
+                        {formatVNCurrency(previewPrice)}
+                        <span className="sm:block hidden"> &#x2022; Thêm vào giỏ hàng</span>
+                        <span className="sm:hidden block"> &#x2022; Thêm</span>
                     </Button>
                 </div>
             </div>

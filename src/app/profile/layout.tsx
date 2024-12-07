@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { User } from "@nextui-org/react";
+
+import { TbBasketHeart } from "react-icons/tb";
 import { BiUser, BiPackage } from "react-icons/bi";
 import { RiCoupon3Line } from "react-icons/ri";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import MainLayout from "@/components/UI/MainLayout";
-import { usePathname } from "next/navigation";
-import { TbBasketHeart } from "react-icons/tb";
 
 const navLinks = [
     {
@@ -36,6 +36,14 @@ const navLinks = [
 export default function ProductLayout({ children }: { children: React.ReactNode }) {
     const { currentUser } = useCurrentUser();
     const pathName = usePathname();
+    const router = useRouter();
+
+    // Redirect to login page if user is not logged in
+    useEffect(() => {
+        if (!currentUser) {
+            router.push("/login");
+        }
+    }, [currentUser]);
 
     return (
         <MainLayout>

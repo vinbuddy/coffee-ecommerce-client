@@ -1,16 +1,18 @@
 "use client";
 import { Checkbox, Chip, Image, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { mutate } from "swr";
+import { toast } from "sonner";
+
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlineDraw } from "react-icons/md";
 import AddToCartPreviewButton from "./AddToCartPreviewButton";
-import { ICart } from "@/types/cart";
-import { formatVNCurrency } from "@/lib/utils";
 import DeleteConfirmationButton from "../UI/DeleteConfirmationButton";
-import { mutate } from "swr";
+
+import { formatVNCurrency } from "@/lib/utils";
+import { ICart } from "@/types/cart";
+
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { toast } from "sonner";
 import useCartStore from "@/hooks/useCartStore";
 
 interface IProps {
@@ -75,7 +77,7 @@ export default function CartItem({
     };
 
     return (
-        <li className="flex items-start h-[140px] mb-5 last:mb-0">
+        <li className="flex items-start overflow-hidden mb-7 last:mb-0">
             {isSelected && (
                 <Checkbox
                     isDisabled={!cartItem?.product_status}
@@ -87,10 +89,44 @@ export default function CartItem({
                 ></Checkbox>
             )}
 
+            <div className="flex flex-col sm:hidden items-center justify-center">
+                {isDeleted && isEdited && !cartItem?.product_status && (
+                    <Chip size="sm" color="danger" variant="faded">
+                        Sản phẩm đã hết
+                    </Chip>
+                )}
+                {isEdited && cartItem?.product_status && (
+                    <AddToCartPreviewButton
+                        cartItem={cartItem}
+                        buttonProps={{
+                            color: "default",
+                            variant: "light",
+                            size: "md",
+                            radius: "full",
+                            className: "w-[30px] h-[30px] px-2 min-w-0",
+                            children: <MdOutlineDraw className="text-lg" />,
+                        }}
+                    />
+                )}
+                {isDeleted && (
+                    <DeleteConfirmationButton
+                        onDelete={handleDeleteCartItem}
+                        buttonProps={{
+                            color: "danger",
+                            variant: "light",
+                            radius: "full",
+                            size: "md",
+                            className: "w-[30px] h-[30px] px-2 min-w-0 mt-3",
+                            children: <AiOutlineDelete className="text-lg" />,
+                        }}
+                    />
+                )}
+            </div>
+
             <div className="flex-1 h-full flex justify-between">
                 {isProductLink ? (
                     <div className="relative">
-                        <Link href={`/product/${cartItem.product_id}`} className=" block h-full">
+                        <Link href={`/product/${cartItem.product_id}`} className="w-[100px] block h-auto">
                             <Image
                                 removeWrapper
                                 className="h-full border object-cover"
@@ -114,13 +150,13 @@ export default function CartItem({
                         )}
                     </div>
                 ) : (
-                    <Image className="h-full border object-cover" src={cartItem?.product_image || ""} alt="" />
+                    <Image className="w-[100px] border object-cover" src={cartItem?.product_image || ""} alt="" />
                 )}
 
-                <div className="flex-1 ms-4">
-                    <div className="flex items-center justify-between">
-                        <p className="font-medium mb-2">{cartItem?.product_name}</p>
-                        <div className="flex items-center">
+                <div className="flex-1 ms-4 overflow-hidden">
+                    <div className="flex items-center justify-between overflow-hidden">
+                        <p className="font-medium mb-2 truncate max-w-[80%]">{cartItem?.product_name}</p>
+                        <div className="hidden sm:flex items-center">
                             {isDeleted && isEdited && !cartItem?.product_status && (
                                 <Chip size="sm" color="danger" variant="faded">
                                     Sản phẩm đã hết
@@ -173,7 +209,7 @@ export default function CartItem({
                                     content={topping.topping_price}
                                     placement="bottom"
                                 >
-                                    <Chip className="cursor-pointer" color="default" variant="flat">
+                                    <Chip className="cursor-pointer" size="sm" color="default" variant="flat">
                                         {topping.topping_name}
                                     </Chip>
                                 </Tooltip>

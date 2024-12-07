@@ -1,16 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Button, Card, CardBody } from "@nextui-org/react";
-import Logo from "@/components/UI/Logo";
-import { FcGoogle } from "react-icons/fc";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { sendPasswordResetEmail } from "firebase/auth";
+import { Button, Card, CardBody } from "@nextui-org/react";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+
+import Logo from "@/components/UI/Logo";
+import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface IResetPassword {
     email: string;
@@ -24,16 +22,12 @@ export default function ForgetPasswordPage(): React.ReactNode {
         formState: { errors },
     } = useForm<IResetPassword>();
 
-    // const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
-    // const [loading, setLoading] = useState<boolean>(false);
     const { handelResetPassword, loading, error: authErrorMessage } = useFirebaseAuthStore();
     const router = useRouter();
 
     const { currentUser } = useCurrentUser();
 
     useEffect(() => {
-        // if (currentUser.role === "admin")router.push("/admin");
-
         if (currentUser) {
             router.push("/");
         }
@@ -54,9 +48,9 @@ export default function ForgetPasswordPage(): React.ReactNode {
     };
 
     return (
-        <Card>
+        <Card className="md:w-auto w-full">
             <CardBody className="p-5">
-                <form onSubmit={handleSubmit(onSubmitHandler)} className="w-[400px] ">
+                <form onSubmit={handleSubmit(onSubmitHandler)} className="md:w-[400px] w-full">
                     <div className="mb-10">
                         <Logo className="flex justify-center" />
                         <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">Quên Mật Khẩu</h4>
@@ -65,7 +59,7 @@ export default function ForgetPasswordPage(): React.ReactNode {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="text"
-                            placeholder="Email address"
+                            placeholder="Địa chỉ email"
                             {...register("email", {
                                 required: true,
                                 pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -90,7 +84,7 @@ export default function ForgetPasswordPage(): React.ReactNode {
                         radius="sm"
                         className="w-full text-lg"
                     >
-                        Reset mật khẩu
+                        Khôi phục mật khẩu
                     </Button>
                 </form>
             </CardBody>

@@ -1,13 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button, Card, CardBody } from "@nextui-org/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+
 import Logo from "@/components/UI/Logo";
 import { FcGoogle } from "react-icons/fc";
 import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
-import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface IUserLogin {
@@ -23,8 +24,6 @@ export default function LoginPage(): React.ReactNode {
         formState: { errors },
     } = useForm<IUserLogin>();
 
-    // const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
-    // const [loading, setLoading] = useState<boolean>(false);
     const {
         handleSignInGoogle,
         handleSignInGoogleEmailPassword,
@@ -40,8 +39,6 @@ export default function LoginPage(): React.ReactNode {
     }, []);
 
     useEffect(() => {
-        // if (currentUser.role === "admin")router.push("/admin");
-
         if (currentUser) {
             router.push("/");
         }
@@ -60,9 +57,9 @@ export default function LoginPage(): React.ReactNode {
         } catch (error) {}
     };
     return (
-        <Card>
+        <Card className="md:w-fit w-full">
             <CardBody className="px-5">
-                <form onSubmit={handleSubmit(onSubmitHandler)} className="w-[400px] ">
+                <form onSubmit={handleSubmit(onSubmitHandler)} className="md:w-[400px] w-full">
                     <div>
                         <Logo className="flex justify-center" />
                         <h4 className="text-center text-primary font-medium text-2xl mt-2.5 mb-5">Đăng Nhập</h4>
@@ -71,7 +68,7 @@ export default function LoginPage(): React.ReactNode {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="text"
-                            placeholder="Email address"
+                            placeholder="Địa chỉ email"
                             {...register("email", {
                                 required: true,
                                 pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -89,7 +86,7 @@ export default function LoginPage(): React.ReactNode {
                         <input
                             className="w-full outline-none p-3 border border-slate-300 rounded-md"
                             type="password"
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                             {...register("password", {
                                 required: true,
                                 minLength: 6,
@@ -120,7 +117,6 @@ export default function LoginPage(): React.ReactNode {
 
                     <div className="pt-5 mt-5 border-t border-t-gray-100">
                         <Button
-                            // type="button"
                             onClick={onSubmitGoogle}
                             size="lg"
                             className="bg-transparent border w-full"

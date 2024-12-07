@@ -1,5 +1,6 @@
 import { Card, CardBody, CardFooter, CardHeader, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
+
 import { AiOutlinePlus } from "react-icons/ai";
 import AddToCartPreviewButton from "../Cart/AddToCartPreviewButton";
 import { IProduct } from "@/types/product";
@@ -32,20 +33,34 @@ export default function ProductCard({ product }: IProps): React.ReactNode {
                     />
                 </Link>
             </CardBody>
-            <CardFooter className="text-small justify-between py-4 px-0">
-                <div className="flex flex-col w-[80%]">
+            <CardFooter className="text-small flex-col sm:flex-row justify-between py-4 px-0">
+                <div className="flex flex-col w-full">
                     <b className="text-medium truncate max-w-[90%]">{product?.name}</b>
                     <p className="text-default-500">{formatVNCurrency(product?.price)}</p>
                 </div>
-                <div className="w-[20%] flex justify-end">
+                {/* Show on tablet, mobile */}
+                <div className="hidden sm:flex w-[20%] justify-end">
                     <AddToCartPreviewButton
                         product={product}
                         buttonProps={{
                             color: "primary",
                             size: "md",
                             radius: "full",
-                            className: "w-[30px] h-[30px] px-0 min-w-0",
+                            className: "w-full sm:w-[30px] h-[30px] px-0 min-w-0",
                             children: <AiOutlinePlus className="text-lg" />,
+                        }}
+                    />
+                </div>
+                <div className="flex w-full mt-3 sm:hidden sm:mt-0 justify-end">
+                    <AddToCartPreviewButton
+                        product={product}
+                        buttonProps={{
+                            color: "primary",
+                            variant: "shadow",
+                            size: "md",
+                            radius: "full",
+                            className: "w-full sm:w-[30px] h-[30px] px-0 min-w-0",
+                            children: <span className="text-tiny">Thêm vào giỏ hàng</span>,
                         }}
                     />
                 </div>

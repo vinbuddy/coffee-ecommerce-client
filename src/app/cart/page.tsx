@@ -1,16 +1,17 @@
 "use client";
+import React, { useEffect, useMemo } from "react";
+import { Button, Image } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import useSWR from "swr";
+
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import CartItemSkeleton from "@/components/UI/CartItemSkeleton";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { ICart } from "@/types/cart";
-import { Button, Image } from "@nextui-org/react";
-import React, { useEffect, useMemo } from "react";
 import emptyCartImage from "@/assets/images/empty-cart.png";
-import useSWR from "swr";
 import useCartStore from "@/hooks/useCartStore";
 import { formatVNCurrency } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -100,7 +101,7 @@ export default function CartPage(): React.ReactNode {
                         )}
                     </section>
 
-                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-5 xl:col-span-5 2xl:col-span-5">
+                    <section className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-5 xl:col-span-5 2xl:col-span-5 mt-10 lg:mt-0">
                         <aside className="sticky top-[80px] z-[1]">
                             <div className="">
                                 <p className="flex justify-between items-center mb-3 border-b pb-3">

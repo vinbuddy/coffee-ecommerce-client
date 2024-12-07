@@ -33,7 +33,7 @@ export default function ChatbotModal({ children }: IProps) {
     const [suggestions, setSuggestions] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const { data: productData, isLoading, error, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
+    const { data: productData } = useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
     const initialProducts: IProduct[] = productData?.data || [];
 
     const handleSuggest = async () => {
@@ -49,7 +49,6 @@ export default function ChatbotModal({ children }: IProps) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        // Gemini expects `contents` instead of `prompt`
                         contents: [
                             {
                                 parts: [
@@ -66,9 +65,6 @@ export default function ChatbotModal({ children }: IProps) {
             );
 
             const data = await response.json();
-            console.log("data:", data);
-
-            // Accessing text response from Gemini
 
             let result = data.candidates[0].content.parts[0].text.trim();
 
@@ -79,7 +75,6 @@ export default function ChatbotModal({ children }: IProps) {
                 result = result.substring(start + 7, end).trim();
             }
 
-            // Attempt to parse result as JSON for products, fallback to message
             try {
                 const suggestedProducts = JSON.parse(result);
                 if (Array.isArray(suggestedProducts)) {
@@ -116,21 +111,10 @@ export default function ChatbotModal({ children }: IProps) {
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                <div className="flex items-center gap-4">
-                                    {/* <Avatar isBordered size="sm" src={chatBotCoffee.src} /> */}
-                                    Suggest drink with AI...
-                                </div>
+                                <div className="flex items-center gap-4">Gợi ý món với AI Chatbot</div>
                             </ModalHeader>
-                            <ModalBody className="pt-0 px-6 pb-6">
+                            <ModalBody className="pt-0 px-6">
                                 {/* Chatbot content */}
-                                {suggestions?.length < 0 && !message && (
-                                    <section className="flex justify-center">
-                                        <img
-                                            className="w-2/3"
-                                            src="https://media2.giphy.com/media/1ZDDyAaAA82ywDiyKs/giphy.gif?cid=6c09b952pe70of9olsszq71oau76f0hw4i8epv20smd7hu60&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g"
-                                        />
-                                    </section>
-                                )}
                                 {suggestions?.length > 0 && (
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                                         {suggestions.map((product) => (
@@ -157,7 +141,7 @@ export default function ChatbotModal({ children }: IProps) {
                                         }}
                                         radius="full"
                                         size="lg"
-                                        placeholder="Type something for drink, food..."
+                                        placeholder="Hỏi gì đó về sản phẩm..."
                                         endContent={
                                             <Button
                                                 className="bg-black text-white"

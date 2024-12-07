@@ -2,20 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { toast } from "sonner";
-import {
-    Button,
-    Checkbox,
-    CheckboxGroup,
-    Radio,
-    RadioGroup,
-    Skeleton,
-} from "@nextui-org/react";
+import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 import { mutate } from "swr";
 
 import useLoading from "@/hooks/useLoading";
 
 import { fetchData, formatVNCurrency } from "@/lib/utils";
-import { IProduct, IProductSize, IProductTopping } from "@/types/product";
+import { IProductSize, IProductTopping } from "@/types/product";
 import { ICart } from "@/types/cart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
@@ -24,20 +17,13 @@ interface IProps {
     cartItem: ICart;
 }
 
-export default function EditCartForm({
-    cartItem,
-    onDone = () => {},
-}: IProps): React.ReactNode {
+export default function EditCartForm({ cartItem, onDone = () => {} }: IProps): React.ReactNode {
     const [sizes, setSizes] = useState<IProductSize[]>([]);
     const [toppings, setToppings] = useState<IProductTopping[]>([]);
 
     const { currentUser } = useCurrentUser();
     const { loading, startLoading, stopLoading } = useLoading();
-    const {
-        loading: submitLoading,
-        startLoading: startSubmitLoading,
-        stopLoading: stopSubmitLoading,
-    } = useLoading();
+    const { loading: submitLoading, startLoading: startSubmitLoading, stopLoading: stopSubmitLoading } = useLoading();
 
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
@@ -52,9 +38,7 @@ export default function EditCartForm({
                     fetchData(
                         `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-toppings/${cartItem.product_id}`
                     ),
-                    fetchData(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${cartItem.product_id}`
-                    ),
+                    fetchData(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/product-sizes/${cartItem.product_id}`),
                 ]);
 
                 setToppings(toppingData.data);
@@ -63,9 +47,7 @@ export default function EditCartForm({
 
                 // Set value to checkbox, radio group
                 setSelectedSizeId(cartItem.size_id);
-                const toppingIds = cartItem.toppings.map(
-                    (topping) => topping.topping_id
-                );
+                const toppingIds = cartItem.toppings.map((topping) => topping.topping_id);
                 setSelectedToppings(toppingIds);
             } catch (error) {
                 console.log("error: ", error);
@@ -86,9 +68,7 @@ export default function EditCartForm({
     };
 
     const handleSelectToppings = (toppingIds: any): void => {
-        const convertToppingIds = toppingIds.map((toppingId: any) =>
-            Number(toppingId)
-        );
+        const convertToppingIds = toppingIds.map((toppingId: any) => Number(toppingId));
         setSelectedToppings(convertToppingIds);
     };
 
@@ -105,9 +85,7 @@ export default function EditCartForm({
         let totalPrice: number = Number(cartItem.product_price);
 
         // Calculate size price
-        const selectedSize = sizes.find(
-            (size) => size.size_id === selectedSizeId
-        );
+        const selectedSize = sizes.find((size) => size.size_id === selectedSizeId);
 
         if (selectedSize && selectedSize.size_price) {
             totalPrice += Number(selectedSize.size_price);
@@ -115,9 +93,7 @@ export default function EditCartForm({
 
         // Calculate toppings price
         selectedToppings.forEach((toppingId) => {
-            const selectedTopping = toppings.find(
-                (topping) => topping.id === Number(toppingId)
-            );
+            const selectedTopping = toppings.find((topping) => topping.id === Number(toppingId));
 
             if (selectedTopping && selectedTopping.topping_price) {
                 totalPrice += Number(selectedTopping.topping_price);
@@ -129,9 +105,7 @@ export default function EditCartForm({
         setPreviewPrice(totalPrice);
     };
 
-    const editCart = async (
-        e: React.FormEvent<HTMLFormElement>
-    ): Promise<void> => {
+    const editCart = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         try {
@@ -143,25 +117,20 @@ export default function EditCartForm({
                 toppings: selectedToppings,
             };
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartItem.id}`,
-                {
-                    method: "PUT",
-                    body: JSON.stringify(body),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartItem.id}`, {
+                method: "PUT",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const resData = await response.json();
 
             if (response.status === 200) {
                 // Mutate Cart page
 
-                mutate(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`
-                );
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${currentUser?.id}`);
 
                 toast.success("Chỉnh sửa giỏ hàng thành công", {
                     position: "bottom-center",
@@ -191,12 +160,8 @@ export default function EditCartForm({
                         onValueChange={handleSelectSize}
                     >
                         {sizes.map((size) => (
-                            <Radio
-                                key={size?.size_id}
-                                value={size?.size_id?.toString()}
-                            >
-                                {size?.size_name} +{" "}
-                                {formatVNCurrency(size.size_price)}
+                            <Radio key={size?.size_id} value={size?.size_id?.toString()}>
+                                {size?.size_name} + {formatVNCurrency(size.size_price)}
                             </Radio>
                         ))}
                     </RadioGroup>
@@ -216,12 +181,8 @@ export default function EditCartForm({
                     onChange={handleSelectToppings}
                 >
                     {toppings.map((topping) => (
-                        <Checkbox
-                            key={topping?.id}
-                            value={topping?.id.toString()}
-                        >
-                            {topping.topping_name} +{" "}
-                            {formatVNCurrency(topping.topping_price)}
+                        <Checkbox key={topping?.id} value={topping?.id.toString()}>
+                            {topping.topping_name} + {formatVNCurrency(topping.topping_price)}
                         </Checkbox>
                     ))}
                 </CheckboxGroup>
@@ -248,9 +209,7 @@ export default function EditCartForm({
                         >
                             <AiOutlineMinus />
                         </Button>
-                        <Button className="border-0 w-[50px] h-[35px] min-w-0 px-0 bg-transparent">
-                            {quantity}
-                        </Button>
+                        <Button className="border-0 w-[50px] h-[35px] min-w-0 px-0 bg-transparent">{quantity}</Button>
                         <Button
                             onClick={handleIncrease}
                             color="primary"
@@ -262,14 +221,10 @@ export default function EditCartForm({
                         </Button>
                     </div>
 
-                    <Button
-                        isLoading={submitLoading}
-                        type="submit"
-                        className="w-full ms-3"
-                        color="primary"
-                    >
-                        {formatVNCurrency(previewPrice)} &#x2022; Chỉnh sửa giỏ
-                        hàng
+                    <Button isLoading={submitLoading} type="submit" className="w-full ms-3" color="primary">
+                        {formatVNCurrency(previewPrice)}
+                        <span className="sm:block hidden"> &#x2022; Chỉnh sửa giỏ hàng</span>
+                        <span className="sm:hidden block"> &#x2022; Chỉnh sửa</span>
                     </Button>
                 </div>
             </div>

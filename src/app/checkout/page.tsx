@@ -1,29 +1,31 @@
 "use client";
+import { toast } from "sonner";
+import React, { useEffect, useMemo, useState } from "react";
+import { Image, Input, Radio, RadioGroup, cn, Autocomplete, AutocompleteItem, Button, Avatar } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
+
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { Image, Input, Radio, RadioGroup, cn, Autocomplete, AutocompleteItem, Button, Avatar } from "@nextui-org/react";
-import React, { useEffect, useMemo, useState } from "react";
+
 import moneyIcon from "@/assets/images/money-icon.png";
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
 
 import { ICart } from "@/types/cart";
-import { useRouter } from "next/navigation";
 import ShowVoucherButton from "@/components/Voucher/ShowVoucherButton";
-import useSWR from "swr";
 import { IStore } from "@/types/store";
 import useSearchDebounce from "@/hooks/useSearchDebounce";
 import useLoading from "@/hooks/useLoading";
 import { PaymentMethodType } from "@/types";
 import { formatVNCurrency, generateOrderId, getCurrentDateTimeString } from "@/lib/utils";
-import { useForm } from "react-hook-form";
 import { IOrder } from "@/types/order";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { SHIPPING_COST } from "@/lib/constants";
-import useCheckoutStore from "@/hooks/useCheckoutStore";
 import AppliedVoucher from "@/components/Voucher/AppliedVoucher";
+import useCheckoutStore from "@/hooks/useCheckoutStore";
 import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import { toast } from "sonner";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {
@@ -264,7 +266,7 @@ export default function CheckoutPage(): React.ReactNode {
                 </div>
 
                 <form onSubmit={handleSubmit(createNewOrder)}>
-                    <div className="grid grid-cols-12 h-full gap-0">
+                    <div className="grid grid-cols-12 h-full  gap-5 lg:gap-10">
                         {/* Shipping - Payment method */}
                         <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                             <div className="">
@@ -468,7 +470,7 @@ export default function CheckoutPage(): React.ReactNode {
 
                         {/* Summary */}
                         <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                            <div className="p-0 md:p-5">
+                            <div>
                                 <div className="shadow-lg border rounded-xl ">
                                     <div className="p-4 ">
                                         <section>
@@ -519,7 +521,7 @@ export default function CheckoutPage(): React.ReactNode {
                                             </ul>
                                         </section>
                                     </div>
-                                    <div className="p-4  flex items-center justify-between bg-[#F4F4F5] ">
+                                    <div className="p-4 flex flex-col items-start sm:flex-row sm:items-center justify-between bg-[#F4F4F5] ">
                                         <div>
                                             <p>Tổng thanh toán</p>
                                             <p className="text-primary mt-2 text-lg">
@@ -533,6 +535,7 @@ export default function CheckoutPage(): React.ReactNode {
                                             radius="full"
                                             color="primary"
                                             size="lg"
+                                            className="w-full sm:w-auto mt-4 sm:mt-0"
                                         >
                                             Đặt hàng
                                         </Button>

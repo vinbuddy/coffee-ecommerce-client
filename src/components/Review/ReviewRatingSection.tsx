@@ -2,6 +2,7 @@
 import { IReview } from "@/types/review";
 import { Progress } from "@nextui-org/react";
 import Link from "next/link";
+
 import { BiSolidStar } from "react-icons/bi";
 
 interface IProps {
@@ -52,7 +53,7 @@ export default function ReviewRatingSection({ reviews = [] }: IProps) {
 
     return (
         <div className="p-5 rounded-xl border">
-            <div className="flex items-center justify-between mb-5">
+            <div className="sm:flex-row flex-col gap-2 flex items-center justify-between mb-5">
                 <h3 className="font-bold text-2xl ">Xếp hạng đánh giá</h3>
                 <Link className="text-[#0071e3]" href="">
                     {reviews.length} đánh giá

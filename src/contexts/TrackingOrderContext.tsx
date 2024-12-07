@@ -1,10 +1,10 @@
 "use client";
 import { realTimeDb } from "@/config/firebase";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { ICurrentOrder, IFirebaseOrder, IOrderStatus } from "@/types/order";
-import { equalTo, get, onValue, orderByChild, query, ref } from "firebase/database";
+import { equalTo, onValue, orderByChild, query, ref } from "firebase/database";
 import React, { useEffect } from "react";
+
+import { ICurrentOrder, IOrderStatus } from "@/types";
+import { useCurrentOrderStore, useCurrentUser } from "@/hooks";
 
 export const TrackingOrderContext = React.createContext({});
 export const useTrackingOrderContext = () => React.useContext(TrackingOrderContext);

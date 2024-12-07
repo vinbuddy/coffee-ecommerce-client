@@ -1,13 +1,12 @@
 "use client";
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarItem } from "@nextui-org/react";
-
-import useCurrentUser from "@/hooks/useCurrentUser";
-import avatarFallback from "@/assets/images/avatar-fallback.jpg";
 import Link from "next/link";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
-import { BiLogOut, BiPackage, BiUser } from "react-icons/bi";
 import { CiCoffeeCup } from "react-icons/ci";
 import { TbBasketHeart } from "react-icons/tb";
+import { BiLogOut, BiPackage, BiUser } from "react-icons/bi";
+
+import avatarFallback from "@/assets/images/avatar-fallback.jpg";
+import { useCurrentUser, useFirebaseAuthStore } from "@/hooks";
 
 export default function NavbarUserInfo() {
     const { currentUser } = useCurrentUser();

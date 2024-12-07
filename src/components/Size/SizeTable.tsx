@@ -1,8 +1,7 @@
 "use client";
-import { EditIcon } from "@/assets/icons";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Button } from "@nextui-org/react";
 
-import { ISize } from "@/types/size";
+import { ISize } from "@/types";
 
 interface IProps {
     sizes: ISize[];

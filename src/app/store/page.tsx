@@ -1,8 +1,9 @@
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { fetchData } from "@/lib/utils";
-import { IStore, IStoreLocation } from "@/types/store";
 import { Button, Image, Link as NextUILink } from "@nextui-org/react";
 import Link from "next/link";
+
+import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import { fetchData } from "@/lib/utils";
+import { IStore, IStoreLocation } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

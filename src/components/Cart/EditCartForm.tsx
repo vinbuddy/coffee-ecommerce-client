@@ -5,12 +5,9 @@ import { toast } from "sonner";
 import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 import { mutate } from "swr";
 
-import useLoading from "@/hooks/useLoading";
-
 import { fetchData, formatVNCurrency } from "@/lib/utils";
-import { IProductSize, IProductTopping } from "@/types/product";
-import { ICart } from "@/types/cart";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import { ICart, IProductSize, IProductTopping } from "@/types";
+import { useCurrentUser, useLoading } from "@/hooks";
 
 interface IProps {
     onDone?: () => void;

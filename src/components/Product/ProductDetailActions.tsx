@@ -1,12 +1,12 @@
 "use client";
 import { Button } from "@nextui-org/react";
-import AddToWishlistButton from "@/components/Wishlist/AddToWishlistButton";
-import { GoShare } from "react-icons/go";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useSWR from "swr";
-import { IWishList } from "@/types/wishlist";
-import { useMemo } from "react";
 import { toast } from "sonner";
+import { GoShare } from "react-icons/go";
+import useSWR from "swr";
+
+import AddToWishlistButton from "@/components/Wishlist/AddToWishlistButton";
+import { IWishList } from "@/types";
+import { useCurrentUser } from "@/hooks";
 
 interface IProps {
     productId: number;

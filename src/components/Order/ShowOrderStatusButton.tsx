@@ -2,7 +2,6 @@
 import {
     Badge,
     Button,
-    Image,
     Modal,
     ModalBody,
     ModalContent,
@@ -11,13 +10,14 @@ import {
     Tooltip,
     useDisclosure,
 } from "@nextui-org/react";
-import OrderStatusProgress from "./OrderStatusProgress";
+import { toast } from "sonner";
 import { MdDeliveryDining } from "react-icons/md";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
+
+import OrderStatusProgress from "./OrderStatusProgress";
 import { getOrderStatusColor } from "@/lib/utils";
 import CancelOrderButton from "./CancelOrderButton";
 import CompleteOrderButton from "./CompleteOrderButton";
-import { toast } from "sonner";
+import { useCurrentOrderStore } from "@/hooks";
 
 export default function OrderStatusWidget() {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();

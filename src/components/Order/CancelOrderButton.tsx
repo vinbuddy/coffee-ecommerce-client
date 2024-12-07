@@ -1,6 +1,5 @@
 "use client";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import { Button } from "@nextui-org/react";
+import { useCurrentOrderStore } from "@/hooks";
 import DeleteConfirmationButton from "../UI/DeleteConfirmationButton";
 
 interface IProps {

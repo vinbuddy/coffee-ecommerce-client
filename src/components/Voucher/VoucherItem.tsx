@@ -1,20 +1,10 @@
-import {
-    Button,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    useDisclosure,
-    Image,
-    ButtonProps,
-    Chip,
-} from "@nextui-org/react";
-import { IVoucher } from "@/types/voucher";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Image, Chip } from "@nextui-org/react";
 import React from "react";
-import { formatDateTime, formatVNCurrency } from "@/lib/utils";
-import useCheckoutStore from "@/hooks/useCheckoutStore";
-import { ICart } from "@/types/cart";
 import { toast } from "sonner";
+
+import { formatDateTime, formatVNCurrency } from "@/lib/utils";
+import { IVoucher, ICart } from "@/types";
+import { useCheckoutStore } from "@/hooks";
 
 interface IProps {
     voucher: IVoucher;

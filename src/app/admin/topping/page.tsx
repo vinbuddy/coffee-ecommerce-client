@@ -2,11 +2,10 @@ import React from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import RouterRefresh from "@/components/UI/RouterRefresh";
-
-import { fetchData } from "@/lib/utils";
-import { ITopping } from "@/types/topping";
 import ToppingTable from "@/components/Topping/ToppingTable";
 import AddEditToppingButton from "@/components/Topping/AddEditToppingButton";
+import { fetchData } from "@/lib/utils";
+import { ITopping } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

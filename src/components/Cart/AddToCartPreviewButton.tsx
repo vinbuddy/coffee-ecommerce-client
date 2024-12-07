@@ -13,8 +13,7 @@ import {
 import AddToCartForm from "./AddToCartForm";
 import { formatVNCurrency } from "@/lib/utils";
 
-import { IProduct } from "@/types/product";
-import { ICart } from "@/types/cart";
+import { IProduct, ICart } from "@/types";
 
 import EditCartForm from "./EditCartForm";
 

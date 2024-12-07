@@ -1,11 +1,12 @@
 "use client";
-import CartItem from "@/components/Cart/CartItem";
-import OrderDetailStatusProgress from "@/components/Order/OrderDetailStatusProgress";
-import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
-import { IOrderInfo } from "@/types/order";
 import { Card, CardBody, Chip, User } from "@nextui-org/react";
 import { useEffect, useMemo } from "react";
 import useSWR from "swr";
+
+import CartItem from "@/components/Cart/CartItem";
+import OrderDetailStatusProgress from "@/components/Order/OrderDetailStatusProgress";
+import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
+import { IOrderInfo } from "@/types";
 
 export default function UserOrderDetailPage({ params }: { params: { id: string } }) {
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/order/${params?.id}`;

@@ -1,23 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { Input, Select, SelectItem, Textarea, Image, Button, Chip, Spinner } from "@nextui-org/react";
-import { LuUpload } from "react-icons/lu";
-
-import productPlaceholder from "@/assets/images/product-placeholder.png";
-import { ICategory } from "@/types/category";
-import { ITopping } from "@/types/topping";
-import { ISize } from "@/types/size";
-import { IAddProduct, IProduct, IProductSize, IProductTopping } from "@/types/product";
-import { formatVNCurrency } from "@/lib/utils";
-import { storage } from "@/config/firebase";
-import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import useLoading from "@/hooks/useLoading";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { Input, Select, SelectItem, Textarea, Image, Button, Chip, Spinner } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { LuUpload } from "react-icons/lu";
+
+import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import productPlaceholder from "@/assets/images/product-placeholder.png";
+import { storage } from "@/config/firebase";
+import { formatVNCurrency } from "@/lib/utils";
+import { ICategory, ITopping, ISize, IAddProduct, IProductSize, IProductTopping } from "@/types";
+import { useLoading } from "@/hooks";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

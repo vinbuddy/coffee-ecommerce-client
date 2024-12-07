@@ -1,8 +1,7 @@
 "use client";
-import { EditIcon } from "@/assets/icons";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Button } from "@nextui-org/react";
 
-import { ITopping } from "@/types/topping";
+import { ITopping } from "@/types";
 import { formatVNCurrency } from "@/lib/utils";
 
 interface IProps {

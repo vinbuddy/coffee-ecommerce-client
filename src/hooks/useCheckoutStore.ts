@@ -1,6 +1,6 @@
-import { IStore } from "@/types/store";
-import { IVoucher } from "@/types/voucher";
 import { create } from "zustand";
+
+import { IVoucher } from "@/types";
 
 type CheckoutState = {
     voucher: IVoucher | null;

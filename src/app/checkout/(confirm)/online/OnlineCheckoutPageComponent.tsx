@@ -1,19 +1,17 @@
 "use client";
-import { IOrder } from "@/types/order";
 import { Button, Image, Link as NextUILink } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { IoIosWarning } from "react-icons/io";
 
 import momoIcon from "@/assets/images/momo-icon.png";
 import vnpayIcon from "@/assets/images/vnpay-icon.png";
 import emptySearch from "@/assets/images/empty-search.png";
-import useLoading from "@/hooks/useLoading";
 import { MOMO_MESSAGE, VNPAY_MESSAGE } from "@/lib/constants";
-import { IoIosWarning } from "react-icons/io";
-import useCheckoutStore from "@/hooks/useCheckoutStore";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
 import { getCurrentDateTimeString } from "@/lib/utils";
+import { IOrder } from "@/types";
+import { useLoading, useCheckoutStore, useCurrentOrderStore } from "@/hooks";
 
 type OrderType = Omit<IOrder, "order_date" | "order_status">;
 

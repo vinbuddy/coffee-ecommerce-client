@@ -1,8 +1,9 @@
-import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
-import { IOrder } from "@/types/order";
 import { Button, Chip } from "@nextui-org/react";
-import CartItem from "../Cart/CartItem";
 import Link from "next/link";
+
+import CartItem from "../Cart/CartItem";
+import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
+import { IOrder } from "@/types";
 
 interface IProps {
     order: IOrder;

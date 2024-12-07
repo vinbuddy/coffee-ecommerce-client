@@ -2,11 +2,10 @@ import React from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import RouterRefresh from "@/components/UI/RouterRefresh";
-
-import { fetchData } from "@/lib/utils";
-import SizeTable from "@/components/Size/SizeTable";
-import { ISize } from "@/types/size";
 import AddEditSizeButton from "@/components/Size/AddEditSizeButton";
+import SizeTable from "@/components/Size/SizeTable";
+import { fetchData } from "@/lib/utils";
+import { ISize } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

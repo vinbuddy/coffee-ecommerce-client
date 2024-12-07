@@ -1,11 +1,11 @@
 import { Card, CardBody, CardFooter, CardHeader, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
-
-import { AiOutlinePlus } from "react-icons/ai";
-import AddToCartPreviewButton from "../Cart/AddToCartPreviewButton";
-import { IProduct } from "@/types/product";
-import { formatVNCurrency } from "@/lib/utils";
 import { AiOutlineStop } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
+
+import AddToCartPreviewButton from "../Cart/AddToCartPreviewButton";
+import { formatVNCurrency } from "@/lib/utils";
+import { IProduct } from "@/types";
 
 interface IProps {
     product: IProduct;

@@ -1,13 +1,11 @@
 import React from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-
-import RouterRefresh from "@/components/UI/RouterRefresh";
-
-import { fetchData } from "@/lib/utils";
-import { ICategory } from "@/types/category";
 import CategoryTable from "@/components/Category/CategoryTable";
 import AddEditCategoryButton from "@/components/Category/AddEditCategoryButton";
+import RouterRefresh from "@/components/UI/RouterRefresh";
+import { fetchData } from "@/lib/utils";
+import { ICategory } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

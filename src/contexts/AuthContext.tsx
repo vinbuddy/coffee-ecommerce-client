@@ -1,11 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { onAuthStateChanged, getAuth, User } from "firebase/auth";
-import { setCookie, getCookie } from "cookies-next";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { setCookie } from "cookies-next";
+
 import { app } from "@/config/firebase";
-import useCurrentUser from "../hooks/useCurrentUser";
-import LoadingPage from "@/components/UI/LoadingPage";
-import { IUser } from "@/types/user";
+import { useCurrentUser } from "@/hooks";
 
 const auth = getAuth(app);
 

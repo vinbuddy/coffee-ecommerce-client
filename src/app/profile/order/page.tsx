@@ -1,22 +1,21 @@
 "use client";
 import React, { useEffect } from "react";
-import { Tabs, Tab, Card, CardBody, Chip, Button } from "@nextui-org/react";
-import CartItem from "@/components/Cart/CartItem";
-import OrderStatusProgress from "@/components/Order/OrderStatusProgress";
-import CancelOrderButton from "@/components/Order/CancelOrderButton";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import CompleteOrderButton from "@/components/Order/CompleteOrderButton";
+import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { toast } from "sonner";
 import useSWR from "swr";
-import useCurrentUser from "@/hooks/useCurrentUser";
+
+import OrderStatusProgress from "@/components/Order/OrderStatusProgress";
+import CancelOrderButton from "@/components/Order/CancelOrderButton";
+import CompleteOrderButton from "@/components/Order/CompleteOrderButton";
 import OrderCard from "@/components/Order/OrderCard";
-import { IOrder } from "@/types/order";
+import { IOrder } from "@/types";
+import { useCurrentUser, useCurrentOrderStore } from "@/hooks";
 
 export default function UserOrderPage(): React.ReactNode {
     const { currentOrder } = useCurrentOrderStore();
     const { currentUser } = useCurrentUser();
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/order/user-order/${currentUser?.id}`;
-    const { data: orderData, isLoading, error, mutate } = useSWR(url);
+    const { data: orderData, mutate } = useSWR(url);
     const orders: IOrder[] = orderData?.data || [];
 
     const lastStatus = currentOrder?.statuses[currentOrder?.statuses.length - 1].status;

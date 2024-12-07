@@ -1,11 +1,12 @@
 "use client";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import { formatDateTime } from "@/lib/utils";
-import { Chip, Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/react";
 import { FaRegHandPointer } from "react-icons/fa";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { PiCookingPotBold } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
+
+import { formatDateTime } from "@/lib/utils";
+import { useCurrentOrderStore } from "@/hooks";
 
 const orderStatuses = [
     { status: "Đang chờ", label: "Xác nhận đơn hàng", icon: <FaRegHandPointer /> },

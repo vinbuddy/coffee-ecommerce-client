@@ -1,8 +1,9 @@
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { fetchData } from "@/lib/utils";
-import { IStore } from "@/types/store";
 import { Image } from "@nextui-org/react";
 import { Metadata, ResolvingMetadata } from "next";
+
+import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import { fetchData } from "@/lib/utils";
+import { IStore } from "@/types";
 
 type Props = {
     params: { id: string };

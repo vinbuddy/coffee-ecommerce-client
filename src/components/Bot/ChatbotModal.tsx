@@ -16,9 +16,9 @@ import {
 } from "@nextui-org/react";
 import { LuArrowRight } from "react-icons/lu";
 
-import chatBotCoffee from "@/assets/images/coffee-bot.png";
-import { IProduct } from "@/types/product";
 import ProductCard from "../Product/ProductCard";
+import chatBotCoffee from "@/assets/images/coffee-bot.png";
+import { IProduct } from "@/types";
 
 interface IProps {
     children?: React.ReactNode;

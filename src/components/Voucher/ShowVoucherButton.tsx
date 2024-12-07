@@ -1,20 +1,10 @@
 "use client";
-import {
-    Button,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    useDisclosure,
-    Image,
-    ButtonProps,
-} from "@nextui-org/react";
-
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { fetchData } from "@/lib/utils";
-import { IVoucher } from "@/types/voucher";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, ButtonProps } from "@nextui-org/react";
 import useSWR from "swr";
+
 import VoucherItem from "./VoucherItem";
+import { IVoucher } from "@/types";
+import { useCurrentUser } from "@/hooks";
 
 interface IProps {
     buttonProps?: ButtonProps;

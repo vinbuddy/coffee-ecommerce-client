@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { app, auth } from "@/config/firebase";
 import {
     getAuth,
     signOut,
@@ -12,8 +11,9 @@ import {
     sendPasswordResetEmail,
     AuthError,
 } from "firebase/auth";
-import useCurrentUser from "./useCurrentUser";
-import { IUser } from "@/types/user";
+
+import { auth } from "@/config/firebase";
+import { useCurrentUser } from "@/hooks";
 
 interface FirebaseAuthStoreState {
     loading: boolean;

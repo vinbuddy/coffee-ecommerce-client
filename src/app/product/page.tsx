@@ -1,13 +1,13 @@
-import { Image, Input } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
+import Link from "next/link";
 import React from "react";
+
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import emptyProduct from "@/assets/images/empty-product.png";
 import ProductCard from "@/components/Product/ProductCard";
-import Link from "next/link";
-import { IProduct } from "@/types/product";
-import { fetchData } from "@/lib/utils";
-import { ICategory } from "@/types/category";
 import ProductSearchBar from "@/components/Product/ProductSearchBar";
+import { fetchData } from "@/lib/utils";
+import { IProduct, ICategory } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

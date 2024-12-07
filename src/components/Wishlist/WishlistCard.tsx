@@ -1,11 +1,9 @@
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Link from "next/link";
-import { AiOutlinePlus } from "react-icons/ai";
-import AddToCartPreviewButton from "../Cart/AddToCartPreviewButton";
-import { IProduct } from "@/types/product";
-import { formatVNCurrency } from "@/lib/utils";
-import { IWishList } from "@/types/wishlist";
+
 import AddToWishlistButton from "./AddToWishlistButton";
+import { formatVNCurrency } from "@/lib/utils";
+import { IWishList } from "@/types";
 
 interface IProps {
     wishlistItem: IWishList;

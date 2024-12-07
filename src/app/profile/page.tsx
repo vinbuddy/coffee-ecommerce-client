@@ -1,17 +1,12 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import Link from "next/link";
-import { Avatar, Badge, Button, Input, Spacer, Tooltip, User } from "@nextui-org/react";
-import { BiUser, BiPackage } from "react-icons/bi";
-import { RiCoupon3Line } from "react-icons/ri";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useLoading from "@/hooks/useLoading";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/config/firebase";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
+import React, { useEffect, useState } from "react";
+import { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import { Avatar, Button, Input, Spacer, Tooltip, User } from "@nextui-org/react";
 import { toast } from "sonner";
-import { AiOutlineClose } from "react-icons/ai";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import { storage } from "@/config/firebase";
+import { useCurrentUser, useFirebaseAuthStore, useLoading } from "@/hooks";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

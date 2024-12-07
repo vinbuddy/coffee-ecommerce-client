@@ -16,7 +16,7 @@ import MainLayout from "@/components/UI/MainLayout";
 import ProductCard from "@/components/Product/ProductCard";
 
 import { MdArrowOutward } from "react-icons/md";
-import { IProduct } from "@/types/product";
+import { IProduct } from "@/types";
 
 const COFFEE_CATEGORY_NAME: string = "Cà phê";
 const TEA_CATEGORY_NAME: string = "Trà";

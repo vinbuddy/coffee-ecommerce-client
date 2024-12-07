@@ -1,8 +1,9 @@
+import { set as setDb, ref, update } from "firebase/database";
+import { create } from "zustand";
+
 import { realTimeDb } from "@/config/firebase";
 import { getCurrentDateTimeString } from "@/lib/utils";
-import { ICurrentOrder, IFirebaseOrder } from "@/types/order";
-import { set as setDb, ref, onValue, remove, update } from "firebase/database";
-import { create } from "zustand";
+import { ICurrentOrder, IFirebaseOrder } from "@/types";
 
 interface CurrentOrderState {
     currentOrder: ICurrentOrder | null;

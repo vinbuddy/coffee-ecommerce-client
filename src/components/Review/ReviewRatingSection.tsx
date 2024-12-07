@@ -1,9 +1,9 @@
 "use client";
-import { IReview } from "@/types/review";
 import { Progress } from "@nextui-org/react";
 import Link from "next/link";
-
 import { BiSolidStar } from "react-icons/bi";
+
+import { IReview } from "@/types";
 
 interface IProps {
     reviews: IReview[];

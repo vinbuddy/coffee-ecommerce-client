@@ -1,12 +1,12 @@
 "use client";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { fetchData } from "@/lib/utils";
-import emptyProduct from "@/assets/images/empty-product.png";
-import { IWishList } from "@/types/wishlist";
-import useSWR from "swr";
 import { Image } from "@nextui-org/react";
-import WishlistCard from "@/components/Wishlist/WishlistCard";
 import { useEffect } from "react";
+import useSWR from "swr";
+
+import emptyProduct from "@/assets/images/empty-product.png";
+import WishlistCard from "@/components/Wishlist/WishlistCard";
+import { IWishList } from "@/types";
+import { useCurrentUser } from "@/hooks";
 
 export default function WishlistPage() {
     const { currentUser } = useCurrentUser();

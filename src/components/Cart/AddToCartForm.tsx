@@ -4,12 +4,10 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { toast } from "sonner";
 import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 
-import useCartStore from "@/hooks/useCartStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useLoading from "@/hooks/useLoading";
+import { useCartStore, useCurrentUser, useLoading } from "@/hooks";
 
 import { fetchData, formatVNCurrency } from "@/lib/utils";
-import { IProduct, IProductSize, IProductTopping } from "@/types/product";
+import { IProduct, IProductSize, IProductTopping } from "@/types";
 
 interface IProps {
     onDone?: () => void;

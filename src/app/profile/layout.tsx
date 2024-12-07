@@ -7,7 +7,7 @@ import { User } from "@nextui-org/react";
 import { TbBasketHeart } from "react-icons/tb";
 import { BiUser, BiPackage } from "react-icons/bi";
 import { RiCoupon3Line } from "react-icons/ri";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/hooks";
 import MainLayout from "@/components/UI/MainLayout";
 
 const navLinks = [

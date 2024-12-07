@@ -1,5 +1,4 @@
 "use client";
-import useLoading from "@/hooks/useLoading";
 import {
     Button,
     Modal,
@@ -12,9 +11,9 @@ import {
     ModalFooter,
 } from "@nextui-org/react";
 import React from "react";
-
 import { IoIosWarning } from "react-icons/io";
-import { toast } from "sonner";
+
+import { useLoading } from "@/hooks";
 
 interface IProps {
     buttonProps?: ButtonProps;

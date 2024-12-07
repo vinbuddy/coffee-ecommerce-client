@@ -1,9 +1,5 @@
 "use client";
 
-import CartItem from "@/components/Cart/CartItem";
-import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
-import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
-import { IOrderInfo } from "@/types/order";
 import {
     Select,
     SelectItem,
@@ -22,8 +18,12 @@ import useSWR from "swr";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import { IoIosWarning } from "react-icons/io";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import useLoading from "@/hooks/useLoading";
+
+import CartItem from "@/components/Cart/CartItem";
+import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
+import { formatDateTime, formatVNCurrency, getOrderStatusColor } from "@/lib/utils";
+import { IOrderInfo } from "@/types";
+import { useCurrentOrderStore, useLoading } from "@/hooks";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

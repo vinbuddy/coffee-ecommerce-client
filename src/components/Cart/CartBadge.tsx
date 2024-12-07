@@ -1,10 +1,10 @@
 "use client";
-import useCartStore from "@/hooks/useCartStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
 import { Badge, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import { useEffect } from "react";
+
 import { CiCoffeeCup } from "react-icons/ci";
+import { useCartStore, useCurrentUser } from "@/hooks";
 
 export default function CartBadge() {
     const { totalItem } = useCartStore();

@@ -1,7 +1,7 @@
 "use client";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import useLoading from "@/hooks/useLoading";
 import { Button } from "@nextui-org/react";
+
+import { useCurrentOrderStore, useLoading } from "@/hooks";
 
 interface IProps {
     onAfterCompleted: () => void | Promise<void>;

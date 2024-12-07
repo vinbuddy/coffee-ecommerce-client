@@ -1,6 +1,7 @@
-import useCheckoutStore from "@/hooks/useCheckoutStore";
-import { formatVNCurrency } from "@/lib/utils";
 import { Chip } from "@nextui-org/react";
+
+import { formatVNCurrency } from "@/lib/utils";
+import { useCheckoutStore } from "@/hooks";
 
 export default function AppliedVoucher() {
     const { voucher, clearVoucher } = useCheckoutStore();

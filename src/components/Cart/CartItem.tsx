@@ -8,12 +8,9 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { MdOutlineDraw } from "react-icons/md";
 import AddToCartPreviewButton from "./AddToCartPreviewButton";
 import DeleteConfirmationButton from "../UI/DeleteConfirmationButton";
-
 import { formatVNCurrency } from "@/lib/utils";
-import { ICart } from "@/types/cart";
-
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useCartStore from "@/hooks/useCartStore";
+import { ICart } from "@/types";
+import { useCurrentUser, useCartStore } from "@/hooks";
 
 interface IProps {
     cartItem: ICart;

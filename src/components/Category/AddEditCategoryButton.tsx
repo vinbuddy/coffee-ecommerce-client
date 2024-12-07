@@ -1,5 +1,4 @@
 "use client";
-import useLoading from "@/hooks/useLoading";
 import {
     Button,
     Modal,
@@ -14,6 +13,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+
+import { useLoading } from "@/hooks";
 
 interface IProps {
     categoryValue?: string;

@@ -1,7 +1,4 @@
 "use client";
-import { DeleteIcon, EditIcon, EyeIcon } from "@/assets/icons";
-import { formatVNCurrency } from "@/lib/utils";
-import { IProduct } from "@/types/product";
 import {
     Table,
     TableHeader,
@@ -14,6 +11,10 @@ import {
     Tooltip,
 } from "@nextui-org/react";
 import Link from "next/link";
+
+import { DeleteIcon, EditIcon, EyeIcon } from "@/assets/icons";
+import { formatVNCurrency } from "@/lib/utils";
+import { IProduct } from "@/types";
 
 interface IProps {
     products: IProduct[];

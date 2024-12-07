@@ -1,10 +1,11 @@
 "use client";
-import useCurrentUser from "@/hooks/useCurrentUser";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import { GoHeart, GoHeartFill } from "react-icons/go";
 import { toast } from "sonner";
 import { mutate } from "swr";
+import { GoHeart, GoHeartFill } from "react-icons/go";
+
+import { useCurrentUser } from "@/hooks";
 
 interface IProps {
     isAdded?: boolean;

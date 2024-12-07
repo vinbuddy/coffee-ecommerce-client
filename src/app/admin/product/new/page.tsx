@@ -3,21 +3,18 @@ import React, { useEffect, useState } from "react";
 
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import { Input, Select, SelectItem, Textarea, Image, Button, Chip } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { toast } from "sonner";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { LuUpload } from "react-icons/lu";
 
 import productPlaceholder from "@/assets/images/product-placeholder.png";
-import { ICategory } from "@/types/category";
-import { ITopping } from "@/types/topping";
-import { ISize } from "@/types/size";
-import { IAddProduct } from "@/types/product";
 import { formatVNCurrency } from "@/lib/utils";
 import { storage } from "@/config/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import useLoading from "@/hooks/useLoading";
-import { useTransition } from "react";
-import { toast } from "sonner";
+import { useLoading } from "@/hooks";
+import { ICategory, ISize, ITopping, IAddProduct } from "@/types";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

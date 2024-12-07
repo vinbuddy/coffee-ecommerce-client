@@ -6,8 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import Logo from "@/components/UI/Logo";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import { useFirebaseAuthStore, useCurrentUser } from "@/hooks";
 
 interface IUserRegister {
     username: string;

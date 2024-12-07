@@ -1,8 +1,9 @@
 "use client";
-import { EditIcon } from "@/assets/icons";
-import { ICategory } from "@/types/category";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Button } from "@nextui-org/react";
+
 import AddEditCategoryButton from "./AddEditCategoryButton";
+import { EditIcon } from "@/assets/icons";
+import { ICategory } from "@/types";
 
 interface IProps {
     categories: ICategory[];

@@ -1,15 +1,16 @@
 "use client";
-import { realTimeDb } from "@/config/firebase";
-import useCurrentOrderStore from "@/hooks/useCurrentOrderStore";
-import { formatDateTime } from "@/lib/utils";
-import { ICurrentOrder, IOrderStatus } from "@/types/order";
 import { Chip, Tooltip } from "@nextui-org/react";
-import { get, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
-import { FaRegHandPointer } from "react-icons/fa";
-import { MdOutlineDeliveryDining } from "react-icons/md";
+import { get, onValue, ref } from "firebase/database";
+
 import { PiCookingPotBold } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
+import { FaRegHandPointer } from "react-icons/fa";
+import { MdOutlineDeliveryDining } from "react-icons/md";
+
+import { realTimeDb } from "@/config/firebase";
+import { formatDateTime } from "@/lib/utils";
+import { ICurrentOrder, IOrderStatus } from "@/types";
 
 interface IProps {
     orderId: string;

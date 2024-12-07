@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 
 import Logo from "@/components/UI/Logo";
 import { FcGoogle } from "react-icons/fc";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
+
+import { useFirebaseAuthStore, useCurrentUser } from "@/hooks";
 
 interface IUserLogin {
     password: string;

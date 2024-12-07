@@ -1,18 +1,15 @@
+import { Button, Image } from "@nextui-org/react";
+import React from "react";
+import { Metadata, ResolvingMetadata } from "next";
+
 import AddToCartForm from "@/components/Cart/AddToCartForm";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import { fetchData, formatVNCurrency } from "@/lib/utils";
-import { IProduct, IProductSize, IProductTopping } from "@/types/product";
-import { Avatar, Button, Chip, Image, Progress, User } from "@nextui-org/react";
-import { Metadata, ResolvingMetadata } from "next";
-import { GoHeart, GoHeartFill, GoShare } from "react-icons/go";
-import { BiSolidStar, BiStar, BiSolidStarHalf } from "react-icons/bi";
-import React from "react";
-import Link from "next/link";
-import emptyProduct from "@/assets/images/empty-product.png";
 import ProductDetailActions from "@/components/Product/ProductDetailActions";
 import ReviewRatingSection from "@/components/Review/ReviewRatingSection";
-import { IReview } from "@/types/review";
 import ReviewItem from "@/components/Review/ReviewItem";
+import emptyProduct from "@/assets/images/empty-product.png";
+import { IReview, IProduct } from "@/types";
 
 type Props = {
     params: { id: string };

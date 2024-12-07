@@ -7,11 +7,10 @@ import useSWR from "swr";
 import CartItem from "@/components/Cart/CartItem";
 import Breadcrumbs, { IBreadcumbItem } from "@/components/UI/Breadcumbs";
 import CartItemSkeleton from "@/components/UI/CartItemSkeleton";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { ICart } from "@/types/cart";
 import emptyCartImage from "@/assets/images/empty-cart.png";
-import useCartStore from "@/hooks/useCartStore";
+import { ICart } from "@/types";
 import { formatVNCurrency } from "@/lib/utils";
+import { useCartStore, useCurrentUser } from "@/hooks";
 
 const breadcumbItems: IBreadcumbItem[] = [
     {

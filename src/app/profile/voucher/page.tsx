@@ -1,12 +1,12 @@
 "use client";
-import VoucherItem from "@/components/Voucher/VoucherItem";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { fetchData } from "@/lib/utils";
-import { IVoucher } from "@/types/voucher";
-import { Image } from "@nextui-org/react";
-import emptyVoucher from "@/assets/images/empty-search.png";
 import useSWR from "swr";
 import { useEffect } from "react";
+import { Image } from "@nextui-org/react";
+
+import VoucherItem from "@/components/Voucher/VoucherItem";
+import emptyVoucher from "@/assets/images/empty-search.png";
+import { IVoucher } from "@/types";
+import { useCurrentUser } from "@/hooks";
 
 export default function VoucherPage() {
     const { currentUser } = useCurrentUser();

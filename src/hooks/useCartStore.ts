@@ -1,5 +1,6 @@
-import { ICart } from "@/types/cart";
 import { create } from "zustand";
+
+import { ICart } from "@/types";
 
 interface CartState {
     totalItem: number;
@@ -24,9 +25,7 @@ const useCartStore = create<CartState>((set) => ({
     },
     removeSelectedCartItems: (cartItem) => {
         set((state) => ({
-            selectedCartItems: state.selectedCartItems.filter(
-                (item) => item.id !== cartItem.id
-            ),
+            selectedCartItems: state.selectedCartItems.filter((item) => item.id !== cartItem.id),
         }));
     },
 }));

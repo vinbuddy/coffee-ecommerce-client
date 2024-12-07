@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 
 import Logo from "@/components/UI/Logo";
-import useFirebaseAuthStore from "@/hooks/useFirebaseAuthStore";
-import useCurrentUser from "@/hooks/useCurrentUser";
+
+import { useFirebaseAuthStore, useCurrentUser } from "@/hooks";
 
 interface IResetPassword {
     email: string;

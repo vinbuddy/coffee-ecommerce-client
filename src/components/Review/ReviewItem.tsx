@@ -1,8 +1,8 @@
-import { IReview } from "@/types/review";
 import { Avatar, Chip } from "@nextui-org/react";
-import { BiSolidStar } from "react-icons/bi";
+
 import StarRating from "../UI/StarRating";
 import { formatDateTime } from "@/lib/utils";
+import { IReview } from "@/types";
 
 interface IProps {
     review: IReview;

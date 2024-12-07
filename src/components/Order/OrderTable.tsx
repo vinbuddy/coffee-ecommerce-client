@@ -1,8 +1,4 @@
 "use client";
-import { DeleteIcon, EditIcon, EyeIcon } from "@/assets/icons";
-import { formatDateTime, formatVNCurrency } from "@/lib/utils";
-import { renderChipOrderStatus } from "@/lib/utils/render";
-import { IOrderInfo } from "@/types/order";
 import {
     Table,
     TableHeader,
@@ -15,6 +11,11 @@ import {
     Tooltip,
 } from "@nextui-org/react";
 import Link from "next/link";
+
+import { EyeIcon } from "@/assets/icons";
+import { formatDateTime, formatVNCurrency } from "@/lib/utils";
+import { renderChipOrderStatus } from "@/lib/utils/render";
+import { IOrderInfo } from "@/types";
 
 interface IProps {
     orders: IOrderInfo[];

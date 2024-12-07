@@ -123,10 +123,10 @@ export default function CartItem({
             <div className="flex-1 h-full flex justify-between">
                 {isProductLink ? (
                     <div className="relative">
-                        <Link href={`/product/${cartItem.product_id}`} className="w-[100px] block h-auto">
+                        <Link href={`/product/${cartItem.product_id}`} className="size-[100px] block">
                             <Image
                                 removeWrapper
-                                className="h-full border object-cover"
+                                className="size-[100px] border object-cover"
                                 src={cartItem?.product_image || ""}
                                 alt=""
                             />
@@ -147,7 +147,7 @@ export default function CartItem({
                         )}
                     </div>
                 ) : (
-                    <Image className="w-[100px] border object-cover" src={cartItem?.product_image || ""} alt="" />
+                    <Image className="size-[100px] border object-cover" src={cartItem?.product_image || ""} alt="" />
                 )}
 
                 <div className="flex-1 ms-4 overflow-hidden">
